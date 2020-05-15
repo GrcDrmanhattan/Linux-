@@ -1,0 +1,49 @@
+给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+
+示例 1:
+
+输入:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+输出: [1,2,3,6,9,8,7,4,5]
+
+#############################
+模拟运动
+
+class Solution 
+{
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) 
+    {
+        vector<int> res;
+        if(matrix.empty()) return res;
+        //向右、向下、向左、向上
+        //边界
+        int up=0;
+        int down=matrix.size()-1;
+        int left=0;
+        int right=matrix[0].size()-1;
+
+        while(true)
+        {
+            for(int i=left;i<=right;++i) res.push_back(matrix[up][i]);//向右移动
+
+            if(++up>down) break;//向下移动，如果大于下边界break否则不满足就进入循环
+            for(int i=up;i<=down;++i) res.push_back(matrix[i][right]);
+
+            if(--right<left) break;//向左移动，如果小于左边界跳出，否则循环左移
+            for(int i=right;i>=left;--i) res.push_back(matrix[down][i]);
+
+            if(--down<up) break;//向上，如果小于上边界，break，否则循环上移
+            for(int i=down;i>=up;--i) res.push_back(matrix[i][left]);
+
+            if(++left>right) break;//向右移动，
+        }
+
+        return res;
+    }
+};
+

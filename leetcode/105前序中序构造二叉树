@@ -1,0 +1,64 @@
+根据一棵树的前序遍历与中序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+前序遍历 preorder = [3,9,20,15,7]
+中序遍历 inorder = [9,3,15,20,7]
+返回如下的二叉树：
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+####################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution 
+{
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) 
+    {
+        if(preorder.size()==0 || inorder.size()==0) return nullptr;
+        return helper(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);        
+    }
+
+    TreeNode* helper(vector<int>& preorder,int ps,int pe,vector<int>& inorder,int is,int ie)
+    {
+        if(ps>pe || is>ie) return NULL;  // 省时间
+        TreeNode* root=new TreeNode(preorder[ps]);        
+        root->left=NULL;
+        root->right=NULL;
+        int i;
+        for(i=0;i<ie;++i)   // 小于等于都可以，等号不影响
+        {
+            if(inorder[i]==preorder[ps]) break;
+        }
+
+        int llength=i-is;
+        // int rlength=ie-i;     //  要先比较，llength，rlength 是否大于0，否则会栈溢出
+        // int rlength=ie-i;
+
+        // if(llength) 
+        root->left=helper(preorder,ps+1,ps+llength,inorder,is,i-1);  //左子树的前序，中序 ，从ps+1开始因为，ps在前序位置是根啊！！！      
+        // if(rlength) 
+        root->right=helper(preorder,ps+llength+1,pe,inorder,i+1,ie);  //右子树 前序，中序
+
+        return root;
+    }
+
+};
+
+//unordered_map<int, int> m;   <中序节点值，对应的序号0-。。。>

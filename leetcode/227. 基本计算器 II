@@ -1,0 +1,180 @@
+无括号的计算器
+
+=======================解法1
+
+
+class Solution 
+{
+public:
+    int calculate(string s) 
+    {
+        int begin=0;
+        return helper(s,begin);
+    }
+
+    int helper(string s,int& i)
+    {
+        char oper= '+';
+        int nums=0;
+        int res=0;//初始化否则出错
+        stack<int> st;
+        for( i;i<s.size();++i)
+        {
+            if(s[i]>='0' && s[i] <='9')
+            {
+                nums =nums *10 +(s[i] -'0');//要加括号，容易溢出报错
+            }
+            if(s[i] == '(')
+            {
+                nums = helper(s,++i);
+                ++i;
+            }
+
+            if(( (s[i] > '9' || s[i] <'0') && s[i] != ' ' ) || i==s.size()-1)//空格' '
+            {
+                int pre=0;
+                switch (oper)
+                {
+                     case  '+' :
+                        st.push(nums);
+                        break;
+                    case '-':
+                        st.push(-nums);
+                        break;
+                    case '*':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre*nums);
+                        break;
+                    case '/':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre / nums);
+                        break;
+                }
+                   
+                oper =s[i];
+                nums=0;
+            }
+            if(s[i]==')')
+            {
+                break;
+            }
+        }
+
+        while(!st.empty())
+        {
+            res+=st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
+
+===============================================解法2
+
+class Solution
+{
+public:
+    int calculate(string s)
+    {
+        char oper= '+';//之前补上+号
+        int nums=0;
+        int res=0;//初始化否则出错
+        stack<int> st;
+        for(int i=0;i<s.size();++i)
+        {
+            if(s[i]>='0' && s[i] <='9')//存储数字
+            {
+                nums =nums *10 +(s[i] -'0');//要加括号，容易溢出报错
+            }
+            if(s[i] == '(')
+            {
+                // ++i;
+                nums =calculate(s);
+                ++i;//在前后都可以
+            }
+
+            if(( (s[i] > '9' || s[i] <'0') && s[i] != ' ' ) || i==s.size()-1)//空格' '
+            {
+                int pre=0;
+                switch (oper)
+                {
+                     case  '+' :
+                        st.push(nums);
+                        break;
+                    case '-':
+                        st.push(-nums);
+                        break;
+                    case '*':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre*nums);
+                        break;
+                    case '/':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre / nums);
+                        break;
+                }
+                   
+                oper =s[i];
+                nums=0;
+            }
+            if(s[i]==')')
+            {
+                break;
+            }
+        }
+
+        while(!st.empty())
+        {
+            res+=st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
+
+
+======================================================================解法3=========================
+
+class Solution
+{
+public:
+    int calculate(string s) //  3+5 / 2 
+    {
+        int res=0;
+        int cur=0;
+        int num=0;
+        char oper ='+';
+        for(int i=0;i<s.size();++i)
+        {
+            if(s[i] >= '0' && s[i] <= '9')
+            {
+                num=num *10+(s[i]-'0');
+            }
+
+            if(s[i] == '+' || s[i]=='-' || s[i]=='*' || s[i]=='/' || i==s.size()-1)
+            {
+                switch(oper)
+                {
+                    case '+':cur+=num;break;
+                    case '-':cur-=num;break;
+                    case '*':cur*=num;break;
+                    case '/':cur/=num;break;
+                }
+                if(s[i]=='+' ||s[i]=='-' ||i==s.size()-1)
+                {
+                    res+=cur;
+                    cur=0;
+                }     
+
+                oper=s[i];
+                num=0;
+            }
+        }
+
+        return res;
+    }
+};

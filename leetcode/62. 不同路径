@@ -12,41 +12,19 @@
 2. 向右 -> 向下 -> 向右
 3. 向下 -> 向右 -> 向右
 
-=================================== 动态规划画表格求值而已
+=================================== 动态规划，相当于填充一个表格，依据原来的图，填充一个新的表格
 
 
 
-class Solution  //自己画表就可以了，是否补边界，写一下接可以
-{
-public:
-    int uniquePaths(int m, int n) //改变参数的顺序变为m行n列,
-    //经试验，m行n列可以，m列n行可以，就是求m-1，n-1这个坐标的值而已！！！
-    {
-        //本题 n行 m、列，其实无所谓
-        vector<vector<int> > dp(n+1,vector<int>(m+1,0));
-        for(int i=0;i<n+1;++i) dp[i][0]=1;//第 0列 初始化为1
-        for(int i=0;i<m+1;++i) dp[0][i]=1;//第 0行 初始化1
 
-        for(int i=1;i<n;++i)//因为i=0已经初始化了，=号会溢出int？？
-        {
-            for(int j=1;j<m;++j)//因为j=0，已经初始化了
-            {
-                dp[i][j]=dp[i-1][j]+dp[i][j-1];
-            }
-        }        
+//未补充边界，相当于填和原来一样的表格
 
-        return dp[n-1][m-1];
-    }
-
-};
-
-===============================不补充边界
 class Solution
 {
 public:
     int uniquePaths(int m, int n)
     {
-        vector<vector<int>> dp(n,vector<int>(m,1));
+        vector<vector<int>> dp(n,vector<int>(m,1));//相当于已经把第一个位置初始化为1了
         // for(int i=0;i<n;++i) dp[i][0]=1;
         // for(int i=0;i<m;++i) dp[0][i]=1;
         for(int i=1;i<n;++i)
@@ -57,7 +35,34 @@ public:
             }
         }
 
-        return dp[n-1][m-1];
+        return dp[n-1][m-1];//未补充边界返回的是前一个
     }
 };
 
+=============================补充边界相当于填充多一行一列的表格，符合人类从0开始的计数
+
+class Solution
+{
+public:
+    int uniquePaths(int m, int n)
+    {
+        //先多补充一行一列，保证后面遍历ij从1开始时，可以遍历到nm，符合规律
+        //第ij就是第ij个，而不是i-1，j-1个，避免了，数组从0开始的问题
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        
+        for(int i=1;i<=n;++i)
+        {
+            for(int j=1;j<=m;++j)
+            {
+                if(i==1&&j==1) dp[i][j]=1;//首先把相当于原图第一行第一列的位置写1
+                else//然后填表格
+                {
+                    dp[i][j]=dp[i-1][j]+dp[i][j-1];
+                }
+               
+            }
+        }
+
+        return dp[n][m];//补充边界后，返回的就是正常的顺序了
+    }
+};

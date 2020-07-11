@@ -1,0 +1,63 @@
+给定一个非空二叉树，返回其最大路径和。
+
+本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+
+示例 1:
+
+输入: [1,2,3]
+
+       1
+      / \
+     2   3
+
+输出: 6
+示例 2:
+
+输入: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+输出: 42
+
+===================================
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//时间复杂度 O(n)，每个节点都要遍历
+//空间复杂度：O(N)，其中 N
+//N 是二叉树中的节点个数。空间复杂度主要取决于递归调用层数，最大层数等于二叉树的高度，最坏情况下，二叉树的高度等于二叉树中的节点个数
+
+
+class Solution //返回路径最大的节点的和
+{
+public:
+    int res=INT_MIN;
+    int maxPathSum(TreeNode* root) 
+    {
+        helper(root);
+        return res;
+
+    }
+    //通过后序遍历的方式，先计算出左右子树的最大路径和，然后再计算当前树的最大路径和
+    int helper(TreeNode* root)//返回的是以root为根的树中，root为起点的路径的最大和
+    {
+        if(root==NULL) return 0;//递归边界
+        int ll=max(0,helper(root->left));//本次递归做什么
+        int rr=max(0,helper(root->right));
+        res=max(res,root->val+ll+rr);
+        // 返回节点的最大贡献值
+        return root->val + max(ll,rr);//递归向上一层返回什么
+    }
+};

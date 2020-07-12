@@ -1,0 +1,98 @@
+给你一个字符串 date ，它的格式为 Day Month Year ，其中：
+
+Day 是集合 {"1st", "2nd", "3rd", "4th", ..., "30th", "31st"} 中的一个元素。
+Month 是集合 {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"} 中的一个元素。
+Year 的范围在 ​[1900, 2100] 之间。
+请你将字符串转变为 YYYY-MM-DD 的格式，其中：
+
+YYYY 表示 4 位的年份。
+MM 表示 2 位的月份。
+DD 表示 2 位的天数。
+ 
+
+示例 1：
+
+输入：date = "20th Oct 2052"
+输出："2052-10-20"
+
+=====================================
+
+class Solution {
+public:
+    string reformatDate(string date) 
+    {
+        string res="";
+        int num=0;
+        vector<string> month={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        string m;
+        vector<string> v;
+        date+=' ';
+        for(auto c:date)
+        {
+            if(c==' ')
+            {
+                v.push_back(m);
+                m="";
+            }
+            else
+            {
+                m+=c;
+            }
+          
+        }
+        // v.push_back(m);//或者前面date没有加' '
+        //20th 月 年
+        res = v[2]+'-';
+        for(int i=0;i<12;++i)
+        {
+            if(month[i]==v[1])
+            {
+                int now=i+1;
+                if(now<10)
+                {
+                    res+='0';
+                    res+=to_string(now);
+                }
+                else
+                {
+                    res+=to_string(now);
+                    
+                }
+                
+                res+='-';
+            }
+        }
+        
+        if(v[0].size()==3)
+        {
+            res+='0';
+            res+=v[0][0];
+        }
+        else
+        {
+            res+=v[0][0];
+            res+=v[0][1];
+        }
+
+//             for(auto c:v[0])
+//             {
+//                 if(c>='0'&&c<='9')
+//                 {
+//                     num=num*10+(c-'0');//day
+//                 }
+//             }
+//             if(num<10)
+//             {
+//                 day+='0';
+//                 day=day+to_string(num);
+//             }
+//             else
+//             {
+//                 day=to_string(num);
+//             }
+            
+    
+        
+        return res;
+    }
+};

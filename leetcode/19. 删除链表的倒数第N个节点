@@ -1,0 +1,182 @@
+给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+
+示例：
+
+给定一个链表: 1->2->3->4->5, 和 n = 2.
+
+当删除了倒数第二个节点后，链表变为 1->2->3->5.
+
+==============================
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+// class Solution 
+// {
+// public:
+//     ListNode* removeNthFromEnd(ListNode* head, int n) 
+//     {
+//         ListNode* l1=head;
+//         ListNode* p=head;
+//         int len=0;
+//         while(p!=nullptr)
+//         {
+//             len++;
+//             // head=head->next;
+//             p=p->next;
+//         }   
+//         // cout<<len;        
+//         if(len==n) return head->next;
+//         int tem=len-n; //tem是倒数第n个节点的前一个节点的位置，看图
+        
+//         for(int i=1;i<=len;++i)
+//         {
+//             if(i==tem)
+//             {
+//                 l1->next=l1->next->next;
+//                 break;
+//             } 
+//             else  
+//             {
+//                 l1=l1->next;
+//             }
+//         }
+
+//         return head;
+//     }
+// };
+
+//---------解法2 ---
+
+// class Solution
+// {
+// public:
+//     ListNode* removeNthFromEnd(ListNode* head, int n)
+//     {
+//         ListNode* dummy=new ListNode(0);
+//         dummy->next=head;  //使用该节点防止只有1个节点时，不能找到被删节点的前驱
+        
+//         ListNode* q=dummy;
+//         ListNode* p=dummy;
+
+//         for(int i=0;i<n;++i)  //pq距离为n
+//         {
+//             q=q->next;  // q移到距离n处，p在起始位置
+//         }
+
+//         while(q->next)   //当q-next不为空是，pq不断后移，
+//         {
+//             p=p->next;
+//             q=q->next;
+//             // p=p->next;   //p先next或者q先next  结果正确，只是时间问题
+//         }
+//         // 为空时：p-next为要删除的节点
+//         p->next=p->next->next;
+
+//         ListNode* res=dummy->next;  //dumm-next才是有数据的开始节点，dumm则是为了删除方便
+//         delete dummy;
+//         return res;
+
+//     }
+
+// };
+
+// class Solution
+// {
+// public: 
+//     ListNode* removeNthFromEnd(ListNode* head,int n)
+//     {
+//         ListNode* dum=new ListNode(-1);
+//         dum->next=head;
+
+//         ListNode* p=dum;
+//         ListNode* q=dum;
+
+//         for(int i=0;i<n;++i)
+//         {
+//             p=p->next;
+//         }
+
+//         while(p->next)
+//         {
+//             p=p->next;
+//             q=q->next;
+//         }    
+
+//         q->next=q->next->next;
+
+//         ListNode* res=dum->next;
+//         delete dum;
+//         return res;
+//     }
+
+// };
+//                                自己的解法 7-16
+class Solution
+{
+public:
+    ListNode* removeNthFromEnd(ListNode* head,int n)
+    {
+        ListNode* dummy=new ListNode(-1);//一定要加前节点，这样防止后面删除时，1-2这样的链表出现错误
+        dummy->next=head;
+
+        ListNode* node=dummy;
+        int len=0;
+        while(node->next) //如果拿不准，可以输出试一下
+        {
+            node=node->next;
+            len++;
+        }
+        len++;//长度
+        // cout<<len;
+        if(len==n) return NULL;//防止删除只有一个节点的链表，报错后发现的
+        
+        ListNode* pre=dummy;
+        for(int i=0;i<len-n-1;++i)//i<谁，可以自己画图看一下，不困难的
+        {
+            pre=pre->next;
+        }
+        //找到被删除节点的前一个节点，然后删除被删除的节点
+        pre->next=pre->next->next;
+
+        return dummy->next;
+
+    }
+};
+
+//      官方的双指针解答 7-16
+class Solution
+{
+public:
+    ListNode* removeNthFromEnd(ListNode* head,int n)
+    {
+        ListNode* d=new ListNode(-1);
+        d->next=head;
+
+        ListNode* fast=d;
+        ListNode* slow=d;
+
+        //fast 先走n+1步
+        for(int i=1;i<=n+1;++i)
+        {
+            fast=fast->next;
+        }
+
+        //然后fast 走到末尾，这时slow走到了被删除的前一个节点
+        while(fast!=NULL)
+        {
+            fast=fast->next;
+            slow=slow->next;
+        }
+
+        slow->next=slow->next->next;
+
+        return d->next;
+    }
+};

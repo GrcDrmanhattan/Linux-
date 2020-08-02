@@ -28,6 +28,8 @@
 
 ##########################33
 
+return *max_element(arr.begin(),arr.end());//返回数组最大的元素
+
 class Solution 
 {
 public:

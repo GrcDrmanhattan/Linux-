@@ -1,0 +1,65 @@
+给你一个 n x n 的二进制网格 grid，每一次操作中，你可以选择网格的 相邻两行 进行交换。
+
+一个符合要求的网格需要满足主对角线以上的格子全部都是 0 。
+
+请你返回使网格满足要求的最少操作次数，如果无法使网格符合要求，请你返回 -1 。
+
+主对角线指的是从 (1, 1) 到 (n, n) 的这些格子。
+
+##################################
+
+
+
+class Solution 
+{
+public:
+    int minSwaps(vector<vector<int>>& grid) 
+    {
+        int n=grid.size();
+        vector<int> f(n,0);
+
+        for(int i=0;i<n;++i)
+        {
+            for(int j=n-1;j>=0;--j)
+            {
+                if(grid[i][j]==1)
+                {
+                    f[i]=j;//i行从后往前第一个出现1点位置,要<=i,满足题意
+                    break;
+                }
+            }
+        }
+
+        int res=0;
+        int pos=0;
+
+        for(int i=0;i<n;++i)//遍历每一行，看是否满足条件
+        {
+            if(f[i]<=i) continue;//该行满足条件，
+            //未满足，从下一行寻找满足的换上来
+            int j;
+            for(j=i+1;j<n;++j)
+            {
+                if(f[j]<=i)
+                {
+                    pos=j;
+                    break;
+                }
+            }
+
+            if(j==n) return -1;
+
+            for(int k=pos;k>i;--k)
+            {
+                int tmp=f[k];
+                f[k]=f[k-1];
+                f[k-1]=tmp;
+            }
+
+            res+=(pos-i);
+        }
+
+        return res;
+    }
+};
+

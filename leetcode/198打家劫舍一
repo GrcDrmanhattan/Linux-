@@ -33,3 +33,28 @@ public:
         return dp[n-1];
     }
 };
+
+
+class Solution
+{
+public:
+    int rob(vector<int>& nums)
+    {
+        int n=nums.size();
+        int dpi=0;
+        int dpi_1=0;//dpi+1
+        int dpi_2=0;//dpi+2
+
+        for(int i=0;i<n;++i)
+        {
+            dpi=max(dpi_1,nums[i]+dpi_2);//不抢第i个，值等于dpi_1,抢了第i个，值等于num[i]+dpi_2,取其中最大的
+            dpi_2=dpi_1;//dpi_1 挪到dpi+2
+            dpi_1=dpi;//dpi挪到dpi+1
+        }
+
+        return dpi;
+    }
+};
+
+
+

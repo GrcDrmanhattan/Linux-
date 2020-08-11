@@ -1,0 +1,137 @@
+给定一个字符串 s ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 s 的最大长度为 1000 。
+
+ 
+
+示例 1:
+输入:
+
+"bbbab"
+输出:
+
+4
+一个可能的最长回文子序列为 "bbbb"。
+
+示例 2:
+输入:
+
+"cbbd"
+输出:
+
+2
+一个可能的最长回文子序列为 "bb"。
+
+
+
+#########################3 子序列，不一定连续的，只要满足回文就可以
+、
+
+
+//dp[i][j]是ij之间闭区间的最长回文子序列长度,j>i
+//因为所求的dp[0][n-1]在最右上角，需要左，左下，下三个方向汇总
+//所以i坐标从n-1开始向上遍历，j坐标从i+1，j大于i，开始遍历，
+
+
+
+class Solution //反着遍历
+{
+public:
+    int longestPalindromeSubseq(string s) 
+    {
+        int n=s.size();
+        vector<vector<int>> dp(n,vector<int>(n));
+        for(int i=0;i<n;++i)
+        {
+            dp[i][i]=1;//初始化1
+        }
+
+        for(int i=n-1;i>=0;--i)//i 从最后一个字符开始往前遍历，j 从 i + 1 开始往后遍历
+        {
+            for(int j=i+1;j<n;++j)//说明在对角线之上遍历，j>i
+            {
+                if(s[i]==s[j])
+                {
+                    dp[i][j]=dp[i+1][j-1]+2;
+                }
+                else
+                {
+                    dp[i][j]=max(dp[i][j-1],dp[i+1][j]);
+                }
+            }
+        }
+
+        return dp[0][n-1];//返回0到n-1长度到结果植
+    }
+};
+
+
+//斜着遍历
+int longestPalindromeSubseq(string s) {
+    int n = s.size();
+	vector<vector<int>> dp(n, vector<int>(n, 0));
+	for (int i = 0; i < n; i++)
+	{
+		dp[i][i] = 1;
+	}
+	for (int k = 1; k <= n; k++)
+	{
+		for (int i = 0; i < n - k; i++)
+		{
+			int j = i + k;
+			if (s[i] == s[j])
+			{
+				dp[i][j] = dp[i + 1][j - 1] + 2;
+			}
+			else
+			{
+				dp[i][j] = max(dp[i][j - 1], dp[i + 1][j]);
+			}
+		}
+	}
+	return dp[0][n - 1];
+    }
+};
+
+
+##########################
+
+
+//题目是求不连续的，算法笔记解法是连续的子串的最大长度
+class Solution
+{
+public:
+    int longestPalindromeSubseq(string s)
+    {
+        int res=1;
+        int n=s.size();
+        vector<vector<int>> dp(1003,vector<int>(1003,0));//dp[i][j]表示s[i]到s[j]之间是否是回文，是1，否0
+
+        for(int i=0;i<n;++i)
+        {
+            dp[i][i]=1;
+            if(i<n-1)
+            {
+                if(s[i]==s[i+1])
+                {
+                    dp[i][i+1]=1;
+                    res=2;
+                }
+            }
+        }
+
+        for(int len=3;len<=n;++len)
+        {
+            for(int i=0;i+len-1<n;++i)
+            {
+                int j=i+len-1;//右端点
+
+                if(s[i]==s[j] && dp[i+1][j-1]==1)
+                {
+                    dp[i][j]=1;
+                    res=len;
+                }
+            }
+        }
+
+        return res+1;//结果是连续的回文的长度
+    }
+};

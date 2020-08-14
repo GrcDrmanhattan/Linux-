@@ -30,22 +30,90 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution {
-public:
-    bool isSymmetric(TreeNode* root) 
-    {
-        if(!root) return true;
-        return helper(root->left,root->right);
-    }
 
-    bool helper(TreeNode* p,TreeNode* q)
+// class Solution 
+// {
+// public:
+//     bool isSymmetric(TreeNode* root) 
+//     {
+//         if(!root) return true;
+//         return helper(root->left,root->right);
+//     }
+
+//     bool helper(TreeNode* p,TreeNode* q)
+//     {
+//         if(!q && !p) return true;
+//         if(!q || !p) return false;
+//         if(q->val == p->val) return helper(p->left,q->right) && helper(p->right,q->left);//如果节点相等，继续比较对称的子树
+//         return false;
+//     }
+// };
+
+//时间复杂度On，遍历所有节点
+//空间复杂度 为递归的深度，最坏也就是跟树高度有关，最坏情况下树变成一个链表结构，高度是n，O(n)
+
+
+// class Solution
+// {
+// public:
+//     bool isSymmetric(TreeNode* root)
+//     {   
+//         if(root==NULL) return true;
+//         return helper(root->left,root->right);//根不为空，判断左右子树是否相等
+
+//     }
+
+//     bool helper(TreeNode* p,TreeNode* q)
+//     {
+//         //四种情况
+//         if(p==NULL && q==NULL) return true;
+//         if(p==NULL || q==NULL) return false;
+
+//         if(q->val==p->val) 
+//         {
+//             return helper(p->left,q->right) && helper(p->right,q->left);
+        
+//         }
+
+//         return false;//两个节点值不相等返回fales
+//     }
+// };
+
+
+//迭代
+//时间和空间都是O(n)
+
+class Solution
+{
+public:
+    bool isSymmetric(TreeNode* root)
     {
-        if(!q && !p) return true;
-        if(!q || !p) return false;
-        if(q->val == p->val) return helper(p->left,q->right) && helper(p->right,q->left);//如果节点相等，继续比较对称的子树
-        return false;
+        if(root==NULL || root->left ==NULL && root->right==NULL) return true;
+
+        queue<TreeNode*> q;
+        q.push(root->left);
+        q.push(root->right);
+
+        while(!q.empty())
+        {
+            TreeNode* ll=q.front();q.pop();
+            TreeNode* rr=q.front();q.pop();
+
+            if(ll==NULL && rr==NULL) continue;//继续循环
+            if(ll==NULL || rr==NULL) return false;
+            if(ll->val != rr->val) return false;
+
+            if(ll->val == rr->val)
+            {
+                q.push(ll->right);
+                q.push(rr->left);
+
+                q.push(ll->left);
+                q.push(rr->right);
+            }
+        }
+
+        return true;
     }
 };
-
-
 

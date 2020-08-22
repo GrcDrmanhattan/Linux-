@@ -1,0 +1,80 @@
+剑指 Offer 11. 旋转数组的最小数字
+
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。  
+
+示例 1：
+
+输入：[3,4,5,1,2]
+输出：1
+示例 2：
+
+输入：[2,2,2,0,1]
+输出：0
+
+#######################################################
+
+// class Solution 
+// {
+// public:
+//     int minArray(vector<int>& numbers) 
+//     {
+//         int res;    
+//         int n=numbers.size();
+//         sort(numbers.begin(),numbers.end());
+//         res=numbers[0];
+
+//         return res;
+//     }
+// };
+
+//0822 官方题解
+
+//根据num最右边的元素，将数组分为两部分
+//最小值右侧的元素都小于等于 数组最右边的元素
+//最小值左边的元素 都大于等于 最右边的元素
+
+// 那么一般我们写二分的时候，左闭右闭的情况下，循环条件一般为low<=high，这里为什么又变成了low<high?
+// 因为一般二分时，low==high时，答案还不确定，还需在进行一次判定，
+// 而该题在low==high时，答案确定，必然是low(或者high)，因此循环条件为low<high。
+
+// 那么若改为low==high行不行呢？这主要看你代码里最后的返回值了，
+// 因为low==high时，mid = (low+high)/2=high，即内部会进入nums[mid]==mid[high]的分支，high=high-1，
+// 这时若返回nums[high]，那么是错的，返回nums[low]是对的。
+// 若循环条件为low<high，那么返回nums[low]或者nums[high]都可以，因此没必要改为low<=high。
+
+
+class Solution
+{
+public:
+    int minArray(vector<int>& numbers)
+    {
+        int l=0;
+        int r=numbers.size()-1;//闭区间，因为要取到最右边的元素
+        //相当于两个排序数组 
+        while(l<=r)
+        {
+            int mid=l+r >>1;
+            if(numbers[mid]>numbers[r])//说明mid在数组的左部分，已经确定mid不是最小值，可以跳过
+            {
+                l=mid+1;//[3, 4, 5, 1, 2]
+            }
+            else if(numbers[mid]<numbers[r])//说明mid在数组的右部分，也是在右边排序的数组中，但不能确定mid是否是最小值
+            {
+                r=mid;//[5,0,1,2,3,4]
+            }
+            else if(numbers[mid]==numbers[r])//
+            {
+                //如果中间值等于最后一个元素的值，我们是没法确定最小值是
+            // 在mid的前面还是后面，但我们可以缩小查找范围，让right
+            // 减1，因为即使right指向的是最小值，但因为他的值和mid
+            // 指向的一样，我们这里并没有排除mid，所以结果是不会有影响的。
+            //比如[3，1，3，3，3，3，3]和[3，3，3，3，3，1，3],中间的值
+            //等于最右边的值，但我们没法确定最小值是在左边还是右边
+                r=r-1;
+            }
+        }
+
+        return numbers[l];
+    }
+};
+

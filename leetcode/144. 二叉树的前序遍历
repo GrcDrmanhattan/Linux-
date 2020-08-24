@@ -1,0 +1,98 @@
+144. 二叉树的前序遍历
+
+给定一个二叉树，返回它的 前序 遍历。
+
+ 示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+
+#######################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//. Morris法. 空间复杂度o1，时间 On，前序遍历，
+
+// class Solution {
+// public:
+//     TreeNode* getleftmostright(TreeNode* root)
+//     {   //.  寻找root左子树的最右节点
+//         auto node=root->left;
+//         while(node!= NULL && node->right!=NULL && node->right != root)
+//             node=node->right;
+//         return node;
+//     }
+
+//     vector<int> preorderTraversal(TreeNode* root) {
+//         vector<int> res;
+//         while(root)
+//         {
+//             if(!root->left)          //root的左子树为空,说明到了叶子结点，把值存上
+//             {
+//                 res.push_back(root->val);
+//                 root=root->right;  // 顺着右指针到下一个节点
+//             }
+//             else
+//             {
+//                 auto node=getleftmostright(root);  // 如果有左子树，就找到左子树的最右节点
+//                 if(node->right==root) //如果，当前节点左子树的最右节点的右指针指向自己
+//                 {
+//                     node->right=NULL;  // 恢复树的形态
+//                     root=root->right;   //. 当前节点继续向右
+//                 }
+//                 else
+//                 {
+//                     res.push_back(root->val);
+//                     node->right=root;  //指向自己
+//                     root=root->left;    // 重新找左子树，
+//                 }
+//             }
+
+//         }
+
+//         return res;
+//     }
+// };
+
+//0824 非递归 
+
+class Solution
+{
+public:
+    vector<int> preorderTraversal(TreeNode* root)
+    {
+        vector<int> res;
+        if(!root) return {};
+
+        stack<TreeNode*> st;
+        st.push(root);
+
+        while(!st.empty())
+        {
+            auto tmp=st.top();
+            res.push_back(tmp->val);
+            st.pop();
+
+            if(tmp->right) st.push(tmp->right);//先右子树
+        
+            if(tmp->left) st.push(tmp->left);//后左子树
+
+        }
+
+        return res;
+    }
+};

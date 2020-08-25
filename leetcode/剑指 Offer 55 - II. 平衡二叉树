@@ -68,4 +68,28 @@ class Solution
     }
 };
 
+class Solution
+{
+public:
+    bool flag=true;//初始为true
+    bool isBalanced(TreeNode* root)
+    {
+        if(!root) return true;
+        helper(root);
+        return flag;
+    }
+
+    int helper(TreeNode* root)
+    {
+        if(!root) return 0;
+
+        int ll=helper(root->left);
+        int rr=helper(root->right);
+
+        if(abs(ll-rr)>1) flag=false;
+
+        return max(ll,rr)+1;
+    }
+};
+
 

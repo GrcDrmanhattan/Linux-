@@ -35,6 +35,9 @@ const int N=1e6+10;
 int n,k;
 int q[N];
 
+//快排 nlogn
+
+/*
 void quick_sort(int q[],int l,int r)
 {
     if(l>=r) return ;
@@ -55,6 +58,29 @@ void quick_sort(int q[],int l,int r)
     
 }
 
+*/
+
+//快速选择算法，时间复杂度On
+int quick_sort(int q[],int l,int r,int k)//d递归保证第k小数是在 [l,r],里面的
+{
+    if(l==r)  return q[l];//只有一个，区间的一个数就是答案返回答案,也可以写l>=r
+    
+    int i=l-1;
+    int j=r+1;
+    int x=q[l];
+    
+    while(i<j)
+    {
+        while(q[++i]<x);//先++
+        while(q[--j]>x);
+        if(i<j) swap(q[i],q[j]);
+    }
+    
+    int sl=j-l+1;
+    if(k<=sl) return quick_sort(q,l,j,k);//k在左区间
+    else return quick_sort(q,j+1,r,k-sl);
+    
+}
 
 int main()
 {
@@ -62,12 +88,15 @@ int main()
     
     for(int i=0;i<n;++i) scanf("%d",&q[i]);
     
-    quick_sort(q,0,n-1);
+    // quick_sort(q,0,n-1);
     
-    printf("%d ",q[k-1]);
+    // printf("%d ",q[k-1]);//快排
     // for(int i=0;i<n;++i) printf("%d ",q[i]);
+    
+    
+    //快速选择 
+    cout<<quick_sort(q,0,n-1,k)<<endl;
     
     return 0;
 }
-
 

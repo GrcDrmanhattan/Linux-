@@ -1,0 +1,44 @@
+//大整数加法
+
+#inlcude<iostream>
+#include <vector>
+
+using namespace std;
+
+//c=A+B
+vector<int> add(vector<int>&A,vector<int>&B)
+{
+    vector<int> C;
+
+    int jinwei=0;
+    for(int i=0;i<A.size() || i<B.size();++i)
+    {
+        if(i<A.size()) jinwei +=A[i];
+        if(i<B.size()) jinwei +=B[i];
+
+        C.push_back(jinwei%10);
+        jinwei/=10;
+    }
+
+    if(jinwei) C.push_back(1);
+
+    return C;
+}
+
+int main()
+{
+    string a,b;
+    cin>>a>>b;
+
+    vector<int> A,B;//将大整数ab用vector存储
+
+    for(int i=a.size()-1;i>=0;--i) A.push_back(a[i]-'0');
+    for(int i=b.size()-1;i>=0;--i) B.push_back(b[i]-'0');//[6,5,4,3,2,1]
+
+    auto C=add(A,B);
+
+    for(int i=C.size()-1;i>=0;--i) printf("%d",C[i]);
+
+    return 0;
+}
+

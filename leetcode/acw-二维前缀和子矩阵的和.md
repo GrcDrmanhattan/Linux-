@@ -1,3 +1,12 @@
+![图片]（）
+
+
+
+
+
+
+## 代码
+```
 #include<iostream>
 
 const int N=1010;
@@ -34,3 +43,4 @@ int main()
 
     return 0;
 }
+```

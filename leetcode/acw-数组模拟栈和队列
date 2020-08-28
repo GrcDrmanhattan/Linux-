@@ -1,0 +1,46 @@
+#include<iostream>
+
+using namespace std;
+
+const int N=100010;
+
+//      栈
+int stk[N];
+int tt;
+
+//插入
+stk[++tt]=x;
+
+//弹出
+tt--;
+
+//判断空
+if(tt>0) not empty
+else empty;
+
+//栈顶
+stk[tt];
+
+//************************8  队列
+
+//在队尾插入，在队头弹出
+int q[N];
+int hh;
+int tt=-1;
+
+//插入
+q[++tt]=x;
+
+//tanchu1
+hh++;
+
+//判空
+if(hh<=tt) not empty
+else  empty;
+
+//取出队头元素
+q[hh];
+
+
+
+

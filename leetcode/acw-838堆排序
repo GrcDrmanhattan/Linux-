@@ -1,0 +1,87 @@
+输入一个长度为n的整数数列，从小到大输出前m小的数。
+
+输入格式
+第一行包含整数n和m。
+
+第二行包含n个整数，表示整数数列。
+
+输出格式
+共一行，包含m个整数，表示整数数列中前m小的数。
+
+数据范围
+1≤m≤n≤105，
+1≤数列中元素≤109
+输入样例：
+5 3
+4 5 1 3 2
+输出样例：
+1 2 3
+
+##########################################################
+
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int n;
+int m;
+
+int h[N];
+int sizes;
+
+void down(int u)//节点向下调整
+{
+    int t=u;//t表示三个点最小值的编号，先设为u
+    
+    if(u*2<=sizes && h[u*2]<h[t]) t=u*2;//左儿子更小，t为左儿子
+    if(u*2+1<=sizes && h[u*2+1]<h[t]) t=u*2+1;//右儿子小，t为右儿子
+    
+    if(u!=t)//根结点不是最小值t，就要和最小交换
+    {
+        swap(h[u],h[t]);
+        down(t);
+    }
+}
+
+
+void up(int u)//小的元素向上走
+{
+    while(u/2 && h[u/2]>h[u])
+    {
+        swap(h[u/2],h[u]);
+        u/=2;
+    }
+}
+
+
+//小根堆
+
+
+int main()
+{
+    scanf("%d%d",&n,&m);
+    
+    for(int i=1;i<=n;++i)
+    {
+        scanf("%d",&h[i]);
+    }
+    
+    sizes=n;
+    
+    for(int i=n/2;i;--i) down(i);//On建堆过程
+    
+    while(m--)
+    {
+        printf("%d ",h[1]);
+        //输出最小值，要删除元素
+        h[1]=h[sizes];
+        sizes--;
+        down(1);
+    }
+    
+    return 0;
+}
+

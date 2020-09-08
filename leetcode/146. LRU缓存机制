@@ -96,63 +96,261 @@ cache.get(4);       // 返回  4
  */
 
 
-//0812 练习
+//0812 
 
+
+// class LRUCache
+// {
+// private:
+//     int cp;
+//     list<pair<int,int>> ls;//双向链表 stl
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;//迭代器
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         this->cp=capacity;//箭头
+//     }
+
+//     int get(int key)//访问元素
+//     {
+//         if(mp.find(key)!=mp.end())//找到元素
+//         {
+//             auto tmp=*mp[key];
+
+//             ls.erase(mp[key]);//删除原来的
+//             ls.push_front(tmp);//放入第一个，提前到队首
+
+//             mp[key]=ls.begin();//更新map的位置
+//             return tmp.second;
+//         }
+//         else
+//         {
+//             return -1;
+//         }
+
+//     }
+
+//     void put(int key, int value)
+//     {
+//         if(mp.find(key)!=mp.end())//插入的元素，已经有了，需要更新
+//         {
+//             auto tmp=*mp[key];
+//             tmp.second=value;
+
+//             ls.erase(mp[key]);//mp[key]表示 key对应的节点，ls删除节点
+//             ls.push_front(tmp);
+//             // ls.push_front(make_pair(key,value));这个更简洁
+//             mp[key]=ls.begin();
+
+//         }
+//         else//插入的原来不存在，就插入
+//         {
+//             if(ls.size()==cp)
+//             {
+//                 //删除最后一个节点
+//                 auto lastpair=ls.back();
+//                 auto lastkey=lastpair.first;
+//                 ls.pop_back();
+//                 mp.erase(lastkey);
+
+//                 //插入新的节点到链表头
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+//             else
+//             {
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+            
+//         }
+
+//     }
+// };
+
+// class LRUCache
+// {
+// private:
+
+//     list<pair<int,int>> cache;
+//     int cp;
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         this->cp=capacity;
+//     }
+
+//     int get(int key)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             auto tmp=*mp[key];
+//             //删除原来的，重新插入到开始
+//             cache.erase(mp[key]);
+//             cache.push_front(tmp);//tmp加*
+
+//             mp[key]=cache.begin();
+//             return tmp.second;
+//         }
+//         else
+//         {
+//             return -1;
+//         }
+//     }
+
+//     void put(int key,int value)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             cache.erase(mp[key]);//链表要删除节点，通过key对应的迭代器删除
+
+//             cache.push_front(make_pair(key,value));
+//             mp[key]=cache.begin();
+//         }
+//         else
+//         {
+//             if(cache.size()==cp)
+//             {
+//                 auto tmp=cache.back();
+
+//                 cache.pop_back();
+//                 cache.push_front(make_pair(key,value));
+
+//                 mp.erase(tmp.first);
+//                 mp[key]=cache.begin();
+//             }
+//             else
+//             {
+//                 cache.push_front(make_pair(key,value));
+//                 mp[key]=cache.begin();
+//             }
+
+//         }
+//     }
+// };
+
+
+// 0824 
+// class LRUCache
+// {
+// private:
+//     int cp;
+//     list<pair<int,int>> ls;//key val
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         cp=capacity;
+//     }
+
+//     int get(int key)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             auto tmp=*mp[key];//存储的是迭代器，所以要取地址
+
+//             ls.erase(mp[key]);//list 通过迭代器删除元素
+//             ls.push_front(tmp);
+            
+//             mp[key]=ls.begin();
+
+//             return tmp.second;
+//         }
+//         else 
+//         {
+//             return -1;
+//         }
+//     }
+
+//     void put(int key,int value)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             //关键字 存在，更新元素
+//             ls.erase(mp[key]);//list 通过迭代器删除元素
+//             ls.push_front(make_pair(key,value));
+
+//             mp[key]=ls.begin();
+//         }
+//         else
+//         {
+//             if(ls.size()==cp)
+//             {
+//                 auto tmp=ls.back();
+
+//                 ls.pop_back();
+//                 ls.push_front(make_pair(key,value));
+//                 //mp删除原来的，更新新插入的元素的映射
+//                 mp.erase(tmp.first);//map通过key删除元素
+//                 mp[key]=ls.begin();    
+//             }
+//             else
+//             {
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+//         }
+//     }
+// };
+
+
+//list，map关联容器的erasr操作有两种参数，一个是删除给定关键字的元素，一个是删除迭代器指向的元素
 
 class LRUCache
 {
 private:
     int cp;
-    list<pair<int,int>> ls;//双向链表 stl
-    unordered_map<int,list<pair<int,int>>::iterator> mp;//迭代器
+    list<pair<int,int>> ls;//存储的是缓存数据，以键值对的形式
+    //mp存储缓存数据的key以及在ls中的位置，用迭代器表示
+    unordered_map<int,list<pair<int,int>>::iterator> mp;//存储key 和对应的缓存的迭代器
 
 public:
     LRUCache(int capacity)
     {
-        this->cp=capacity;//箭头
+        cp=capacity;
     }
 
-    int get(int key)//访问元素
+    int get(int key)
     {
-        if(mp.find(key)!=mp.end())//找到元素
+        if(mp.find(key)!=mp.end())
         {
             auto tmp=*mp[key];
 
-            ls.erase(mp[key]);//删除原来的
-            ls.push_front(tmp);//放入第一个，提前到队首
+            ls.erase(mp[key]);//删除迭代器位置指向的元素
+            ls.push_front(tmp);
 
-            mp[key]=ls.begin();//更新map的位置
+            mp[key]=ls.begin();
+
             return tmp.second;
         }
         else
         {
             return -1;
         }
-
     }
 
-    void put(int key, int value)
+    void put(int key,int value)
     {
-        if(mp.find(key)!=mp.end())//插入的元素，已经有了，需要更新
+        if(mp.find(key)!=mp.end())
         {
-            auto tmp=*mp[key];
-            tmp.second=value;
-
             ls.erase(mp[key]);
-            ls.push_front(tmp);
-            // ls.push_front(make_pair(key,value));这个更简洁
+            ls.push_front(make_pair(key,value));
             mp[key]=ls.begin();
 
         }
-        else//插入的原来不存在，就插入
+        else
         {
             if(ls.size()==cp)
             {
-                //删除最后一个节点
-                auto lastpair=ls.back();
-                auto lastkey=lastpair.first;
+                auto tmp=ls.back();
+                
                 ls.pop_back();
-                mp.erase(lastkey);
+                //mp删除掉被删除元素的映射
+                mp.erase(tmp.first);
 
                 ls.push_front(make_pair(key,value));
                 mp[key]=ls.begin();
@@ -162,8 +360,7 @@ public:
                 ls.push_front(make_pair(key,value));
                 mp[key]=ls.begin();
             }
-            
         }
-
     }
 };
+

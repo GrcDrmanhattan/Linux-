@@ -62,8 +62,8 @@ int main()
     
     for(int i=1;i<=n;++i)
     {
-        p[i]=p[i-1]*P;
-        h[i]=h[i-1]*P + str[i];
+        p[i]=p[i-1]*P;//先求出p的次幂方便求值
+        h[i]=h[i-1]*P + str[i];//相当于求对应的p进制数是多少,a*p^3+b*p^2+cp^1+dp^0.......
     }
     
     while(m--)

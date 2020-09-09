@@ -54,6 +54,29 @@ int get(int l,int r)//求[l,r]之间的字符串哈希值，
     return h[r]-h[l-1]*p[r-l+1];//p的r-l+1次幂
 }
 
+/************
+h[l-1]是将l-1作为最低位乘以p零次幂
+要将h[l-1] 扩大到 作为h[r] 里面的前缀
+
+或者：
+
+a b c d e f g h i j k l m n
+
+求[h,l]的哈希值
+
+hash[h,l]=h*p4+i*p3+...l*p0
+
+也就是hash[h-1] = hash[g] = hash[a,g] = a*p6+b*p5+.....g*p0
+
+hash[l]=hash[a,l]=a*p11+b*p10+......l*p0
+
+所以hash[h,l]=  hash[l]-hash[g]*p5(5=r-l+1)
+             = a*p11+b*p10+......l*p0  -  (a*p6+b*p5+.....g*p0) *p5
+             = h*p4+i*p3+...l*p0
+
+*/
+
+
 int main()
 {
     scanf("%d%d%s",&n,&m,str+1);

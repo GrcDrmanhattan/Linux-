@@ -47,7 +47,7 @@ public:
 
     void dfs(int u)
     {
-        if(u == t)
+        if(u == t)//遍历到第n层，满足结果，
         {
             vector<string> tmp;
             for(int i = 0; i < t; i ++)
@@ -57,21 +57,21 @@ public:
                 {
                     l += g[i][j];
                 }
-                
+
                 tmp.push_back(l);
             }
 
             res.push_back(tmp);
         }
 
-        for(int i=0;i<t;++i)
+        for(int i=0;i<t;++i)//未满足结果
         {
             if(!col[i] && !dg[u+i] && !udg[i-u+t])
             {
                 g[u][i]='Q';
                 col[i]=dg[u+i]=udg[i-u+t]=true;
                 dfs(u+1);
-                col[i]=dg[u+i]=udg[i-u+t]=false;
+                col[i]=dg[u+i]=udg[i-u+t]=false;//出dfs要回溯
                 g[u][i]='.';
 
             }
@@ -95,5 +95,8 @@ public:
         return res;
     }
 };
+
+
+
 
 

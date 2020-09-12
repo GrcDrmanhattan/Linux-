@@ -91,49 +91,59 @@ Q...
 // *****************  第二种·搜索顺序
  
 #include<iostream>
+
 using namespace std;
 
 const int N=20;
-int n;
 char g[N][N];
-bool col[N];
+
+int n;
 bool row[N];
+bool col[N];
 bool dg[N];
 bool udg[N];
 
-void dfs(int x,int y,int s)//左上角xy，当前皇后数s不会超过n
+void dfs(int x,int y,int s)//从左到右，每一行一个个开始遍历
 {
-    if(y==n) y=0,x++;
+    if(y==n)
+    {
+        y=0;
+        ++x;
+    }
     
-    if(x==n)
+    if(x==n)//坐标从0开始，搜到第n行结束
     {
         if(s==n)
         {
             for(int i=0;i<n;++i) puts(g[i]);
-            puts("");
+            puts("");//输出每行后，加换行
+            
         }
-        return ;
+        
+        return ;//放在if外面
     }
     
-    //不放皇后
+    //不放
     dfs(x,y+1,s);
     
-    //放皇后
-    if(!row[x] && !col[y] && !dg[x+y] && !udg[x-y+n])
+    //
+    
+    if(!col[y] && !row[x] && !dg[x+y] && !udg[x-y+n] )//坐标和，坐标差相等，数组下标为整数，所以加n
     {
         g[x][y]='Q';
-        row[x]=col[y]=dg[x+y]=udg[x-y+n]=true;
+        col[y]=row[x]=dg[x+y]=udg[x-y+n]=true;
         dfs(x,y+1,s+1);
-        row[x]=col[y]=dg[x+y]=udg[x-y+n]=false;
+        
+        col[y]=row[x]=dg[x+y]=udg[x-y+n]=false;
         g[x][y]='.';
     }
 }
- 
- 
- 
-int main()
+
+
+int main() 
 {
     cin>>n;
+    
     for(int i=0;i<n;++i)
     {
         for(int j=0;j<n;++j)
@@ -147,6 +157,3 @@ int main()
     return 0;
 }
 
-
-
- 

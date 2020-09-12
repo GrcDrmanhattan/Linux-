@@ -120,3 +120,86 @@ int main()
 }
 
 
+//*****************************************
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+const int M=N*2;
+
+int n;
+//单链表,邻接表
+int h[N];
+int e[M];
+int ne[M];
+int idx;
+
+bool st[N];
+
+int ans=N;
+
+
+void add(int a,int b)//插入a->b
+{
+    e[idx]=b;
+    
+    ne[idx]=h[a];
+    h[a]=idx;
+    
+    idx++;
+}
+
+int dfs(int x)
+{
+    int sum=1;//dfs返回的以x为根的树的节点数目
+    int tmp=0;//最大连通块的节点数目
+    
+    st[x]=true;
+    
+    for(int i=h[x];i!=-1;i=ne[i])
+    {
+        int j=e[i];// 先取得idx对应的节点是·多少
+        
+        if(!st[j])
+        {
+            int s=dfs(j);
+            
+            tmp=max(tmp,s);
+            sum+=s;
+        }
+    }
+    
+    tmp=max(tmp,n-sum);//在x下面遍历完，就向上遍历
+    
+    ans=min(ans,tmp);
+    
+    return sum;//返回sum
+}
+
+
+int main()
+{
+    scanf("%d",&n);
+    memset(h,-1,sizeof(h));
+    
+    for(int i=0;i<n-1;++i)//n-1条边
+    {
+        int a;
+        int b;
+        cin>>a>>b;
+        
+        add(a,b);
+        add(b,a);
+        
+    }
+    
+    dfs(1);
+    
+    cout<<ans<<endl;
+    return 0;
+}
+

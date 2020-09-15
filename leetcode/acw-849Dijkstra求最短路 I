@@ -102,3 +102,75 @@ int main()
     return 0;
 }
 
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int N=510;
+
+int n;
+int m;
+
+int g[N][N];
+int dis[N];//1到每个点到距离
+bool st[N];
+
+int dijkstra()//Dijkstra求单源最短路
+{
+    memset(dis,0x3f,sizeof(dis));//先距离设为无穷，1号点到自身距离为0
+    dis[1]=0;
+    
+    for(int i=0;i<n;++i)//n次循环，只是循环n次，i无意义
+    {
+        int t=-1;
+        
+        for(int j=1;j<=n;++j)//看看哪个点不再集合，并且通过该点可以距离更小
+        {
+            if(!st[j] && (t==-1 || dis[t]>dis[j]))
+            {
+                t=j;
+            }
+        }
+        
+        st[t]=true;//把j加入集合
+        
+        for(int j=1;j<=n;++j)
+        {
+            dis[j]=min(dis[j],dis[t]+g[t][j]);//如果经过t到j，距离更小就更新距离
+        }
+    }
+    
+    if(dis[n]==0x3f3f3f3f) return -1;// 如果1号到n号的距离为无穷，返回-1
+    
+    return dis[n];
+}
+
+int main()
+{
+    cin>>n>>m;
+    
+    memset(g,0x3f,sizeof(g));
+    
+    
+    while(m--)
+    {
+        int a;
+        int b;
+        int c;
+        
+        cin>>a>>b>>c;
+        
+        g[a][b]=min(g[a][b],c);
+    }
+    
+    cout<< dijkstra()<<endl;
+    
+    return 0;
+}
+
+
+
+

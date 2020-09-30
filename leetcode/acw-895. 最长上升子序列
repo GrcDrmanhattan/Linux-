@@ -54,3 +54,61 @@ int main()
     return 0;
 }
 
+########################################################################### 输出最大序列，
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+const int N=1010;
+
+int f[N];
+int a[N];
+int n;
+int g[N];//g[i]=j,i从j转移过来
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=1;i<=n;++i) scanf("%d",&a[i]);
+    
+    for(int i=1;i<=n;++i)
+    {
+        f[i]=1;//最少只有一个数
+        g[i]=0;//只有一个数，最少从0转移过来
+        
+        for(int j=1;j<i;++j)
+            if(a[j]<a[i]) 
+            {
+                if(f[i]<f[j]+1)
+                {
+                    f[i]=f[j]+1;
+                    g[i]=j;
+                }
+            }
+    }
+    
+    int k=1;
+    for(int i=1;i<=n;++i)
+    {
+        if(f[k]<f[i]) k=i;//k记录最大长度的下标
+    }
+    
+    printf("%d\n",f[k]);//输出最大长度
+    
+    //输出递增的序列，倒序输出
+    for(int i=0,len=f[k];i<len;++i)
+    {
+        printf("%d ",a[k]);
+        k=g[k];
+    }
+    
+    return 0;
+}
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+906. 区间分组
+给定N个闭区间[ai,bi]，请你将这些区间分成若干组，使得每组内部的区间两两之间（包括端点）没有交集，并使得组数尽可能小。
+
+输出最小组数。
+
+输入格式
+第一行包含整数N，表示区间数。
+
+接下来N行，每行包含两个整数ai,bi，表示一个区间的两个端点。
+
+输出格式
+输出一个整数，表示最小组数。
+
+样例
+输入样例：
+3
+-1 1
+2 4
+3 5
+输出样例：
+2
+
+第一组： [-1,1], [3,5];
+第二组： [2,4]
+
+################################################################
+
+/*
+1将所有区间按照左端点排序
+2从前到后处理每个区间
+    判断能否将区间放到某个现有的组中，当前区间的左端点是否小于组的右端点的最大值就有交集，就不可以放入
+        1.如果不存在这样的组，就是说和所有的组都有交集，就开一个新的组，将区间放进去
+        2 如果存在，就放入，更新当前组的maxr
+    
+*/
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+const int N=1e5+10;
+int n;
+
+struct Range
+{
+    int l, r;
+    bool operator<(const Range &w) const 
+    {
+        return l<w.l;//按照左端点排序
+    }
+}range[N];
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;++i)
+    {
+        int l,r;
+        scanf("%d%d",&l,&r);
+        range[i]={l,r};
+    }
+    
+    sort(range,range+n);
+    
+    priority_queue<int,vector<int>,greater<int>> heap;
+    
+    for(int i=0;i<n;++i)
+    {
+        auto r=range[i];//遍历每个区间
+        if(heap.empty() || heap.top() >= r.l) heap.push(r.r);//开新的组
+        else //放入，更新右端点
+        {
+            int t=heap.top();
+            heap.pop();
+            heap.push(r.r);
+        }
+    }
+    
+    printf("%d\n",heap.size());
+    
+    return 0;
+}
+
+
+

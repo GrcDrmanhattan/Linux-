@@ -65,13 +65,13 @@ int main()
     
     sort(range,range+n);
     
-    priority_queue<int,vector<int>,greater<int>> heap;
+    priority_queue<int,vector<int>,greater<int>> heap;//比较maxr的最小值，堆维护每个组的最小maxr
     
     for(int i=0;i<n;++i)
     {
         auto r=range[i];//遍历每个区间
-        if(heap.empty() || heap.top() >= r.l) heap.push(r.r);//开新的组
-        else //放入，更新右端点
+        if(heap.empty() || heap.top() >= r.l) heap.push(r.r);//开新的组，所有组的最小值都大于l，说明不存在，
+        else //可以放入某个组，更新右端点
         {
             int t=heap.top();
             heap.pop();

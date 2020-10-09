@@ -1,0 +1,43 @@
+67. 数字在排序数组中出现的次数
+统计一个数字在排序数组中出现的次数。
+
+例如输入排序数组[1, 2, 3, 3, 3, 3, 4, 5]和数字3，由于3在这个数组中出现了4次，因此输出4。
+
+样例
+输入：[1, 2, 3, 3, 3, 3, 4, 5] ,  3
+
+输出：4
+
+###############################################
+
+class Solution {
+public:
+    int getNumberOfK(vector<int>& nums , int k) {
+        int n=nums.size();
+        if(nums.empty()) return 0;
+        
+        int l=0;
+        int r=n-1;
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid]>=k) r=mid;//根据性质，右边都大于等于k，左边都小于k，分成两部分，答案在右部分的边界
+            else l=mid+1;
+        }
+        
+        int l1=0;
+        int r1=n-1;
+        while(l1<r1)
+        {
+            int mid=l1+r1+1>>1;
+            if(nums[mid]<=k) l1=mid;
+            else r1=mid-1;
+        }
+        
+        if(nums[l1]!=k && nums[l]!=k) return 0;
+        
+        
+        return l1-l+1;
+    }
+};
+

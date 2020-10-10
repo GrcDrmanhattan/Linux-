@@ -19,16 +19,17 @@ public:
     int getNumberSameAsIndex(vector<int>& nums) {
         if(nums.empty()) return -1;
         int n=nums.size();
-        int l=0;
-        int r=n-1;
+        int l=0;//数组下标
+        int r=n-1;//二分的是数组下标
         while(l<r)
         {
             int mid=l+r>>1;
-            if(nums[mid]-mid>=0) r=mid;//nums[mid]-mid 单调递增序列，可以二分边界，答案是相减为零的
+            if(nums[mid]-mid>=0) r=mid;//nums[mid]-mid 单调递增序列，可以二分边界，答案是相减为零的,
+            //二分找到任意等于0的下标
             else l=mid+1;
         }
         
-        if(nums[l]-l==0) return l;
+        if(nums[l]-l==0) return nums[l];
         return -1;
         
     }

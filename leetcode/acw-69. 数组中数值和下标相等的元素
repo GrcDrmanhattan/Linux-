@@ -1,0 +1,36 @@
+69. 数组中数值和下标相等的元素
+
+假设一个单调递增的数组里的每个元素都是整数并且是唯一的。
+
+请编程实现一个函数找出数组中任意一个数值等于其下标的元素。
+
+例如，在数组[-3, -1, 1, 3, 5]中，数字3和它的下标相等。
+
+样例
+输入：[-3, -1, 1, 3, 5]
+
+输出：3
+注意:如果不存在，则返回-1。
+
+***************************************************************************
+
+class Solution {
+public:
+    int getNumberSameAsIndex(vector<int>& nums) {
+        if(nums.empty()) return -1;
+        int n=nums.size();
+        int l=0;
+        int r=n-1;
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid]-mid>=0) r=mid;//nums[mid]-mid 单调递增序列，可以二分边界，答案是相减为零的
+            else l=mid+1;
+        }
+        
+        if(nums[l]-l==0) return l;
+        return -1;
+        
+    }
+};
+

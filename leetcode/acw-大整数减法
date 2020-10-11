@@ -22,6 +22,8 @@ bool cmp(vector<int>&A,vector<int>&B)
 vector<int> add(vector<int>&A,vector<int>&B)//保证A>=B
 {
     vector<int> C;
+    
+    //从个位开始相减
     for(int i=0,t=0;i<A.size();++i)//a里面的每一位减去b里面的每一位，所以要先剪去上次的借位，然后减b
     {
         t=A[i]-t;//a[i]要先剪去上一位的进位

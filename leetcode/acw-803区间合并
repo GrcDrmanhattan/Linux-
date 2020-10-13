@@ -51,7 +51,7 @@ void merge(vector<PII> &segs)
     
     for(auto seg:segs)
     {
-        if(ed<seg.first)
+        if(ed<seg.first)//维护的区间和当前没有交集，就可以将维护的区间加入答案
         {
             if(st!=-2e9 ) res.push_back({st,ed});
             st=seg.first;
@@ -59,7 +59,7 @@ void merge(vector<PII> &segs)
         }
         else
         {
-            ed=max(ed,seg.second);
+            ed=max(ed,seg.second);//有交集就更新右端点
         }
     }
     // 这个循环结束之后还会剩下一个区间

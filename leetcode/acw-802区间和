@@ -55,10 +55,10 @@ int s[N];//前缀和
 vector<int> alls;//已经映射好了的元素
 vector<PII> add,query;
 
-int find(int x)//返回x离散后的值
+int find(int x)//返回x离散后的值,将那些分散的数x比如3，5，1000，3000000，这样的映射为从1开始的下标
 {
     int l=0;
-    int r=alls.size()-1;
+    int r=alls.size()-1;//需要映射的个数
     
     while(l<r)
     {
@@ -129,7 +129,7 @@ int main()
     
     
     //预处理前缀和
-    for(int i=1;i<= alls.size();++i) s[i]=s[i-1]+a[i];
+    for(int i=1;i<= alls.size();++i) s[i]=s[i-1]+a[i];//前缀和也是对映射后的下标操作
     
     
     //处理查询

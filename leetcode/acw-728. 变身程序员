@@ -1,0 +1,133 @@
+728. 变身程序员
+公司的程序员不够用了，决定把产品经理都转变为程序员以解决开发时间长的问题。
+
+在给定的矩形网格中，每个单元格可以有以下三个值之一：
+
+值0代表空单元格;
+值1代表产品经理;
+值2代表程序员;
+每分钟，任何与程序员(在4个正方向上)相邻的产品经理都会变成程序员。
+
+返回直到单元格中没有产品经理为止所必须经过的最小分钟数。
+
+如果不可能，返回-1。
+
+以下是一个4分钟转变完成的示例：
+
+2 1 1      2 2 1      2 2 2      2 2 2      2 2 2
+1 1 0  ->  2 1 0  ->  2 2 0  ->  2 2 0  ->  2 2 0
+0 1 1      0 1 1      0 1 1      0 2 1      0 2 2
+输入格式
+不固定多行（行数不超过10），毎行是按照空格分割的数字(不固定，毎行数字个数不超过10)。
+
+其中每个数组项的取值仅为0、1、2三种。
+读取时可以按行读取，直到读取到空行为止，再对读取的所有行做转换处理。
+
+输出格式
+如果能够将所有产品经理变成程序员，则输出最小的分钟数。
+
+如果不能够将所有的产品经理变成程序员，则返回-1.
+
+输入样例1：
+0 2
+1 0
+输出样例1：
+-1
+输入样例2：
+1 2 1
+1 1 0
+0 1 1
+输出样例2：
+3
+输入样例3：
+1 2
+2 1
+1 2
+0 1
+0 1
+1 1
+输出样例3：
+4
+
+########################################################################################
+
+#include<iostream>
+#include<algorithm>
+#include<queue>
+#include<cstring>
+#include<sstream>
+
+using namespace std;
+typedef pair<int,int> PII;
+
+const int N=15;
+
+int g[N][N];
+int dis[N][N];
+int n,m;
+
+int bfs()
+{
+    queue<PII> q;
+    memset(dis,-1,sizeof(dis));
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]==2)
+            {
+                dis[i][j]=0;
+                q.push({i,j});
+            }
+            
+    int dx[4]={0,1,-1,0},dy[4]={1,0,0,-1};
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        int x=t.first,y=t.second,d=dis[x][y];
+        
+        for(int i=0;i<4;++i)//遍历2可以到达的点
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            
+            if(a>=0 && a<n &&b>=0 &&b<m && g[a][b]==1 && dis[a][b]==-1)
+            {
+                dis[a][b]=d+1;
+                q.push({a,b});
+            }
+        }
+    }
+    
+    int res=0;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]==1)
+            {
+                if(dis[i][j]==-1) return -1;
+                
+                res=max(res,dis[i][j]);
+            }
+        }
+        
+    return res;
+}
+
+int main()//O(nm)
+{
+    string line;
+    while(getline(cin,line))//读取cin的一行，默认遇到回车停止读入
+    {
+        int k=0;
+        stringstream ssin(line);//将line转换为流对象
+        while(ssin>>g[n][k]) k++;//根据 >> 后面的变量类型进行输出
+        m=k;
+        n++;
+    }
+    
+    cout<<bfs()<<endl;
+    
+    return 0;
+}
+

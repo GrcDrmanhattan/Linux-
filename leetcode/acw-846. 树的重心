@@ -204,3 +204,71 @@ int main()
     return 0;
 }
 
+
+*********************************************************************88888  1024
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int n;
+const int N=1e5+10;
+
+int ne[N],h[N],e[N],idx;
+int res=N;
+
+bool st[N];
+
+void add(int a,int b)
+{
+    e[idx]=b;
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+}
+
+int dfs(int x)//dfs两个作用，返回以x为根的节点数sum，和 计算删除x后每个连通块的最大数tmp并且更新全局res
+{
+    st[x]=true;
+    int sum=1;//dfs返回的值
+    int tmp=0;
+    
+    for(int i=h[x];i!=-1;i=ne[i])
+    {
+        int j=e[i];
+        if(!st[j])
+        {
+            int t=dfs(j);
+            sum+=t;
+            
+            tmp=max(tmp,t);
+        }
+    }
+    //最后还要和在x点之上的连通块数取一个max
+    tmp=max(tmp,n-sum);
+    res=min(res,tmp);
+    
+    return sum;
+}
+
+int main()
+{
+    cin>>n;
+    memset(h,-1,sizeof(h));
+    
+    for(int i=0;i<n-1;++i)//n-1个边
+    {
+        int a,b;
+        cin>>a>>b;
+        add(a,b);
+        add(b,a);
+    }
+    
+    dfs(1);
+    cout<<res<<endl;
+    return 0;
+    
+}
+

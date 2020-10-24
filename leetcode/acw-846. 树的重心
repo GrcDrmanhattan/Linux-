@@ -112,7 +112,8 @@ int main()
         add(b,a);
     }
     
-    dfs(1);//dfs(n)都可以，1-n个节点
+    dfs(1);//dfs(n)都可以，1-n个节点，
+    //节点编号从1开始，所以dfs从1开始，idx是边的关系
     
     cout<<ans<<endl;
     

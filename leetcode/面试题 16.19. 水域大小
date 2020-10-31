@@ -1,0 +1,140 @@
+面试题 16.19. 水域大小
+你有一个用于表示一片土地的整数矩阵land，该矩阵中每个点的值代表对应地点的海拔高度。若值为0则表示水域。由垂直、水平或对角连接的水域为池塘。池塘的大小是指相连接的水域的个数。编写一个方法来计算矩阵中所有池塘的大小，返回值需要从小到大排序。
+
+示例：
+
+输入：
+[
+  [0,2,1,0],
+  [0,1,0,1],
+  [1,1,0,1],
+  [0,1,0,1]
+]
+输出： [1,2,4]
+提示：
+
+0 < len(land) <= 1000
+0 < len(land[i]) <= 1000
+
+
+########################################################################
+
+// const int N=1010;
+// bool st[N][N];
+
+// int dx[8]={0,1,0,-1,1,1,-1,-1};
+// int dy[8]={1,0,-1,0,1,-1,-1,1};
+
+// //    dfs
+
+// class Solution {
+// public:
+
+//     void dfs(int x,int y,int &s,vector<vector<int>>& land)
+//     {
+//         st[x][y]=true;
+//         // land[x][y]=-1;
+//         s++;
+//         for(int i=0;i<8;++i)
+//         {
+//             int a=x+dx[i];
+//             int b=y+dy[i];
+            
+//             if(a>=0 && a<land.size() && b>=0 && b<land[0].size() && land[a][b]==0 && !st[a][b])
+//             {
+//                 dfs(a,b,s,land);
+//             }
+//         }
+//     }
+
+//     vector<int> pondSizes(vector<vector<int>>& land) {
+//         vector<int> res;
+//         int n=land.size();
+//         int m=land[0].size();
+//         if(n==0 || m==0) return {};
+//         memset(st,0,sizeof(st));
+
+//         for(int i=0;i<n;++i)
+//             for(int j=0;j<m;++j)
+//             {
+//                 if(land[i][j]==0 && !st[i][j])
+//                 {
+//                     int s=0;
+//                     dfs(i,j,s,land);
+//                     if(s!=0) res.push_back(s);
+//                 }
+//             }
+
+//         sort(res.begin(),res.end());
+//         return res;
+//     }
+// };
+
+//  bfs
+bool st[1010][1010];
+typedef pair<int,int> PII;
+int dx[8]={0,1,0,-1,-1,-1,1,1};
+int dy[8]={1,0,-1,0,-1,1,-1,1};
+queue<PII> q;
+
+class Solution {
+public:
+
+    void bfs(int x,int y,int &s,vector<vector<int>>& land)
+    {
+        int n=land.size();
+        int m=land[0].size();
+        q.push({x,y});
+        st[x][y]=true;
+        s++;
+        while(q.size())
+        {
+            auto t=q.front();
+            q.pop();
+            int x=t.first;
+            int y=t.second;
+
+            for(int k=0;k<8;++k)
+            {
+                int a=x+dx[k];
+                int b=y+dy[k];
+                if(a>=0 && a<n && b>=0 && b<m && land[a][b]==0 && !st[a][b])
+                {
+                    st[a][b]=true;
+                    // land[a][b]=-1;
+                    s++;
+                    q.push({a,b});
+                }
+            }
+        }
+    }
+
+    vector<int> pondSizes(vector<vector<int>>& land) {
+        vector<int> res;
+        int n=land.size();
+        int m=land[0].size();
+        if(n==0 || m==0) return {};
+        
+        memset(st,0,sizeof(st));
+        // int s=0;
+
+        for(int i=0;i<n;++i)
+        {
+            for(int j=0;j<m;++j) 
+            {
+                if(land[i][j]==0 && !st[i][j]) 
+                {
+                    int s=0;
+                    bfs(i,j,s,land);
+                    // land[i][j]=-1;
+                    // while(q.size()) q.pop();
+                    
+                    if(s!=0) res.push_back(s);
+                }
+            }
+        }
+        sort(res.begin(),res.end());
+        return res;
+    }
+};
+

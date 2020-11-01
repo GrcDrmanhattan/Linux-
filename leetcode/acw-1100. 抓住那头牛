@@ -1,0 +1,87 @@
+1100. 抓住那头牛
+题目描述
+农夫知道一头牛的位置，想要抓住它。
+
+农夫和牛都位于数轴上，农夫起始位于点 NN，牛位于点 KK。
+
+农夫有两种移动方式：
+
+从 XX 移动到 X−1X−1 或 X+1X+1，每次移动花费一分钟
+从 XX 移动到 2∗X2∗X，每次移动花费一分钟
+假设牛没有意识到农夫的行动，站在原地不动。
+
+农夫最少要花多少时间才能抓住牛？
+
+输入格式
+共一行，包含两个整数NN和KK。
+
+输出格式
+输出一个整数，表示抓到牛所花费的最少时间。
+
+数据范围
+0≤N,K≤105
+样例
+输入样例：
+
+5 17
+输出样例：
+
+4
+
+#######################################################3    将移动表示成连接边，求bfs最短距离
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=2e5+10;
+
+int q[N];
+int dis[N];
+int n,k;
+
+int bfs()
+{
+    int hh=0;
+    int tt=0;
+    q[0]=n;
+    memset(dis,-1,sizeof(dis));
+    
+    dis[n]=0;
+    
+    while(hh<=tt)
+    {
+        int t=q[hh++];
+        if(t==k) return dis[k];
+        
+        if(t+1<N && dis[t+1]==-1)
+        {
+            dis[t+1]=dis[t]+1;
+            q[++tt]=t+1;
+        }
+        if(t-1>=0 && dis[t-1]==-1)
+        {
+            dis[t-1]=dis[t]+1;
+            q[++tt]=t-1;
+        }
+        if(t*2 <N && dis[t*2]==-1)
+        {
+            dis[t*2]=dis[t]+1;
+            q[++tt]=t*2;
+        }
+    }
+    
+    return -1;
+}
+
+int main()//将+1，-1 ，* 2看作是连接边，权重都为1，求最短时间，相当于bfs
+{
+    cin>>n>>k;
+    
+    cout<<bfs()<<endl;
+    
+    return 0;
+}
+

@@ -1,0 +1,154 @@
+1107. 魔板
+这是一张有 8 个大小相同的格子的魔板：
+
+1 2 3 4
+8 7 6 5
+我们知道魔板的每一个方格都有一种颜色。
+
+这 8 种颜色用前 8 个正整数来表示。
+
+可以用颜色的序列来表示一种魔板状态，规定从魔板的左上角开始，沿顺时针方向依次取出整数，构成一个颜色序列。
+
+对于上图的魔板状态，我们用序列 (1,2,3,4,5,6,7,8) 来表示，这是基本状态。
+
+这里提供三种基本操作，分别用大写字母 A，B，C 来表示（可以通过这些操作改变魔板的状态）：
+
+A：交换上下两行；
+B：将最右边的一列插入到最左边；
+C：魔板中央对的4个数作顺时针旋转。
+
+
+你要编程计算用最少的基本操作完成基本状态到特殊状态的转换，输出基本操作序列。
+
+输入样例
+2 6 8 4 5 7 3 1
+
+输出样例
+7
+BCABCCB
+
+##########################################################################
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<unordered_map>
+#include<queue>
+
+using namespace std;
+
+char g[2][4];
+unordered_map<string,int> dis;
+unordered_map<string,pair<char,string>> pre;
+queue<string> q;
+
+void set(string state)//将字符串变成矩阵
+{
+    for(int i=0;i<4;++i) g[0][i]=state[i];//矩阵第1行
+    for(int i=3,j=4;i>=0;--i,++j) g[1][i]=state[j];//第2行
+}
+
+string get()//将矩阵变成字符串
+{
+    string res;
+    for(int i=0;i<4;++i) res +=g[0][i];
+    for(int i=3;i>=0;--i) res+=g[1][i];
+    return res;
+}
+
+string move0(string state)//交换两行
+{
+    set(state);
+    
+    for(int i=0;i<4;++i) swap(g[0][i],g[1][i]);
+    return get();
+}
+
+string move1(string state)//最后一列放到第一列
+{
+    set(state);
+    
+    char v0=g[0][3];
+    char v1=g[1][3];
+    for(int i=3;i>0;--i)
+        for(int j=0;j<2;++j)
+            g[j][i]=g[j][i-1];
+    g[0][0]=v0;
+    g[1][0]=v1;
+    
+    return get();
+}
+
+string move2(string state)//中央对的4个数作顺时针旋转
+{
+    set(state);
+    char v=g[0][1];
+    g[0][1]=g[1][1];
+    g[1][1]=g[1][2];
+    g[1][2]=g[0][2];
+    g[0][2]=v;
+    
+    return get();
+}
+
+void bfs(string st,string ed)
+{
+    if(st==ed) return ;
+    q.push(st);
+    dis[st]=0;
+    
+    while(q.size())
+    {
+        auto t= q.front();
+        q.pop();
+        
+        string m[3];
+        m[0]=move0(t);//转移到三个状态
+        m[1]=move1(t);
+        m[2]=move2(t);
+        
+        for(int i=0;i<3;++i)
+        {
+            string str=m[i];
+            if(dis.count(str)==0)
+            {
+                dis[str]=dis[t]+1;
+                pre[str]={char(i + 'A'),t};
+                
+                if(str==ed) break;
+                q.push(str);
+            }
+        }
+    }
+}
+
+
+int main()
+{
+    int x;
+    string st,ed;//ed要变成的状态
+    for(int i=0;i<8;++i)
+    {
+        cin>>x;
+        ed += char(x+'0');//将输入的数字转换成字符串状态
+    }
+    
+    for(int i=0;i<8;++i) st +=char(i + '1');//初始化 st状态  "12345678"
+    
+    bfs(st,ed);
+    
+    string res;
+    while(ed != st)
+    {
+        res += pre[ed].first;//从什么操作转移过来
+        ed = pre[ed].second;
+    }
+    
+    reverse(res.begin(),res.end());
+    
+    if(res.size()) cout<<res<<endl;
+    
+    return 0;
+}
+
+

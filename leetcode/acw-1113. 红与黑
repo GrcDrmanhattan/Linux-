@@ -129,7 +129,7 @@ int dfs(int x,int y)
         if(a>=0 && a<n && b>=0 &&b<m &&g[a][b]=='.' && !st[a][b])
         {
             st[a][b]=true;
-            cnt+=dfs(a,b);
+            cnt+=dfs(a,b);  // cnt 加上递归下一次的结果
         }
     }
     

@@ -120,4 +120,75 @@ int main()
 }
 
 
+#########################################################  1107
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=1010,M=N*N;
+
+typedef pair<int,int> PII;
+#define x first
+#define y second
+
+int n;
+int g[N][N];
+bool st[N][N];
+
+PII q[M];
+
+PII pre[N][N];
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+void bfs(int x,int y)
+{
+    int hh=0;int tt=0;
+    q[0]={x,y};
+    st[x][y]=true;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            if(a>=0 && a<n &&b>=0 &&b<n && g[a][b]==0 && !st[a][b])
+            {
+                st[a][b]=true;
+                pre[a][b]=t;
+                q[++tt]={a,b};
+            }
+        }
+    }
+}
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            scanf("%d",&g[i][j]);
+    
+    bfs(n-1,n-1);
+    PII end(0,0);
+    
+    while(1)
+    {
+        printf("%d %d\n",end.x,end.y);
+        if(end.x==n-1 && end.y==n-1) break;
+        end=pre[end.x][end.y];
+        
+    }
+    
+    return 0;
+}
+
+
 

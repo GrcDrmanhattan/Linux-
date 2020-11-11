@@ -128,3 +128,62 @@ int main()
 
 // 10 1234567890123456789012345678901234567890
 // 16 3A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int t;
+
+int main()
+{
+    cin>>t;
+    while(t--)
+    {
+        int a,b;
+        string a_line,b_line;
+        cin>>a>>b>>a_line;
+        
+        vector<int> nums;
+        for(auto c:a_line)
+        {
+            if(c>='0' && c<='9') nums.push_back(c-'0'+0);
+            if(c>='A' && c<='Z') nums.push_back(c-'A'+10);
+            if(c>='a' && c<= 'z') nums.push_back(c-'a'+36);
+        }
+        reverse(nums.begin(),nums.end());
+        
+        vector<int> res;
+        while(nums.size())
+        {
+            int r=0;
+            for(int i=nums.size()-1;i>=0;--i)
+            {
+                nums[i] += r*a;
+                r=nums[i]%b;
+                nums[i]/=b;
+            }
+            
+            res.push_back(r);
+            while(nums.size() && nums.back()==0) nums.pop_back();
+        }
+        
+        reverse(res.begin(),res.end());
+        for(auto x : res)
+        {
+            if(x>=0 && x<=9) b_line+=(char)(x-0+'0');
+            if(x>=10 && x<=35) b_line+=(char)(x-10+'A');
+            if(x>=36 && x<=61) b_line+=(char)(x-36+'a');
+        }
+        
+        
+        cout<<a<<' '<<a_line<<endl;
+        cout<<b<<' '<<b_line<<endl;
+        cout<<endl;
+    }
+    return 0;
+}

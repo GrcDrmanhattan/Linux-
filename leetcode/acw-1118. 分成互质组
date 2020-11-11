@@ -92,3 +92,74 @@ int main()
     cout<<res<<endl;
 }
 
+
+
+//分组使得每组内没有边连接，有边连接相当于有因数关系
+//组合问题不考虑顺序,按照组合枚举
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+int p[N];
+int group[N][N];
+int res=N;
+bool st[N];
+
+
+int gcd(int a,int b)//ab是否互质
+{
+    return b ? gcd(b,a%b) :a ;
+}
+
+
+bool check(int group[],int gc,int i)
+{
+    for(int j=0;j<gc;++j)
+        if(gcd(p[group[j]],p[i])>1) //最大公约数大于1
+            return false;//不是互质
+            
+    return true;//
+}
+
+
+void dfs(int g,int gc,int tc,int start)//第几组，当前枚举到组内下标的元素，当前一共处理多少元素，当前可以从哪个元素开始搜
+{
+    if(g>=res) return;
+    if(tc==n) res=g;
+    
+    bool flag=true;//true表示组不可以添加元素
+    
+    for(int i=start;i<n;++i)
+    {
+        if(!st[i] && check(group[g],gc,i))//没有用过i，并且当前组内所有元素和i互质
+        {
+            st[i]=true;
+            group[g][gc]=i;
+            
+            dfs(g,gc+1,tc+1,i+1);
+            
+            st[i]=false;
+            
+            flag=false;
+        }
+    }
+    
+    if(flag) dfs(g+1,0,tc,0);//新开一个组
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>p[i];
+    
+    dfs(1,0,0,0);
+    
+    cout<<res<<endl;
+}
+

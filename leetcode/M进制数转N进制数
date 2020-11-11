@@ -1,0 +1,139 @@
+M进制数转N进制数
+题目描述
+将M进制的数X转换为N进制的数输出。
+
+输入描述
+输入的第一行包括两个整数：M和N(2<=M,N<=36)。
+另起一行输入一个数X，X是M进制的数，现在要求你将M进制的数X转换成N进制的数输出。
+
+输出描述
+输出X的N进制表示的数
+
+样例输入
+10 2
+11
+
+样例输出
+1011
+
+提示
+数字都用小写字母，如 0123456789abcdef
+
+############################################3333  from jianshu
+
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+
+typedef long long  int64;
+
+//输入一个字符，返回数值
+int getCharValue(char c)
+{
+    if(c >= '0' && c <= '9')
+    {
+        return (int)(c - '0');
+    }
+    else if(c >= 'a' && c <= 'z')
+    {
+        return (int)(c - 'a') + 10;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+//输入一个n进制数的一位，得到其字符串
+char getCharByNum(int b)
+{
+    if(b >= 0 && b <= 9)
+    {
+        return  ('0' + b);
+    }
+    else if(b >= 10 && b <= 36)
+    {
+        return  ('a' + b - 10);
+    }
+    else
+    {
+        printf("FATAL!!!\n");
+        return '0';
+    }
+}
+
+//一个进制为jz的数字字符串转换成10进制数值
+int64 getIntNum(const char* str,int jz)
+{
+    int64 sum = 0;
+    int len = strlen(str);
+    int bitlen = len;
+    for(int i = 0;i < len;i++)
+    {
+        bitlen--;
+        sum += getCharValue(str[i]) * pow(jz,bitlen);
+    }
+    return sum;
+}
+
+int main()
+{
+    int m,n;
+    int flag = false;
+    char input[50] = {0};
+    while(scanf("%d %d",&m,&n) != EOF)
+    {
+        if(m < 2 || m > 36 || n < 2 || n > 36)
+            continue;
+        scanf("%s",&input);
+        
+
+        //如有负号，提取出来单独处理
+        char* inputStr = input;
+        if(input[0] == '-')
+        {
+            inputStr++;
+            flag = true;    
+        }
+
+        //输入的m进制数字转成0进制数值
+        int64 inputNum = getIntNum(inputStr,m);
+
+        //将十进制数值转换成n进制的字符串
+        char array[64] = {0};
+        for(int i = 0;;i++)
+        {
+            int a = inputNum / n;
+            int b = inputNum % n;
+            inputNum = a;
+            if(a <= 0)
+            {
+                array[i] = getCharByNum(b);
+                if(flag)
+                {
+                    array[i + 1] = '-';
+                    array[i + 2] = '\0';
+                }
+                else
+                {
+                    array[i + 1] = '\0';
+                }
+                
+                break;
+            }
+            array[i] = getCharByNum(b);
+        }
+        
+        
+        for(int i = strlen(array) - 1;i >= 0;i--)
+        {
+            printf("%c",array[i]);
+        }
+        printf("\n");
+    }
+        
+    return 0;
+}
+

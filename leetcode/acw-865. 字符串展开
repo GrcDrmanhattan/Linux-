@@ -75,4 +75,101 @@ int main()//括号匹配
 }
 
 
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+string str;
+int u;
+
+string dfs()
+{
+    string res;
+    
+    while(u<str.size())
+    {
+        char c=str[u];
+        if(c=='#') return res;
+        if(c>='0' && c<='9') 
+        {
+            int k=0;
+            while(str[u]!='%')
+            {
+                k=k*10 +str[u]-'0';
+                u++;
+            }
+            u++;
+            string tmp=dfs();
+            while(k--) res+=tmp;
+        }
+        else 
+        {
+            //z字母
+            res+=c;
+        }
+        
+        u++;
+    }
+    
+    return res;
+}
+
+int main()
+{
+    cin>>str;
+    cout<<dfs()<<endl;
+    return 0;
+}
+
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+string str;
+int u;
+
+string dfs()
+{
+    string res;
+    
+    while(u<str.size())
+    {
+        char c=str[u];//当前字符
+        
+        if(c=='#') return res;
+        if(c>='0' && c<='9')
+        {
+            int k=0;
+            while(str[u]!='%')
+            {
+                k = k*10 +str[u]-'0';
+                u++;
+            }
+            
+            u++;
+            string tmp=dfs();//此时u在变化，接着上层的
+            while(k--) res+=tmp;
+        }
+        else
+        {
+            res+=c;
+        }
+        
+        u++;
+    }
+    
+    return res;
+}
+
+
+int main()
+{
+    cin>>str;
+    cout<<dfs()<<endl;
+    return 0;
+}
+
 

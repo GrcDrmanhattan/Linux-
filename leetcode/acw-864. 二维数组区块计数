@@ -1,0 +1,153 @@
+864. 二维数组区块计数
+
+FLood fill 
+
+输入一个只包含0和1的二维数组，上下左右和对角相邻的1组成一个区块，0不形成区块，求数组中的区块个数。
+
+输入格式
+第一行输入两个正整数N和M，N表示数组行数，M表示数组列数。
+
+接下来N行，每行表示数组对应的一行，每行包含M个整数，整数之间用空格隔开。
+
+输出格式
+输出一个整数，表示数组中区块的个数。
+
+数据范围
+0≤N,M,N∗M≤106
+输入样例：
+3 3
+0 1 0
+1 0 0
+1 0 1
+输出样例：
+2
+
+###############################################################################   dfs
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+const int N=1e6+10;
+typedef pair<int,int> PII;
+
+
+// int g[N][N];//会爆数组
+
+//二维转换为一维数组
+//(i,j) = i*m +j
+
+//一维转2维
+//(k/m下取整，k%m) =   k
+
+//dfs会爆栈 1e6
+
+/***********************8888     DFS
+
+int n,m;
+int g[N];
+
+bool vis[N];
+
+int dx[]={0,1,0,-1,1,1,-1,-1};
+int dy[]={1,0,-1,0,1,-1,-1,1};
+    
+void dfs(int x,int y)
+{
+    vis[x*m+y]=true;
+    
+    for(int i=0;i<8;++i)
+    {
+        int a=x+dx[i];
+        int b=y+dy[i];
+        if(a>=0 && a<n && b>=0 && b<m && g[a*m+b]==1 && !vis[a*m+b])
+        {
+            vis[a*m+b]=true;
+            dfs(a,b);
+        }
+    }
+}
+
+int main()
+{
+    int x,y;
+    scanf("%d%d",&n,&m);
+    for(int i=0,k=0;i<n;++i)
+        for(int j=0;j<m;++j,k++)
+            scanf("%d",&g[k]);
+            
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i*m+j]==1 && !vis[i*m+j])
+            {
+                res++;
+               
+                dfs(i,j);
+            }
+            
+    printf("%d\n",res);
+    return 0;
+}
+
+*/
+
+// *************************888     bfs
+
+int n,m;
+int g[N];
+bool vis[N];
+
+void bfs(int x,int y)
+{
+    queue<PII> q;
+    q.push({x,y});
+    
+    vis[x*m+y]=true;
+    while(q.size())
+    {
+        auto t=q.front();q.pop();
+        
+        for(int i=-1;i<=1;++i)
+            for(int j=-1;j<=1;++j)
+            {
+                int a=t.first+i;
+                int b=t.second+j;
+                
+                if(a>=0 && a<n && b>=0 && b<m && g[a*m+b]==1 && !vis[a*m+b])
+                {
+                    q.push({a,b});
+                    vis[a*m+b]=true;
+                }
+            }
+    }
+}
+
+int main()
+{
+    int x,y;
+    scanf("%d%d",&n,&m);
+    for(int i=0,k=0;i<n;++i)
+        for(int j=0;j<m;++j,k++)
+            scanf("%d",&g[k]);
+            
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i*m+j]==1 && !vis[i*m+j])
+            {
+                res++;
+               
+                bfs(i,j);
+            }
+            
+    printf("%d\n",res);
+    return 0;
+}
+
+
+

@@ -66,8 +66,8 @@ int main()
             else 
             {
                 dp[i][j]=1e9;
-                if(i>1) dp[i][j]=min(dp[i][j],dp[i-1][j]+w[i][j]);
-                if(j>1) dp[i][j]=min(dp[i][j],dp[i][j-1]+w[i][j]);
+                if(i>1) dp[i][j]=min(dp[i][j],dp[i-1][j]+w[i][j]);//如果不是第一行，可以从上面过来
+                if(j>1) dp[i][j]=min(dp[i][j],dp[i][j-1]+w[i][j]);//如果不是第一列，可以从左边过来
             }
     
     printf("%d\n",dp[n][n]);

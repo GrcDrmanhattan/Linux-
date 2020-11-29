@@ -65,3 +65,22 @@ public:
     }
 };
 
+
+
+// yxc
+class Solution {
+public:
+    ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+        auto p=list1,q=list1;
+
+        for(int i=0;i<a-1;++i) p=p->next;//p走到a前一个位置,走了a-1步
+        for(int j=0;j<b+1;++j) q=q->next;//q走到b后面的位置，走了b+1步
+        p->next=list2;
+
+        while(list2->next) list2=list2->next;
+        list2->next=q;
+
+        return list1;
+    }
+};
+

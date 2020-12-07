@@ -1,0 +1,43 @@
+21. 斐波那契数列
+
+输入一个整数 n ，求斐波那契数列的第 n 项。
+
+假定从0开始，第0项为0。(n<=39)
+
+样例
+输入整数 n=5 
+
+返回 5
+
+---------------------------
+
+// class Solution {
+// public:
+//     int Fibonacci(int n) {
+//         if(n==0) return 0;
+//         if(n==1 ) return 1;
+        
+//         return Fibonacci(n-1)+Fibonacci(n-2);
+        
+//     }
+// };
+
+// a 表示第 n−1n−1 项，b 表示第 nn 项。
+// 则令 c=a+b 表示第 n+1 项，然后让a,b 顺次往后移一位。
+
+class Solution {
+public:
+    int Fibonacci(int n) {
+        int a=0;
+        int b=1;
+        while(n--)
+        {
+            int c=a+b;
+            a=b;
+            b=c;
+        }
+        
+        return a;
+    }
+};
+

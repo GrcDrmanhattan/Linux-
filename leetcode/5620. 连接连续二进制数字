@@ -47,13 +47,17 @@ public:
     
     int concatenatedBinary(int n) {
         long long res=0,mod=1e9+7;
+        vector<int> g(n+1);
         
         for(int i=1;i<=n;++i)
         {
-            (res = (res << getlen(i)) + i) %= mod;//res=将res向左移动i的二进制个位，然后在末尾加上i
+            g[i] = g[i/2]+1;//求位数
+            (res = (res << g[i]) + i) %= mod;
+            // (res = (res << getlen(i)) + i) %= mod;//res=将res向左移动i的二进制个位，然后在末尾加上i
         }
         
         return res;
     }
 };
+
 

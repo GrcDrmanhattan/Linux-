@@ -1,0 +1,69 @@
+23. 矩阵中的路径
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。
+
+路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。
+
+如果一条路径经过了矩阵中的某一个格子，则之后不能再次进入这个格子。
+
+注意：
+
+输入的路径不为空；
+所有出现的字符均为大写英文字母；
+样例
+matrix=
+[
+  ["A","B","C","E"],
+  ["S","F","C","S"],
+  ["A","D","E","E"]
+]
+
+str="BCCE" , return "true" 
+
+str="ASAE" , return "false"
+
+-----------------------------------
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+class Solution {
+public:
+    bool dfs(vector<vector<char>>& matrix, int u,int x,int y,string str)
+    {
+        if(matrix[x][y]!=str[u]) return false;//dfs的矩阵的元素不等于字符串当前访问的位置元素，返回false
+        
+        if(u == str.size()-1) return true;//u是当前遍历到的str的位置，下标从0开始,访问的元素正好是字符串最后一个并且和矩阵的当前相等，返回true
+        char c=str[u];
+        
+        matrix[x][y]='*';
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<matrix.size() && b>=0 && b<matrix[0].size())
+            {
+                
+                if(dfs(matrix,u+1,a,b,str)) return true;//dfs字符串下一个位置，矩阵里面的下一个位置
+            }
+                
+        }
+        
+        matrix[x][y]=c;
+        return false;
+    }
+    
+    
+    bool hasPath(vector<vector<char>>& matrix, string &str) {
+        for(int i=0;i<matrix.size();++i)
+            for(int j=0;j<matrix[0].size();++j)//枚举每一个元素作为起点
+            {
+                if(dfs(matrix,0,i,j,str)) return true;//从字符串第一个元素开始dfs
+            }
+       
+        return false;
+    }
+};
+
+
+

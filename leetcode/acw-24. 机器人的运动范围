@@ -1,0 +1,73 @@
+24. 机器人的运动范围
+地上有一个 m 行和 n 列的方格，横纵坐标范围分别是 0∼m−1 和 0∼n−1。
+
+一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格。
+
+但是不能进入行坐标和列坐标的数位之和大于 k 的格子。
+
+请问该机器人能够达到多少个格子？
+
+样例1
+输入：k=7, m=4, n=5
+
+输出：20
+样例2
+输入：k=18, m=40, n=40
+
+输出：1484
+
+解释：当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。
+      但是，它不能进入方格（35,38），因为3+5+3+8 = 19。
+注意:
+
+0<=m<=50
+0<=n<=50
+0<=k<=100
+
+----------------------------           烦恼的dfs
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+bool st[55][55];
+
+int res=1;
+
+class Solution {
+public:
+    int movingCount(int k, int rows, int cols)
+    {
+        if(k==0) return 1;
+        if(!rows && !cols) return 0;
+        memset(st,0,sizeof(st));
+       
+        dfs(k,0,0,rows,cols);
+        return res;
+    }
+    
+    int get(int x,int y)
+    {
+        return x/10+x%10+y/10+y%10;
+    }
+    
+    void dfs(int k,int x,int y,int n,int m)
+    {
+        if(get(x,y)>k) return ;
+        st[x][y]=true;
+        //res++
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m  && !st[a][b] && get(a,b)<=k)
+            {
+                st[a][b]=true;
+                res++;//res位置可以放在前面，初始就可以为0
+                dfs(k,a,b,n,m);
+            }
+        }
+        
+    }
+    
+};
+

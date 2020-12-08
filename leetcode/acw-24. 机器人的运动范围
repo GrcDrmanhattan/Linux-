@@ -71,3 +71,53 @@ public:
     
 };
 
+
+-------------------------------------
+
+bool st[55][55];
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+int res=0;
+
+class Solution {
+public:
+    int movingCount(int k, int rows, int cols)
+    {
+        if(!rows && !cols) return 0;//特殊判断00位置
+        
+        memset(st,0,sizeof(st));
+        dfs(k,0,0,rows,cols);
+        return res;
+    }
+    
+    int get(int x,int y)
+    {
+        return x%10 + x/10 + y%10 + y/10;
+    }
+    
+    void dfs(int k,int x,int y,int n,int m)
+    {
+
+        st[x][y]=true;
+        res++;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && get(a,b)<=k)
+            {
+                
+                st[a][b]=true;
+                dfs(k,a,b,n,m);//除了00位置外，其余的点进入dfs已经判断get是否合法
+            }
+        }
+        
+    }
+    
+};
+
+
+
+

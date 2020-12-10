@@ -1,0 +1,100 @@
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+样例
+输入：
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+
+---------------------
+
+class Solution {
+public:
+    vector<int> printMatrix(vector<vector<int> > matrix) {
+        
+        vector<int> res;
+        
+        if(matrix.size()==0 || matrix[0].size()==0) return res;
+        
+        int n=matrix.size();
+        int m=matrix[0].size();
+        int up=0;
+        int down=n-1;
+        int ll = 0;
+        int rr = m-1;
+        
+        while(1)
+        {
+            for(int i=ll;i<=rr;++i) res.push_back(matrix[up][i]);
+            
+            if(++up>down) break;
+            for(int i=up;i<=down ;++i) res.push_back(matrix[i][rr]);
+            
+            if(--rr<ll) break;
+            for(int i=rr;i>=ll;--i) res.push_back(matrix[down][i]);
+            
+            if(--down<up) break;
+            for(int i=down;i>=up;--i) res.push_back(matrix[i][ll]);
+            
+            
+            if(++ll>rr) break; 
+        }
+        
+        return res;
+    }
+};
+
+
+-----------------------------------  -----------------------------------  -----------------------------------  ----------------------------------- 
+
+yxc
+
+
+class Solution {
+public:
+    vector<int> printMatrix(vector<vector<int> > matrix) {
+        
+        vector<int> res;
+        
+        if(matrix.size()==0 || matrix[0].size()==0) return res;
+        
+        int n=matrix.size();
+        int m=matrix[0].size();
+        //  上右下左, 每次前进的方向
+        int dx[]={-1,0,1,0};
+        int dy[]={0,1,0,-1};
+        
+        vector<vector<bool>> st(n,vector<bool>(m,false));
+        
+        int x=0,y=0;
+        int d=1; //初始向右
+        
+        for(int i=0;i<n*m;++i)
+        {
+            st[x][y]=true;
+            res.push_back(matrix[x][y]);
+            
+            int a=x+dx[d];
+            int b=y+dy[d];
+            
+            if( a<0 || a>=n || b<0 || b>=m || st[a][b]) // 先试探是否越界，越界后更改方向，然后更新xy
+            {
+                d=(d+1)%4;
+                a=x+dx[d];
+                b=y+dy[d];
+            }
+            
+            x=a;
+            y=b;
+        }
+
+        return res;
+    }
+};
+
+

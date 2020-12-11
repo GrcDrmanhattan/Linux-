@@ -1,0 +1,56 @@
+48. 复杂链表的复刻
+
+请实现一个函数可以复制一个复杂链表。
+
+在复杂链表中，每个结点除了有一个指针指向下一个结点外，还有一个额外的指针指向链表中的任意结点或者null。
+
+注意：
+
+函数结束后原链表要与输入时保持一致。
+
+
+ yxc   1211   很舒服的一道题，一气呵成
+
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next, *random;
+ *     ListNode(int x) : val(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *copyRandomList(ListNode *head) {
+        if(!head) return head;
+        
+        for(auto p=head;p;) //在每个节点后加上自己的复制节点
+        {
+            auto pn = new ListNode(p->val);
+            auto tmp=p->next;
+            
+            p->next=pn;
+            pn->next = tmp;
+            p=tmp;
+        }
+        
+        for(auto p=head;p;p=p->next->next) //p 每次走两步跨过p节点和p的复制的节点
+            if(p->random) p->next->random = p->random->next;//将复制后节点的random指向原节点的random的复制节点
+        
+        
+        auto d=new ListNode(-1);
+        auto tt=d;
+        
+        for(auto p=head;p;p=p->next) //将复制后的链表连接出来
+        {
+            tt->next = p->next;
+            tt=tt->next;
+            p->next = p->next->next;//恢复原链表
+        }
+           
+        return d->next;
+    }
+};
+
+

@@ -1,0 +1,62 @@
+49. 二叉搜索树与双向链表
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。
+
+要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
+注意：
+
+需要返回双向链表最左侧的节点。
+例如，输入下图中左边的二叉搜索树，则输出右边的排序双向链表。
+
+QQ截图20181202052830.png
+
+         yxc 视频通俗易懂
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+class Solution {
+public:
+    TreeNode* convert(TreeNode* root) {
+        if(!root) return nullptr;
+        
+        auto sides = dfs(root);
+        return sides.first;
+    }
+    
+    pair<TreeNode*,TreeNode*> dfs(TreeNode* rt)
+    {
+        if(!rt->left && !rt->right) return {rt,rt};
+        
+        if(rt->left && rt->right) 
+        {
+            auto lside=dfs(rt->left),rside=dfs(rt->right);
+            lside.second->right = rt, rt->left = lside.second;
+            rt->right  = rside.first, rside.first->left = rt;
+            return {lside.first, rside.second};
+        }
+        if(rt->left)
+        {
+            auto lside=dfs(rt->left);
+            lside.second->right = rt, rt->left = lside.second;
+            return {lside.first, rt};
+        }
+        if(rt->right)
+        {
+            auto rside=dfs(rt->right);
+            rt->right  = rside.first, rside.first->left = rt;
+            return {rt, rside.second};
+        }
+    }
+    
+};
+
+

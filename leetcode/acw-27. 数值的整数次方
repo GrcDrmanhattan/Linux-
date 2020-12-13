@@ -40,4 +40,24 @@ public:
 };
 
 
+1213
+
+class Solution {
+public:
+    double Power(double b, int e) {
+        bool f= e<0;
+    
+        double res = 1;
+        
+        for(int k = abs(e); k ;k>>=1)
+        {
+            if( k&1 == 1) res *= b;
+            b*=b;
+        }
+        
+        if(f) res=1/res;
+        return res;
+    }
+};
+
 

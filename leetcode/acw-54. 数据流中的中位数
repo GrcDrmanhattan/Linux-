@@ -1,0 +1,54 @@
+54. 数据流中的中位数
+
+如何得到一个数据流中的中位数？
+
+如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。
+
+如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+
+样例
+输入：1, 2, 3, 4
+
+输出：1,1.5,2,2.5
+
+解释：每当数据流读入一个数据，就进行一次判断并输出当前的中位数。
+
+
+
+------------------------------------
+
+class Solution {
+public:
+
+    priority_queue<int> max_h; // 大根堆 维护小的部分元素 ,保证在奇数时比小根堆元素多一个
+    priority_queue<int, vector<int> , greater<int>> min_h; // 小根堆 ，维护大的元素
+    
+    void insert(int num){
+        max_h.push(num);
+        
+        if(min_h.size() && max_h.top() > min_h.top()) // 出现逆序， 就交换堆的top
+        {
+            int maxv=max_h.top();max_h.pop();
+            int minv=min_h.top();min_h.pop();
+            max_h.push(minv);
+            min_h.push(maxv);
+        }
+        
+        if(max_h.size() > min_h.size() +1 ) // 元素过多，就插入到上面的小根堆
+        {
+            min_h.push(max_h.top());
+            max_h.pop();
+        }
+    }
+
+    double getMedian(){
+        int t=max_h.size() + min_h.size();
+        if(t&1) return max_h.top(); // 奇数个，中间值是大根堆的堆顶
+        else return (max_h.top() + min_h.top())/2.0; // 偶数个，是平均值
+        
+    }
+};
+
+
+
+

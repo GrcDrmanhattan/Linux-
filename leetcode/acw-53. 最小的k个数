@@ -1,0 +1,75 @@
+53. 最小的k个数
+
+输入n个整数，找出其中最小的k个数。
+
+注意：
+
+数据保证k一定小于等于输入数组的长度;
+输出数组内元素请按从小到大顺序排序;
+样例
+输入：[1,2,3,4,5,6,7,8] , k=4
+
+输出：[1,2,3,4]
+
+
+
+class Solution {
+public:
+    vector<int> getLeastNumbers_Solution(vector<int> input, int k) {
+        vector<int> res;
+        
+        sort(input.begin(), input.end());
+        
+        for(int i=0;i<k;++i) res.push_back(input[i]);
+        
+        return res;
+    }
+};
+
+
+-------------------------------- 
+时间复杂度
+
+：O(n\log k)O(nlogk)，其中 nn 是数组 arr 的长度。
+由于大根堆实时维护前 kk 小值，所以插入删除都是 O(\log k)O(logk) 的时间复杂度，最坏情况下数组里 nn 个数都会插入，所以一共需要 O(n\log k)O(nlogk) 的时间复杂度。
+
+
+因为每次将比堆顶元素小的元素，插入堆，都会使得堆顶的元素弹出，也就是最大的元素弹出，久而久之，每次弹出大的，插入小的，大根堆维护的就是最小的k的元素了
+
+
+每次将比堆顶元素大的，插入小根堆， 每次插入大的，弹出小的，这样小根堆就是维护最大的k个元素了
+
+
+
+// 采用大根堆，维护一个含有K个数的大根堆，这个堆中的所有元素就是所求。
+// 首先，读入K个数创建一个大小为K的大根堆，然后依次读入后序的数据，依次与大根堆的堆顶元素比较，
+// 若大于堆顶元素，则直接抛弃该元素、读入下一个元素。
+// 若小于堆顶元素，则该元素属于最小的K个元素之一，需要用它来替换堆顶元素，然后再从堆顶元素开始维护这个大根堆。
+// 直到所有元素都比较完为止，这个堆中的所有元素就是所求
+
+
+
+class Solution {
+public:
+    vector<int> getLeastNumbers_Solution(vector<int> input, int k) {
+        priority_queue<int> h;
+        vector<int> res;
+        for(auto x:input) // 求最小k，使用大根堆
+        {
+            h.push(x);
+            while(h.size() > k) h.pop();
+        }
+        
+        while(h.size())
+        {
+            res.push_back(h.top());
+            h.pop();
+        }
+        reverse(res.begin(),res.end());
+        
+        return res;
+    }
+};
+
+
+

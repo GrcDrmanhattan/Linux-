@@ -56,3 +56,36 @@ public:
  
  
  
+ ---------------------------------     1216 yxc
+ 
+ class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int> st, m;
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        st.push(x);
+        if(m.size()) x=min(x,m.top()); // 每次插入当前元素和m栈顶的最小值,每次都插入，所以也会每次都弹出
+        m.push(x);
+    }
+    
+    void pop() {
+        st.pop();
+        m.pop();
+    }
+    
+    int top() {
+        return st.top();
+    }
+    
+    int getMin() {
+        return m.top();
+    }
+};
+
+
+ 
+ 

@@ -27,7 +27,7 @@ public:
     }
     
     void push(int x) {
-        if(m.empty() || x <= m.top()) m.push(x);
+        if(m.empty() || x <= m.top()) m.push(x);  //单调栈，新的比栈顶大的元素，不会被getmin使用，不能插入，只有小于等于插入栈
         st.push(x);
     }
     

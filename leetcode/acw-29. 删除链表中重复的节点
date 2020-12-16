@@ -54,3 +54,28 @@ public:
 };
 
 
+1216 ------------------------------------  理解         // 几个相同的节点是一段
+
+
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* head) {
+        auto d=new ListNode(-1);
+        d->next = head;
+        // 几个相同的节点是一段
+        auto p=d;// p指针保存的是上一段的最后一个节点
+        
+        while(p->next)
+        {
+            auto pn = p->next;
+            while(pn && p->next->val == pn->val) pn=pn->next; // 在这一段里面，如果有相同节点，pn就一直向后走
+            
+            if(p->next->next == pn) p=p->next;// 如果这段长度为1，说明只有一个节点，p后移一个节点就可以
+            else p->next=pn;
+        }
+        
+        return d->next;
+    }
+};
+
+

@@ -35,3 +35,27 @@ public:
     }
 };
 
+
+--------------  1217
+
+class Solution {
+public:
+    int getNumberSameAsIndex(vector<int>& nums) {
+        if(nums.empty()) return -1;
+        
+        int l=0;
+        int r=nums.size()-1;
+        
+        while(l<r)
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid]-mid <=0) l=mid;
+            else r=mid-1;
+        }
+        
+        if(nums[l] - l ==0) return l;
+        return -1;
+    }
+};
+
+

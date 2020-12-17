@@ -41,4 +41,28 @@ public:
 };
 
 
+--------------------------------  1217
+
+class Solution {
+public:
+    int getMissingNumber(vector<int>& nums) {
+        if(nums.empty()) return 0;
+        
+        int l=0;
+        int r=nums.size()-1; // lr 是下标的范围
+        
+        while(l<r)
+        {
+            int mid = l+r>>1;
+            if(nums[mid] != mid) r=mid;
+            else l=mid+1;
+        }
+        
+        if(nums[l] == l) l++; // 如果二分出的下标代表的数和下标相等 表示缺少的是nums.size这个数，也就是数n
+        return l;
+    }
+};
+
+
+
 

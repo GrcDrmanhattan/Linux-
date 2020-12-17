@@ -1,0 +1,35 @@
+63. 字符串中第一个只出现一次的字符
+
+在字符串中找出第一个只出现一次的字符。
+
+如输入"abaccdeff"，则输出b。
+
+如果字符串中不存在只出现一次的字符，返回#字符。
+
+样例：
+输入："abaccdeff"
+
+输出：'b'
+
+
+------------------   时间复杂度 On，先扫描一遍统计次数，再扫描一遍查结果
+
+class Solution {
+public:
+    char firstNotRepeatingChar(string s) {
+        map<char ,int>  mp;
+        for(auto x:s) 
+        {
+            mp[x]++;
+            
+        }
+        
+        for(auto x:s)
+        {
+            if(mp[x]==1) return x;
+        }
+        
+        return '#';
+    }
+};
+

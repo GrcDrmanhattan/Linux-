@@ -19,14 +19,14 @@ class Solution
 public:
     int getMissingNumber(vector<int>& nums) 
     {
-        int n=nums.size();
-        if(n==0) return 0;
+        int n = nums.size();
+        if(n == 0) return 0;
         
         //数的取值0-数组长度，总共数组长度个数
         
         //长度是n，却有n+1个数字:0,1,2...n,(n+1个)，肯定要少一个数
         
-        int l=0;
+        int l=0;    //                                          二分的是左闭右开区间 ，如果失败返回尾后的元素， 可以不用特判最后的结果
         int r=n;
         while(l<r)
         {
@@ -49,7 +49,7 @@ public:
         if(nums.empty()) return 0;
         
         int l=0;
-        int r=nums.size()-1; // lr 是下标的范围
+        int r=nums.size()-1; // lr 是下标的范围 ，二分的是闭区间
         
         while(l<r)
         {
@@ -62,7 +62,5 @@ public:
         return l;
     }
 };
-
-
 
 

@@ -1,0 +1,42 @@
+73. 数组中只出现一次的两个数字
+
+一个整型数组里除了两个数字之外，其他的数字都出现了两次。
+
+请写程序找出这两个只出现一次的数字。
+
+你可以假设这两个数字一定存在。
+
+样例
+输入：[1,2,3,3,4,4]
+
+输出：[1,2]
+
+
+-------------------------------- 1217
+
+
+
+
+class Solution {
+public:
+    vector<int> findNumsAppearOnce(vector<int>& nums) {
+        vector<int> res;
+        int a=0;
+        for(auto x:nums)  a^=x;
+        
+        int k=0;
+        while(!(a>>k&1)) k++ ;// while结束后，k表示第几位是1，找到第几位是1，根据此，将数分成两类，一类是这一位是1，另一位是0
+        int t1=0;
+        
+        for(auto x:nums)
+            if(x>>k &1 )
+                t1 ^= x;
+                
+        res.push_back(t1);
+        res.push_back(a^t1);// 全部异或和 ^ t1 得到第二类的结果
+        return res;
+    }
+};
+
+
+

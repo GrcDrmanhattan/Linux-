@@ -41,3 +41,30 @@ public:
     }
 };
 
+
+
+----------------------  1217 
+
+
+class Solution {
+public:
+    int getNumberOfK(vector<int>& nums , int k) {
+        if(nums.empty()) return 0;
+        map<int,int> cnt;
+        for(auto x: nums) cnt[x]++;
+        
+        for(auto x:nums) 
+        {
+            if(cnt.count(x)) 
+            {
+                if(x==k) return cnt[x];
+            }
+            else return 0;
+        }
+        
+        return 0;
+    }
+};
+
+
+

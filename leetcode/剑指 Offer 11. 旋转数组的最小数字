@@ -78,3 +78,30 @@ public:
     }
 };
 
+
+
+--------------------  1221 
+
+
+
+class Solution {
+public:
+    int minArray(vector<int>& numbers) {
+        int n=numbers.size();
+        if(n==0) return -1;
+        while(n-1 && numbers[n-1]==numbers[0]) n--;
+        if(n-1 && numbers[n-1]>numbers[0]) return numbers[0];
+
+        int l=0;
+        int r=n-1;
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(numbers[mid] < numbers[0]) r=mid;
+            else l=mid+1;
+        }
+
+        return numbers[l];
+    }
+};
+

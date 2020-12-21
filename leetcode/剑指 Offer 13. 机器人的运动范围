@@ -1,0 +1,45 @@
+剑指 Offer 13. 机器人的运动范围
+
+
+-------------------   类内初始化 leetcode
+
+bool st[110][110];
+
+class Solution {
+public:
+    int res=0;
+    int dx[4]={0,1,0,-1};
+    int dy[4]={1,0,-1,0};
+    
+    int movingCount(int m, int n, int k) {
+        if(!m || !n) return 0;
+        memset(st,0,sizeof(st));
+        dfs(0,0,m,n, k);
+        return res;
+    }
+
+    int get(int a,int b)
+    {
+        return a%10 +a/10 + b%10 + b/10;
+    }
+
+    void dfs(int x,int y,int m,int n, int k)
+    {   
+        res++;
+        st[x][y]=true;
+    
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<m && b>=0 && b<n && !st[a][b] && get(a,b) <=k)
+            {
+                st[a][b]=true;
+                dfs(a,b,m,n,k);
+            }
+        }
+    }
+};
+
+

@@ -78,3 +78,29 @@ public:
     }
 };
 
+
+
+-----------------  1221  yxc
+
+
+class Solution {
+public:
+    int integerBreak(int n) {
+        if(n<=3) return 1*(n-1);
+        long long  res=1;
+
+        if(n%3==2) res=2,n-=2;
+        if(n%3==1) res=4,n-=4;
+
+        while(n)
+        {
+            res%=1000000007;
+            res*=3;            
+            n-=3;
+        }
+
+        return res%1000000007;
+    }
+};
+
+

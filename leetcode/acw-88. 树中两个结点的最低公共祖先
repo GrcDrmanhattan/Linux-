@@ -1,0 +1,58 @@
+88. 树中两个结点的最低公共祖先
+
+给出一个二叉树，输入两个树节点，求它们的最低公共祖先。
+
+一个树节点的祖先节点包括它本身。
+
+注意：
+
+输入的二叉树不为空；
+输入的两个节点一定不为空，且是二叉树中的节点；
+样例
+二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]如下图所示：
+    8
+   / \
+  12  2
+     / \
+    6   4
+
+1. 如果输入的树节点为2和12，则输出的最低公共祖先为树节点8。
+
+2. 如果输入的树节点为2和6，则输出的最低公共祖先为树节点2。
+
+
+
+------------------------    1221 yxc 
+
+时间On，实际要小于On
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+// 递归查找左右子树是否有pq的最低祖先
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        
+        if(!root) return nullptr;
+        if(root==p || root==q) return root;
+        
+        auto ll=lowestCommonAncestor(root->left, p,q); 
+        auto rr=lowestCommonAncestor(root->right, p,q);
+        
+        if(ll && rr) return root;//如果在左右子树同时查到了祖先，则说明查到的祖先就是当前节点
+        if(ll) return ll; // 如果右子树不存在，返回在左子树查到的祖先
+        else return rr; // 
+        
+    }
+};
+
+

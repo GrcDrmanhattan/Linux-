@@ -37,11 +37,11 @@ int main()
     for(int i=0;i<n;++i )scanf("%d",&a[i]);
     
     int res=0;
-    for(int i=0,j=0;i<n;++i)//枚举i向后
+    for(int i=0,j=0;i<n;++i)//枚举i向后, 每一个i对应一个j
     {
         s[a[i]]++;
         
-        while(s[a[i]]>1)
+        while(s[a[i]]>1) // 有重复元素，就删除重复元素
         {
             s[a[j]]--;
             j++;

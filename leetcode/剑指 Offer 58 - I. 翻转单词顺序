@@ -29,6 +29,19 @@
 -------------------------   1223 
 
 
+        int left = 0, right = s.size() - 1;
+        
+        // 去掉字符串开头的空白字符
+        while (left <= right && s[left] == ' ') ++left;
+
+        // 去掉字符串末尾的空白字符
+        while (left <= right && s[right] == ' ') --right;
+
+
+
+--------------------
+
+
 class Solution {
 public:
     string reverseWords(string s) {

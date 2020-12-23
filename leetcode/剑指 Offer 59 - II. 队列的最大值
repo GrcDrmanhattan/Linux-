@@ -43,8 +43,8 @@ public:
     }
     
     void push_back(int value) {
-        while(q.size() && q.back() <= value) q.pop_back();
-        q.push_back(value);
+        while(q.size() && q.back() <= value) q.pop_back(); // 每次插入新元素时都要删除小的
+        q.push_back(value); // 然后插入大的元素， 
 
         t.push(value);
     }

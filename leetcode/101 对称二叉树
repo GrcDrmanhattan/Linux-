@@ -117,3 +117,29 @@ public:
     }
 };
 
+
+
+
+------------------------------------------------   1224
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+
+        if(help(root->left, root->right) ) return true;
+        return false;
+
+    }
+
+    bool help(TreeNode* p, TreeNode* q)
+    {
+        if(!p || !q) return !q && !p;
+
+        if(p->val != q->val) return false;
+
+        return help(p->left, q->right) && help(p->right, q->left);
+    }
+};
+
+

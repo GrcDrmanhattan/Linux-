@@ -62,3 +62,47 @@ public:
 };
 
 //unordered_map<int, int> m;   <中序节点值，对应的序号0-。。。>
+
+
+
+
+
+
+
+---------------------------------------  1224
+
+ 时间On，
+ 空间 On
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.empty()) return nullptr;
+        return help(preorder, 0 ,preorder.size()-1, inorder, 0, inorder.size()-1);
+    }
+
+    TreeNode* help(vector<int>& pr, int ps ,int pe, vector<int>& ino, int is ,int ie)
+    {
+        if(ps> pe || is >ie) return nullptr;
+        auto rt=new TreeNode(pr[ps]);
+
+        int k=0;
+        for(int i=0;i<ino.size();++i)
+        {
+            if(ino[i] == pr[ps])
+            {
+                k=i;
+                break;
+            }
+        }
+
+        int ll=k-is;
+
+        rt->left=help(pr, ps+1, ps+ll, ino, is ,k-1);
+        rt->right=help(pr, ps+ll+1, pe, ino, k+1,ie);
+        return rt;
+    }
+};
+
+
+

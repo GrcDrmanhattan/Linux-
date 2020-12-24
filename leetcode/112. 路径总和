@@ -30,7 +30,8 @@
  * };
  */
 
-//把从根到叶子节点满足条件sum，转换为从根到left和right到叶子节点的满足和为sum-root->val
+//把从根到叶子节点满足条件sum，转换为从根的left和right到叶子节点的满足和为sum-root->val
+
 
 class Solution 
 {
@@ -42,3 +43,24 @@ public:
         return hasPathSum(root->left,sum-root->val)||hasPathSum(root->right,sum-root->val);
     }
 };
+
+
+
+-----------------------------------    1224/2020
+
+// 子问题是 看左右子树是否有到叶子结点到路径和是 sum - 当前节点的val
+
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(!root) return false;
+
+        if(!root->left && !root->right) return root->val == sum;// 到达叶子结点判断相减之后的sum是否等于叶子结点的值
+
+        return hasPathSum(root->left, sum-root->val) || hasPathSum(root->right, sum-root->val);
+    }
+};
+
+
+

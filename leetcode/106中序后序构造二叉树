@@ -65,3 +65,40 @@ public:
     }
 
 };
+
+------------------------------------------------------  1224
+
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(postorder.empty() || inorder.empty()) return nullptr;
+ 
+        for(int i=0;i<inorder.size();++i)
+        {
+            mp[inorder[i]]=i;
+        }
+        return help(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
+
+    }
+
+    TreeNode* help(vector<int>& ino, int is ,int ie, vector<int>& pos, int ps, int pe)
+    {
+        if(is>ie || ps>pe) return nullptr;
+
+        int r=mp[pos[pe]];
+        auto rt=new TreeNode(pos[pe]);
+
+        int ll=r-is;
+
+        rt->left=help( ino, is, r-1, pos, ps, ps+ll-1); // 看数据想一下接可以
+        rt->right=help(ino, r+1, ie, pos, ps+ll, pe-1);
+
+        return rt;
+    }
+};
+
+
+

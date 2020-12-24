@@ -114,3 +114,41 @@ public:
     }
 };
 
+-----------------------------------------------  1224
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root) return res;
+
+        queue<TreeNode*> q;
+        q.push(root);
+        int l=1;
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+            l++;   // 初始根第一层，进入队列不为空时，l++，根第二层，然后第三层反转
+
+            while(n--)
+            {
+                auto t=q.front();
+               
+                tmp.push_back(t->val);
+                q.pop();
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            if(l&1) reverse(tmp.begin(),tmp.end());
+
+            res.push_back(tmp);
+        }
+
+        return res;
+    }
+};
+

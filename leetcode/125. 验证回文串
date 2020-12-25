@@ -1,0 +1,40 @@
+125. 验证回文串
+
+给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+
+说明：本题中，我们将空字符串定义为有效的回文串。
+
+示例 1:
+
+输入: "A man, a plan, a canal: Panama"
+输出: true
+示例 2:
+
+输入: "race a car"
+输出: false
+
+---------------------------------------- 1225/2020/ yxc
+
+
+class Solution {
+public:
+    bool help(char x)
+    {
+        return x>='a' && x<='z' || x>='A' && x<='Z' || x>='0' && x<='9';
+    }
+    
+    bool isPalindrome(string s) {
+        for(int i=0, j=s.size()-1;i<j; ++i, --j)
+        {
+            while(i<j && !help(s[i])) i++;
+            while(i<j && !help(s[j])) j--;
+
+            if(i<j && tolower(s[i]) != tolower(s[j])) return false;
+        }
+
+        return true;
+    }
+};
+
+
+

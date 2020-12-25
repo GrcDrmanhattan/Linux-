@@ -218,3 +218,39 @@ public:
     }
 };
 
+
+------------------------------------------------------  1225 /2020/ yxc
+
+
+// 双指针优化为On2
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<nums.size();++i)
+        {
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            for(int j=i+1 , k=nums.size()-1; j<k;++j) // j要小于k，两个指针不能超过
+            {
+                if(j>i+1 && nums[j]==nums[j-1]) continue;
+
+                while( j <k-1 && nums[i] + nums[j]+nums[k-1] >=0) k--; // 找到最小的大于等于0的k
+
+                if(nums[i] + nums[j] +nums[k]==0)
+                {
+                    res.push_back({nums[i], nums[j], nums[k]});
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+

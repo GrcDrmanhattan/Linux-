@@ -85,3 +85,58 @@ public:
         return newhead;
     }
 };
+
+
+------------------------  1226/2020 /yxc
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+
+//   也就是将后面的k个节点移动到左边
+//   需要改变三个节点 
+//   原链表的尾节点、head、前面第n-k个节点的指针
+
+
+
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(!head) return head;
+
+        int l=0;
+        ListNode* tail;
+
+        for(auto p=head;p;p=p->next)
+        {
+            tail=p;
+            l++;
+        }
+
+        k%=l;
+        if(!k) return head;
+
+        auto p=head;
+        for(int i=0;i<l-k-1;++i) // 倒数第k个节点第前一个节点，也就是前面第n-k个
+        {
+            p=p->next;
+        }
+
+        tail->next= head;
+        head=p->next;
+        p->next=nullptr;
+
+        return head;
+    }
+};
+
+
+

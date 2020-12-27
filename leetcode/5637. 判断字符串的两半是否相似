@@ -68,3 +68,27 @@ public:
     }
 };
 
+
+-----------------------   yxc
+
+class Solution {
+public:
+    int cnt(string s)
+    {
+        set<char> hs{'a', 'e', 'i', 'o','u'};
+        int res=0;
+        for(auto c:s)
+        {
+            auto x=tolower(c);
+            if(hs.count(x)) res++;
+        }
+
+        return res;
+    }
+    bool halvesAreAlike(string s) {
+        int n=s.size()/2;
+        return cnt(s.substr(0, n)) == cnt(s.substr(n));
+    }
+};
+
+

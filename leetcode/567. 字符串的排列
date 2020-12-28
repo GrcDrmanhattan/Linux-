@@ -49,7 +49,7 @@ public:
             h2[s2[i]]++;
             if(check(s2[i])) cnt++;
 
-            if(i-j >= n) // 维护长度和s1相等的窗口
+            if(i-j >= n) // 维护长度和s1相等的窗口, // 过大了，要缩小窗口
             {
                 if(check(s2[j])) cnt--;
                 h2[s2[j]]--;

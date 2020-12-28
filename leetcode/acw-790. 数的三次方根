@@ -55,3 +55,40 @@ int main()
     return 0;
 }
 
+
+-----------------  1228/ 2020   yxc
+
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+    double n;
+    
+    cin>>n;
+    
+    double  l=-1e5;
+    double r=1e5;
+    
+    // if(n>0) 
+    // {
+    //     l=-n;r=n;
+    // }
+    // else 
+    // {
+    //     l=n;r=-n;
+    // }
+    
+    while(r-l>1e-8)
+    {
+        double mid=(l+r)/2;
+        if(mid * mid * mid >=n) r=mid;
+        else l=mid;
+    }
+    
+    printf("%lf",l);
+    return 0;
+}
+

@@ -100,3 +100,48 @@ int main()
     return 0;
 }
 
+---------------- 1228/2020 
+
+#include<iostream>
+
+using namespace std;
+
+const int N=1e5+10;
+int n,k;
+int a[N];
+
+int qu(int a[], int l, int r,int k)
+{
+    if(l>=r) return a[l];
+    
+    int x=a[(l+r)>>1];
+    int i=l-1;
+    int j=r+1;
+    
+    while(i<j)
+    {
+        while(a[++i] <x);
+        while(a[--j] > x);
+        if(i<j) swap(a[i] , a[j]);
+    }
+    
+    int ll=j-l+1;
+    
+    if(k<=ll) return qu(a, l, j, k);
+    else return qu(a, j+1, r, k-ll);
+    
+}
+
+int main()
+{
+    cin>>n>>k;
+    for(int i=0;i<n;++i) cin>>a[i];
+    
+    cout<< qu(a, 0, n-1, k)<<endl;
+    
+    return 0;
+    
+}
+
+
+

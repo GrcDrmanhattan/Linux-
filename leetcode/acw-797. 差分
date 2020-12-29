@@ -117,3 +117,49 @@ int main()
 //     return 0;
 // }
 
+
+-------------------------------------- 1229 /2020 /
+
+
+#include<iostream>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int a[N];
+int b[N];// 差分数组
+
+int n,m,q;
+
+
+void insert(int l,int r,int c)
+{
+    b[l] += c;
+    b[r+1] -= c;
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=1;i<=n;++i) cin>>a[i];
+    
+    for(int i=1;i<=n;++i) insert(i, i ,a[i]); // 构造差分
+    
+    while(m--)
+    {
+        int l,r,c;
+        cin>>l>>r>>c;
+        
+        insert(l ,r, c);// 操作完a数组已经变化了，怎么输出呢，对差分前缀和 就是原数组了
+    }
+    
+    for(int i=1;i<=n;++i) b[i] += b[i-1];
+    
+    for(int i=1;i<=n;++i) cout<<b[i]<<' ';
+    
+    return 0;
+}
+
+

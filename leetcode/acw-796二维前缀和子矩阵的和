@@ -1,7 +1,6 @@
-![图片]（https://github.com/GrcDrmanhattan/Linux-/blob/master/leetcode/子矩阵的和的题解图片.jpeg）
 
-# 题目
-```
+
+
 输入一个n行m列的整数矩阵，再输入q个询问，每个询问包含四个整数x1, y1, x2, y2，表示一个子矩阵的左上角坐标和右下角坐标。
 
 对于每个询问输出子矩阵中所有数的和。
@@ -38,11 +37,8 @@
 27
 21
 
-```
+------------------------------------------ 
 
-
-## 代码
-```
 #include<iostream>
 
 const int N=1010;
@@ -79,4 +75,44 @@ int main()
 
     return 0;
 }
-```
+
+
+--------------------------------------  1229 /2020 / 
+
+#include<iostream>
+
+using namespace std;
+
+const int N=1010;
+
+int a[N][N];
+int s[N][N];
+
+int n,m,q;
+int x1,y1,x2,y2;
+
+// s[i][j]  从00到ij坐标围城的矩形的和
+
+
+int main()
+{
+    cin>>n>>m>>q;
+    
+    for(int i=1;i<=n;++i)
+        for(int j=1;j<=m;++j)
+            cin>>a[i][j];
+            
+    for(int i=1;i<=n;++i) 
+        for(int j=1;j<=m;++j)
+            s[i][j] = s[i][j-1] + s[i-1][j] - s[i-1][j-1] +a[i][j]; // 构造二维前缀和
+            
+    while(q--)
+    {
+        cin>>x1>>y1>>x2>>y2;
+        int res = s[x2][y2] - s[x2][y1-1] - s[x1-1][y2] + s[x1-1][y1-1];
+        cout<<res<<endl;
+    }
+    
+    return 0;
+}
+

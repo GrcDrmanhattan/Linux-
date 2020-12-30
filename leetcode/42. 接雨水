@@ -41,12 +41,17 @@ public:
             while(st.size() && height[st.top()] <= height[i]) // 比前面的高度小，可以与前面形成凹槽
             {
                 res += (i-st.top()-1) * (height[st.top()] - last);
-                last = height[st.top()];
+                last = height[st.top()]; // 将last更新为栈顶坐标
+                
+                // 在弹出之前先计算面积
                 st.pop();
             }
 
+
             // 当剩下栈内的高度比当前高度大时
             if(st.size()) res += (i-st.top()-1) * (height[i] - last);
+            
+            // 最后push当前i坐标
             st.push(i);
         }
         

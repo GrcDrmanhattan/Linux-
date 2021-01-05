@@ -54,3 +54,45 @@ int main()
     
     return 0;
 }
+
+
+------------------  0105 /2021 
+
+// 因为要取最小值，所以要在栈插入新元素前，判断栈顶元素是否大于等于要插入的元素
+// 如果·是，则不会被用作答案 需要删除
+
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N = 1e5+10;
+
+
+int n;
+int a[N];
+int st[N];
+
+int tt;
+
+int main()
+{
+    
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>a[i];
+    
+    for(int i=0;i<n;++i)
+    {
+        while( tt && a[st[tt]] >= a[i]) tt--; // 在向栈里2插入新元素时要判断是否合法,当弹出结束时栈顶元素就是当前元素最近的最小值
+        
+        if(!tt) cout<<"-1 ";
+        else cout<<a[st[tt]]<<' '; // 当弹出结束时栈顶元素就是当前元素最近的最小值
+        
+        
+        st[++tt]=i;
+    }
+    
+    return 0;
+}
+

@@ -92,7 +92,7 @@ int main()
     return 0;
 }
 
-
+----------------------------------------------------------------------------------------
 
 #include<iostream>
 
@@ -147,3 +147,63 @@ int main()
     
     return 0;
 }
+
+
+--------------------- 0105 / 2021  单调队列或者单调栈， 要看求最小还是最大，只要记住要把越是靠后加入的元素才越作为答案，去弹出栈、队列就可 
+ //    因为越是在后的元素又满足最大或者最小的性质、最晚弹出才会被用作答案
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N= 1e6+10;
+
+int n,k;
+
+int a[N];
+
+int q[N];
+
+
+int main()
+{
+    scanf("%d%d", &n, &k);
+    
+    int hh=0;
+    int tt=-1;
+    
+    for(int i=0;i<n;++i) scanf("%d", &a[i]);
+    
+    for(int i=0 ;i<n;++i)
+    {
+        if(hh<=tt && i-q[hh] + 1 >k) hh++; // 保持窗口为k
+        
+        while(hh<=tt && a[q[tt]] >= a[i]) tt--;// 求窗口最小值新元素又小又近距离，则前面的不会被用作答案
+        q[++tt]=i;
+        
+        if(i-k+1 >=0) printf("%d ", a[q[hh]]);
+        
+    }
+    
+    puts("");
+    
+    hh=0;
+    tt=-1;
+    
+    for(int i=0;i<n;++i)
+    {
+        if(hh<=tt && i-q[hh]+1 > k) hh++;
+        
+        while(hh<=tt && a[q[tt]] <= a[i]) tt--;// 求窗口最大值，新元素又大，又后弹出，所以前面的不会被用作答案
+        q[++tt]=i;
+        
+        
+        if(i-k+1 >=0) printf("%d ", a[q[hh]]);
+        
+    }
+    
+    return 0;
+}
+
+

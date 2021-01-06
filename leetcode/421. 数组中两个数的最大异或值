@@ -1,0 +1,87 @@
+421. 数组中两个数的最大异或值
+
+给定一个非空数组，数组中元素为 a0, a1, a2, … , an-1，其中 0 ≤ ai < 2^31 。
+
+找到 ai 和aj 最大的异或 (XOR) 运算结果，其中0 ≤ i,  j < n 。
+
+你能在O(n)的时间解决这个问题吗？
+
+示例:
+
+输入: [3, 10, 5, 25, 2, 8]
+
+输出: 28
+
+解释: 最大的结果是 5 ^ 25 = 28.
+
+
+------------------ 0106 / 2021 /yxc   
+
+
+
+// 字典树 ，寻找某个数的异或最大的数，要最高位开始，要保证每次都找到和当前位不一样的数，依次去遍历每一位就相当于构造了一棵树，每个节点是0或1，、
+// 二维数组存储 第一维是多少个节点，第二维是每个节点可能的取值（比如26个字母或者01位的数，
+
+
+
+const int N=1e5+10, M=31 * N;
+
+class Solution {
+public:
+
+    int son[M][2];
+    int idx;
+
+    void insert(int x)
+    {
+        int p=0;
+        for(int i=31;i>=0;--i) // 32位
+        {
+            int u=x>>i&1;
+
+            if(!son[p][u]) son[p][u] = ++idx;
+            p=son[p][u];
+        }
+    }
+
+    int query(int x)
+    {
+        int p=0;
+        int res=0;
+
+        for(int i=31;i>=0;--i)
+        {
+            int u=x>>i&1;
+
+            if(son[p][!u])
+            {
+                p=son[p][!u];
+                res = res * 2 + !u;
+            }
+            else
+            {
+                p=son[p][u];
+                res = res *2 + u;
+            }
+        }
+
+        return res;
+    }
+
+
+    int findMaximumXOR(vector<int>& nums) {
+        int res=0;
+        
+        for(auto x:nums)
+        {
+            insert(x);
+            int t=query(x);
+            
+            res=max(res, x ^ t);
+        }
+
+        return res;
+    }
+};
+
+

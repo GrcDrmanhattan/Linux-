@@ -1,0 +1,84 @@
+
+
+对于每个询问指令”Q x”，都要输出一个整数作为结果，表示x在集合中出现的次数。
+
+每个结果占一行。
+
+数据范围
+1≤N≤2∗104
+输入样例：
+5
+I abc
+Q abc
+Q ab
+I ab
+Q ab
+输出样例：
+1
+0
+1
+
+----------------- 0106 /2021 //
+
+#include<iostream>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int son[N][26], cnt[N], idx;
+
+int n;
+
+char str[N];
+
+void insert(char str[])
+{
+    int p=0;
+    for(int i=0;str[i];i++)
+    {
+        int u=str[i]-'a';
+        
+        if(!son[p][u]) son[p][u]=++idx;// 看当前节点是否有寻找的节点，如果没有就坐标++，创建一个
+        
+        p=son[p][u]; // p指向寻找的节点这里
+    }
+    
+    cnt[p]++;
+}
+
+
+int query(char str[])
+{
+    int p=0;
+    for(int i=0;str[i];++i)
+    {
+        int u=str[i]-'a';
+        
+        if(!son[p][u]) return 0;
+        
+        p=son[p][u];
+    }
+    
+    return cnt[p];
+}
+
+
+int main()
+{
+    cin>>n;
+    
+    while(n--)
+    {
+        char op[2];
+        
+        cin>>op>>str;
+        
+        if(op[0]=='I') insert(str);
+        else cout<<query(str)<<endl;
+    }
+    
+    return 0;
+}
+
+

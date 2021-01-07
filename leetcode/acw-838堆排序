@@ -124,3 +124,58 @@ int main()
 }
 
 
+---------------------- 0107 / 2021 /   手写堆，堆里的是数组元素的下标
+
+主要操作down将元素向下调整， up将元素向上调整
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int h[N];
+int n,m;
+int s;
+
+
+void down(int x)
+{
+    int minv=x; // minv是 根节点和左右孩子节点的最小值的坐标
+    
+    if(x*2<=s&&h[x*2] <= h[minv]) minv=x*2;
+    if(x*2+1 <= s && h[x*2+1] <= h[minv]) minv=x*2+1;
+    
+    if(minv != x)
+    {
+        swap(h[minv], h[x]);
+        down(minv);
+    }
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    
+    for(int i=1;i<=n;++i) cin>>h[i];
+    
+    s = n;
+    
+    for(int i=n/2;i;--i) down(i);
+    
+    while(m--)
+    {
+        cout<<h[1]<<' ';
+        
+        h[1]=h[s];
+        s--;
+        down(1);
+    }
+    
+    return 0;
+}
+
+
+

@@ -62,3 +62,63 @@ int main()
     return 0;
 }
 
+
+-------------------- 0108 /2021 
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int N=2e5+3 ; // 质数
+const int nul=0x3f3f3f3f;
+
+
+int h[N];
+
+
+int n;
+
+
+int find(int x)
+{
+    int k=((x%N)+N)%N;
+    
+    while(h[k] != nul && h[k] != x)
+    {
+        k++;
+        
+        if(k==N) k=0;
+    }
+    
+    return k; // 返回while结束的两种情况之一
+}
+
+
+
+int main()
+{
+    cin>>n;
+    
+    memset(h, 0x3f,sizeof(h));
+    
+    while(n--)
+    {
+        char op[2];
+        int x;
+        scanf("%s%d", &op, &x); // 尽量用%s 读入字符
+        
+        int k=find(x);
+        
+        if(op[0]=='I') h[k]=x;
+        else 
+        {
+            if(h[k] != nul) puts("Yes");
+            else puts("No");
+        }
+    }
+    
+    
+    return 0;
+}
+

@@ -61,8 +61,8 @@ void heap_swap(int x,int y)
 void down(int u)
 {
     int t = u;
-    if(u*2<sz && h[u*2]<h[t]) t=u*2;
-    if(u*2+1<sz && h[u*2+1]<h[t]) t=u*2+1;
+    if(u*2<=sz && h[u*2]<h[t]) t=u*2;
+    if(u*2+1<=sz && h[u*2+1]<h[t]) t=u*2+1;
     
     if(u!=t)
     {
@@ -146,3 +146,120 @@ int main()
 }
 
 
+------------------------------ 0108 /2021 /   小根堆的up，down
+
+hp[xx] : 表示一个从堆h指向p的直线，也就是堆里的元素xx是第几个插入的元素，用hp[xx]表示,[]里的都是下标
+ph[xx] : 表示从p 指向堆h的直线，也就是第xx个插入的元素是堆里的哪个元素， 用ph[xx]表示，[]里是下标
+
+
+把ph[] 和 hp[] 看作一个整体，也就是根据里面的值xx不同表示的元素不同， 其实就是一个数，只是方便人理解赋予了不同的含义
+
+
+
+#include<iostream>
+#include<string.h>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int h[N],hp[N],ph[N];
+int n;
+int sz;
+int idx;
+
+void heap_swap(int x, int y) // 交换堆x和y位置的元素
+{
+    swap(ph[hp[x]], ph[hp[y]]);
+    swap(hp[x], hp[y]);
+    swap(h[x] ,h[y]);
+}
+
+void down(int x) // 将堆位置x的元素向下调整
+{
+    int tmp=x;
+    
+    if(x*2<=sz && h[x*2]<h[tmp])  tmp =x*2; //           有等号
+    if(x*2+1<=sz && h[x*2+1] < h[tmp]) tmp=x*2+1; //     有等号
+    
+    if(tmp != x)
+    {
+        heap_swap(tmp, x);
+        down(tmp);
+    }
+}
+
+
+void up(int x) // 将堆位置x的元素向上调整
+{
+    while(x/2 && h[x/2] > h[x])
+    {
+        heap_swap(x/2, x);
+        x/=2;
+    }
+}
+
+int main()
+{
+    cin>>n;
+    int k,x;
+    while(n--)
+    {
+        char op[5];
+        cin>>op;
+        
+        if(!strcmp(op, "I"))
+        {
+            cin>>x;
+            idx++; // p下标++
+            sz++;// 堆里的下标++
+            
+            hp[sz]=idx;
+            ph[idx]=sz;
+           
+            h[sz]=x;
+            
+            up(sz);
+        }
+        else if(!strcmp(op, "PM")) cout<<h[1]<<endl;
+        else if(!strcmp(op, "DM"))
+        {
+            
+            heap_swap(1, sz);// 交换堆里的下标
+            
+            sz--;
+            down(1);// 将堆第一个位置的元素向下调整到合适的位置
+        }
+        else if(!strcmp(op, "D"))
+        {
+            cin>>k;
+            
+            k=ph[k];          
+            heap_swap(k, sz);
+            
+            
+            sz--;
+            down(k);
+            up(k);
+            
+        }
+        else
+        {
+            cin>>k>>x;
+            
+            k=ph[k];
+            h[k]=x;
+            
+            down(k);
+            up(k);
+            
+        }
+    }
+    
+    return 0;
+}
+
+
+
+            

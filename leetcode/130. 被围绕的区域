@@ -1,0 +1,83 @@
+130. 被围绕的区域
+给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
+
+找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+
+示例:
+
+X X X X
+X O O X
+X X O X
+X O X X
+运行你的函数后，矩阵变为：
+
+X X X X
+X X X X
+X X X X
+X O X X
+解释:
+
+
+被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。
+如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+
+
+------------------- 0109 /2021 / yxc
+
+时间On
+
+
+// 将所有在边界的O打上标记，然后将没有标记的o变为x
+// 反向标记
+
+vector<vector<char>> g;
+int n,m;
+int dx[4]={0,1,0,-1};
+int dy[4]={1,0,-1,0};
+
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        if(board.empty()) return ;
+        g=board;
+
+        n=g.size();
+        m=g[0].size();
+
+        for(int i=0;i<n;++i) // 遍历列1的边界，如果是O，标记为*
+        {
+            if(g[i][0]=='O') dfs(i, 0);
+            if(g[i][m-1]=='O') dfs(i, m-1);
+        }
+
+        for(int i=0;i<m;++i) // 遍历行边界，如果是O，标记*
+        {
+            if(g[0][i]=='O') dfs(0, i);
+            if(g[n-1][i]=='O') dfs(n-1, i);
+        }
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(g[i][j]=='*') g[i][j]='O'; // 如果被标记过，说明是在边界上的O
+                else g[i][j]='X'; // 不在边界上的O，如题变为x
+            }
+
+        board=g;
+    }
+
+    void dfs(int x,int y)
+    {
+        g[x][y]='*'; // 遍历到当前元素要打标记
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]=='O') // 搜索，将和边界相连的O标记
+                dfs(a, b);
+        }
+    }
+};
+
+

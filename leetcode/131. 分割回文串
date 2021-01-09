@@ -1,0 +1,74 @@
+131. 分割回文串
+
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。
+
+返回 s 所有可能的分割方案。
+
+示例:
+
+输入: "aab"
+输出:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+
+
+---------------- 0109 /2021 / yxc
+
+
+
+
+// 最坏情况下是指数级别 2^ (n-1) ,意味着可以暴力搜索
+// 递推 + 搜索
+
+// 计算顺序注意
+// 要先枚举j，后i，确保f[i+1][j-1] 在f[i][j]之前被计算出来, 因为i一直都是小于j的，只要j枚举完，i必然枚举完，所以j要先枚举
+
+
+class Solution {
+public:
+    vector<vector<bool>> f;
+    vector<vector<string>> res;
+    vector<string> tm;
+    
+    vector<vector<string>> partition(string s) {
+        int n=s.size();
+
+        f=vector<vector<bool>>(n, vector<bool>(n));
+
+        for(int j=0;j<n;++j)
+            for(int i=0;i<=j;++i)
+            {
+                if(i==j) f[i][j]=true;
+                else if(s[i]==s[j])
+                {
+                    if(i+1 > j-1 || f[i+1][j-1]) f[i][j]=true;
+                }
+            }
+
+        dfs(s, 0);
+
+        return res;
+    }
+
+
+    void dfs(string& s, int u)
+    {
+        if(u == s.size()) res.push_back(tm);
+        else
+        {
+            for(int i=u;i<s.size();++i)
+            {
+                if(f[u][i])
+                {
+                    tm.push_back(s.substr(u, i-u+1));
+                    dfs(s, i+1);
+                    tm.pop_back();
+                }
+            }
+        }
+    }
+};
+
+

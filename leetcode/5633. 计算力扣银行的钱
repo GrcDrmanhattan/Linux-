@@ -59,3 +59,25 @@ public:
 };
 
 
+------------------ 0110 / 2021  yxc
+
+
+class Solution {
+public:
+    int totalMoney(int n) {
+        int res=0;
+        
+        for(int i=1;i<=n;++i)
+        {
+            int r=(i-1)/7;
+            int c=(i-1)%7;
+
+            res += r+c+1;
+        }
+        return res;
+    }
+};
+
+
+
+

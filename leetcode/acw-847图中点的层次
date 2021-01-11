@@ -176,3 +176,79 @@ int main()
 }
 
 
+--------------------------------- 0111 / 2021 /  最典型的bfs，先加入队列，然后 取出队头元素，如果没遍历， 就扩展队头
+
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int idx;
+int h[N], e[N], ne[N];
+
+int n,m;
+int d[N];
+
+queue<int> q;
+
+void add(int a,int b)
+{
+    e[idx]=b;
+    
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+}
+
+
+int bfs()
+{
+    memset(d, -1 ,sizeof d);
+    
+    q.push(1);
+    d[1]=0;
+    
+    while (q.size())
+    {
+        int t = q.front();
+        q.pop();
+
+        for (int i = h[t]; i != -1; i = ne[i])
+        {
+            int j = e[i];
+            if (d[j] == -1)
+            {
+                d[j] = d[t] + 1;
+                q.push(j);
+            }
+        }
+    }
+    
+    return d[n];
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    
+    memset( h ,-1 ,sizeof(h));
+    
+    while(m--)
+    {
+        int a,b;
+        cin>>a>>b;
+        
+        add(a, b);
+    }
+    
+    cout<<bfs()<<endl;
+    
+    return 0;
+}
+
+

@@ -272,3 +272,82 @@ int main()
     
 }
 
+
+-------------------------------------- 0111 /2021 /
+
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int N=1e5+10;
+const int M=N*2;
+
+int h[N];
+int e[M];
+int ne[M];
+int idx;
+
+bool st[N];
+
+int n;
+
+int res=N;
+
+void add(int x,int y)
+{
+    e[idx]=y;
+    
+    ne[idx]=h[x];
+    h[x]=idx;
+    idx++;
+}
+
+int dfs(int u)
+{
+    st[u]=true;
+    
+    int sum=1;
+    int tmp=0;
+    
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int j=e[i];
+        
+        if(!st[j])
+        {
+            int t=dfs(j);
+            sum += t;
+            
+            tmp=max(tmp, t);
+        }
+    }
+    
+    tmp=max(tmp, n-sum);
+    
+    res=min(res, tmp);
+    
+    return sum;
+}
+
+int main()
+{
+    cin>>n;
+    memset(h ,-1 ,sizeof(h)); // 要先初始化
+    
+    for(int i=0;i<n-1;++i)
+    {
+        int a,b;
+        cin>>a>>b;
+        add(a,b);
+        add(b,a);
+    }
+    
+    
+    dfs(1);
+    
+    cout<<res<<endl;
+    return 0;
+}
+

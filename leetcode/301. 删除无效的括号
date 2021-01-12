@@ -1,0 +1,91 @@
+301. 删除无效的括号
+
+删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。
+
+说明: 输入可能包含了除 ( 和 ) 以外的字符。
+
+示例 1:
+
+输入: "()())()"
+输出: ["()()()", "(())()"]
+示例 2:
+
+输入: "(a)())()"
+输出: ["(a)()()", "(a())()"]
+示例 3:
+
+输入: ")("
+输出: [""]
+
+----------------------- 0112 / 2021 /yxc   
+
+
+dfs 暴搜从每个字符开始枚举 ，
+
+
+
+// l是左括号数-右括号数，
+// r是 要删除的右括号数
+// 循环结束，l就是要删除的左括号数，r是删除的右括号数
+
+class Solution {
+public:
+    vector<string> res;
+    vector<string> removeInvalidParentheses(string s) {
+
+        int l=0;
+        int r=0;
+        for(auto x:s)
+        {
+            if(x=='(') l++;
+            else if(x==')')
+            {
+                if(l==0) r++;
+                else l--; // 右括号抵消了一个左括号
+            }
+        }
+
+        dfs(s, 0, "", 0, l ,r);//
+
+        return res;
+    }
+
+    // u当前是字符串的第几位，tmp删除后剩余的字符串， cnt=l-r， 
+    // l是要删除的左括号数目， r是要删除的右括号数目
+    void dfs(string& s, int u, string tmp, int cnt, int l, int r)
+    {
+        if(u==s.size()) {
+            if(!cnt) res.push_back(tmp);
+            return ;
+        }
+
+        if(s[u]!='(' && s[u]!=')') dfs(s, u+1, tmp+s[u], cnt, l ,r);
+        else if(s[u]=='(')
+        {
+            int k=u;
+            while(k<s.size() && s[k]=='(') k++;
+            l -= k-u;
+            for(int i=k-u;i>=0;--i)
+            {
+                if(l>=0) dfs(s, k, tmp, cnt ,l ,r);
+                tmp+='(';
+                cnt++;
+                l++;
+            }
+        }
+        else if(s[u]==')')
+        {
+            int k=u;
+            while(k<s.size() && s[k]==')') k++;
+            r -= k-u;
+            for(int i=k-u;i>=0;--i)
+            {
+                if(cnt>=0 && r>=0) dfs(s, k, tmp, cnt ,l ,r);
+                tmp+=')';
+                cnt--;
+                r++;
+            }
+        }  
+    }
+};
+

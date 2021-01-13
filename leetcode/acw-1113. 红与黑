@@ -162,3 +162,239 @@ int main()
     return 0;
 }
 
+--------------------- 0113 /2021 / yxc   BFS
+
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+const int N=25;
+
+typedef pair<int ,int > pii;
+
+#define x first
+#define y second
+
+int m,n;
+
+char g[N][N];
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+int bfs(int x, int y)
+{
+    queue<pii> q;
+    q.push({x, y});
+    g[x][y]='#';
+    int res=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        res++;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            if(a<0 || a>= n || b< 0 || b>= m || g[a][b] != '.') continue;
+            
+            g[a][b]='#';
+            q.push({a, b});
+        }
+    }
+    
+    return res;
+}
+
+
+int main()
+{
+    while(cin>>m>>n, m||n)
+    {
+        
+        int x ,y;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                cin>>g[i][j];
+                if(g[i][j]=='@')
+                {
+                    x=i;
+                    y=j;
+                }
+            }
+            
+        cout<<bfs(x, y)<<endl;
+    }
+    
+    return 0;
+}
+
+---------------------   bfs
+
+#include<iostream>
+#include<queue>
+#include<cstring>
+
+using namespace std;
+
+const int N=25;
+
+typedef pair<int ,int > pii;
+
+#define x first
+#define y second
+
+int m,n;
+
+char g[N][N];
+bool st[N][N];
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+int bfs(int x, int y)
+{
+    queue<pii> q;
+    q.push({x, y});
+    // g[x][y]='#';
+    st[x][y]=true;
+    int res=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        res++;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            if(a<0 || a>= n || b< 0 || b>= m || g[a][b] != '.' || st[a][b]) continue;
+            
+            // g[a][b]='#';
+            st[a][b]=true;
+            q.push({a, b});
+        }
+    }
+    
+    return res;
+}
+
+
+int main()
+{
+    while(cin>>m>>n, m||n)
+    {
+        
+        int x ,y;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                cin>>g[i][j];
+                if(g[i][j]=='@')
+                {
+                    x=i;
+                    y=j;
+                }
+            }
+            
+        memset(st, false, sizeof st);
+        cout<<bfs(x, y)<<endl;
+    }
+    
+    return 0;
+}
+
+
+-------------------------------  bfs  self
+
+#include<iostream>
+#include<queue>
+#include<cstring>
+
+using namespace std;
+
+const int N=25;
+
+typedef pair<int ,int > pii;
+
+#define x first
+#define y second
+
+int m,n;
+
+char g[N][N];
+bool st[N][N];
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+int bfs(int x, int y)
+{
+    queue<pii> q;
+    q.push({x, y});
+    // g[x][y]='#';
+    st[x][y]=true;
+    int res=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        res++;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            // if(a<0 || a>= n || b< 0 || b>= m || g[a][b] != '.' || st[a][b]) continue;
+            
+            // g[a][b]='#';
+            
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && g[a][b]=='.')
+            {
+                st[a][b]=true;
+                q.push({a, b}); 
+            }
+            
+        }
+    }
+    
+    return res;
+}
+
+
+int main()
+{
+    while(cin>>m>>n, m||n)
+    {
+        
+        int x ,y;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                cin>>g[i][j];
+                if(g[i][j]=='@')
+                {
+                    x=i;
+                    y=j;
+                }
+            }
+            
+        memset(st, false, sizeof st);
+        cout<<bfs(x, y)<<endl;
+    }
+    
+    return 0;
+}
+

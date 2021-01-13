@@ -122,3 +122,90 @@ int  main()
 }
 
 
+------------------------------------- 0113 /2021 /
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+const int N=2e5+10;
+typedef pair<int,int> pii;
+
+
+int h[N],idx,e[N],ne[N],w[N];
+
+int n,m;
+
+bool st[N];
+int dis[N];
+
+priority_queue<pii ,vector<pii> , greater<pii>> hp; // 最多存储m个点，因为最多遍历m个边，所以会有冗余的点的距离
+
+
+void add(int a,int b,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+}
+
+int dij()
+{
+    hp.push({0,1});
+    
+    memset(dis, 0x3f, sizeof(dis));
+    dis[1]=0;
+    
+    while(hp.size())
+    {
+        auto t=hp.top();
+        hp.pop();
+        
+        int d=t.first;
+        int v=t.second;
+        
+        if(st[v]) continue;
+        
+        st[v]=true;
+        
+        for(int i=h[v]; i!=-1;i=ne[i])
+        {
+            int j=e[i];
+            
+            if( dis[j] > d + w[i]) 
+            {
+                dis[j]=d+w[i];
+                
+                hp.push({dis[j] ,j});
+            }
+        }
+    }
+    
+    if(dis[n]==0x3f3f3f3f) return -1;
+    else return dis[n];
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    memset(h, -1 , sizeof h);
+    
+    
+    while(m--)
+    {
+        int a,b,c;
+        cin>>a>>b>>c;
+        
+        add(a, b, c);
+    }
+    
+    cout<<dij()<<endl;
+    return 0;
+}
+

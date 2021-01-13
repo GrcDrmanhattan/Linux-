@@ -172,5 +172,76 @@ int main()
 }
 
 
+---------------------------------- 0113 / 2021 / 
+
+
+// 所有边权值为正数， 自环不影响最短路， 只用处理重边
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int N=510;
+
+int g[N][N];// 邻接矩阵
+int n,m;
+
+int dis[N];
+bool st[N];
+
+
+int dij()
+{
+    memset(dis, 0x3f ,sizeof dis);
+    dis[1]=0;
+    
+    for(int i=0;i<n;++i)
+    {
+        int t=-1;
+        for(int j=1;j<=n;++j)
+        {
+            if(!st[j] && (t==-1 || dis[t] > dis[j])) t=j;
+            
+        }
+        
+        st[t]=true;
+        
+        for(int j=1;j<=n;++j)
+        {
+            dis[j]=min(dis[j], dis[t] + g[t][j]);
+        }
+        
+    }
+    
+    if(dis[n]==0x3f3f3f3f) return -1;
+    else return dis[n];
+    
+}
+
+
+int main() // On^2
+{
+    cin>>n>>m;
+    
+    memset(g,0x3f,sizeof(g));
+    
+    while(m--)
+    {
+        int a, b ,c;
+        cin>>a>>b>>c;
+        
+        g[a][b]=min(g[a][b], c);
+    }
+    
+    
+    memset(st, false ,sizeof(st));
+    
+    cout<<dij()<<endl;
+    return 0;
+}
+
+
+
 
 

@@ -157,3 +157,54 @@ int main()
     return 0;
 }
 
+-------------------------- 0114 /2021 
+
+一共搜索 n 行，每行有 n种选择，所以时间复杂度最坏是 O(n!)
+
+#include<iostream>
+
+using namespace std;
+
+
+char g[10][10];
+
+bool col[20], d[20],ud[20];
+int n;
+
+void dfs(int u)
+{
+    if(u==n)
+    {
+        for(int i=0;i<n;++i) puts(g[i]);
+        puts("");
+        return ;
+    }
+    
+    for(int i=0;i<n;++i)
+    {
+        if(!col[i] && !d[u+i] && !ud[u-i+n])
+        {
+            g[u][i]='Q';
+            col[i]=d[u+i]=ud[u-i+n]=true;
+            dfs(u+1);
+            g[u][i]='.';
+            col[i]=d[u+i]=ud[u-i+n]=false;
+        }
+    }
+}
+
+int main()
+{
+    // int n;
+    cin>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            g[i][j]='.';
+            
+    dfs(0);
+    
+    return 0;
+}
+
+
+

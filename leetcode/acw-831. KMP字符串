@@ -28,6 +28,57 @@ aba
 ababa
 输出样例：
 0 2
+
+----------------------------------------  
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+const int N=10010,M=100010;
+
+int n,m;
+char p[N];//长度n, p是短的串,p在s中多次出现,
+char s[M];//长度m，s是长的串
+int ne[N];
+
+int main()
+{
+    cin>>n>>p+1>>m>>s+1;
+    
+    //next对于短的字串p求next
+    //i从2开始，因为ne[1]=0,从1后退只能到0,ne[i]相当于求前i个字母中前缀和后缀相等的长度是多少
+    //j 起到计数作用
+    
+    for(int i=2,j=0;i<=n;++i)
+    {
+        while(j && p[i]!=p[j+1]) j=ne[j];
+        if(p[i]==p[j+1]) j++;
+        
+        ne[i]=j;
+    }
+    
+    //kmp 匹配
+    for(int i=1,j=0;i<=m;++i)//i遍历长的s串,j遍历短的p串,j起始位置要比i小一个,
+    {
+        //每次试图匹配j的下一位置和i是否相等
+        while(j && s[i]!=p[j+1]) j=ne[j];//j往后退到ne[j]
+        //while结束两种条件，j=0，s[i]==p[j+1]，第二种j可以继续前进
+        if(s[i]==p[j+1]) j++;//j往后退，还需要向前走看是否相等，如果可以j++
+        
+        if(j==n)//j遍历完p串，匹配成功
+        {
+            //匹配成功
+            printf("%d ",i-n);
+            j=ne[j];//
+        }
+    }
+    
+    return 0;
+}
+
+
+
 ------------------  0106/ 2021 /yxc
 
 
@@ -72,6 +123,35 @@ int main()
     }
     
     return 0;
+}
+
+---------------------------------- 0114 /2021 / yxc
+
+#include <iostream>
+using namespace std;
+const int N = 1000010;
+
+int n, m;
+char p[N], s[N];
+int ne[N];
+
+int main()
+{
+    cin >> n >> p + 1 >> m >> s + 1;
+    
+    for (int i = 2, j = 0; i <= n; i++ )
+    {
+        while (j&& p[i] != p[j + 1]) j = ne[j];
+        if (p[i] == p[j + 1]) j ++ ;
+        ne[i] = j;
+    }
+    
+    for (int i = 1, j = 0; i <= m; i ++)
+    {
+        while (j && s[i] != p[j + 1]) j = ne[j];
+        if (s[i] == p[j + 1]) j ++ ;
+        if (j == n) cout << i - j << ' ';
+    }
 }
 
 

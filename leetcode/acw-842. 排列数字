@@ -72,3 +72,85 @@ int main()
     return 0;
 }
 
+----------------------------- 
+
+#include<iostream>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+int path[N];
+bool st[N];
+
+void dfs(int u)//u 0，1，2 ，当u=3，结束
+{
+    if(u==n)//因为从0开始，所以表示已经搜索完了
+    {
+        for(int i=0;i<n;++i) printf("%d ",path[i]);
+        puts("");
+        return ;
+    }
+    
+    for(int i=1;i<=n;++i)//没有访问完，就遍历所有节点是否没访问的，1-n个点
+    {
+        if(!st[i])
+        {
+            path[u]=i;//没有访问过，就把当前层填入这个数字
+            st[i]=true;//true表示被访问，被用过
+            dfs(u+1);
+            st[i]=false;//恢复现场，从递归出来
+        }
+    }
+}
+
+int main()
+{
+    
+    cin>>n;
+    
+    dfs(0);//从第零个位置初始状态，一个位置都没有填充数，开始看，
+    
+    return 0;
+}
+
+------------------------------ 0114 /2021 /
+
+#include<iostream>
+
+using namespace std;
+
+int a[10];
+bool st[10];
+int n;
+
+void dfs(int u) // dfs遍历每个需要放数字的位置
+{
+    if(u==n)
+    {
+        for(int i=0;i<n;++i) printf("%d ", a[i]);
+        puts("");
+        return ;
+    }
+    
+    for(int i=1;i<=n;++i)
+    {
+        if(!st[i])
+        {
+            a[u]=i;
+            st[i]=true;
+            dfs(u+1);
+            st[i]=false;
+        }
+    }
+}
+
+
+int main()
+{
+    cin>>n;
+    dfs(0);
+    return 0;
+}
+

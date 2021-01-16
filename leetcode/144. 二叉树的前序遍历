@@ -147,7 +147,7 @@ public:
 
         while(root || st.size())
         {
-            while(root)
+            while(root) // 当前节点不空
             {
                 res.push_back(root->val);
                 st.push(root);
@@ -155,7 +155,7 @@ public:
                 root=root->left;
             }
 
-            root=st.top()->right;
+            root=st.top()->right; // 当前节点指向右子树
             st.pop();
         }
 

@@ -79,4 +79,60 @@ public:
 
 
 
+------------------------------------ 
+
+//  拼4根长度相等木棍
+
+class Solution {
+public:
+
+    vector<int> g;
+    vector<bool> st;
+
+    bool makesquare(vector<int>& nums) {
+        if(nums.empty()) return false;
+        g=nums;
+        st.resize(nums.size(), false);
+
+        int sum=0;
+        for(auto x: g) sum+=x;
+
+        if(sum % 4) return false;
+        sum/=4;
+
+        sort(g.begin(),g.end(), greater<int>()); // 从大到小排序， 先枚举长度大的， 剪枝
+
+        return dfs(0, 0, sum, 0);
+    }
+
+
+
+    bool dfs(int start , int cur ,int len, int cnt) // cur当前拼成的长度， len每一根的目标长度 ， cnt 已经拼了几根木棍， start 当前选择nums里元素的编号，因为要编号枚举
+    {
+        if(cnt==3) return true;
+        if(cur == len) return dfs(0, 0, len , cnt+1);
+
+        for(int i=start;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len)
+            {
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], len, cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i]==len) return false; // 如果是第一根（拼的当前长度为0）或者 最后一根 ，直接剪枝，返回false
+            
+            while(i+1<g.size() && g[i+1]==g[i]) i++; // 如果当前长度不可以，那么其余长度相同的也不可以 ， 剪枝
+        }
+
+        return false;
+    }
+    
+};
+
+
+
+
 

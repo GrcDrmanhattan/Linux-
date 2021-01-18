@@ -1,0 +1,115 @@
+542. 01 矩阵
+给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。
+
+两个相邻元素间的距离为 1 。
+
+ 
+
+示例 1：
+
+输入：
+[[0,0,0],
+ [0,1,0],
+ [0,0,0]]
+
+输出：
+[[0,0,0],
+ [0,1,0],
+ [0,0,0]]
+示例 2：
+
+输入：
+[[0,0,0],
+ [0,1,0],
+ [1,1,1]]
+
+输出：
+[[0,0,0],
+ [0,1,0],
+ [1,2,1]]
+ 
+
+提示：
+
+给定矩阵的元素个数不超过 10000。
+给定矩阵中至少有一个元素是 0。
+矩阵中的元素只在四个方向上相邻: 上、下、左、右。
+
+
+
+
+
+------------------------------------ 0118 / 2021 / self yxc视频
+
+
+
+
+
+// 多源bfs问题，对于每一个0都是源点起点，求到每一个点到0起点的距离，最后取最小的作为每个点到起点的距离
+// 时间线性 ，每个点只会遍历一次
+// 设置一个超级源点到每个0的距离为1，这样所求的距离-1就是答案， +1-1抵消了，所以将所有的0源点插入队列时，设置距离为0
+
+
+
+
+class Solution {
+public:
+    queue<pair<int, int >> q;
+    int n,m;
+    vector<vector<int>> g;
+    vector<vector<int>> dis;
+
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return matrix;
+
+        g=matrix;
+        n=matrix.size();
+        m=matrix[0].size();
+    
+        dis = vector<vector<int>>(n, vector<int>(m, -1));
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(g[i][j]==0) 
+                {
+                    dis[i][j]=0;
+                    q.push({i, j});
+                }  
+            }
+        
+        bfs();
+        return dis;
+    }
+
+    void bfs()
+    {
+        while(q.size())
+        {
+            auto t=q.front();
+            q.pop();
+
+            int dx[4]={0,1,0,-1};
+            int dy[4]={1,0,-1,0};
+
+            int x=t.first;
+            int y=t.second;
+
+            for(int i=0;i<4;++i)
+            {
+                int a=x+dx[i];
+                int b=y+dy[i];
+                if(a>=0 && a<n && b>=0 && b<m && dis[a][b]==-1)
+                {
+                    dis[a][b]=dis[x][y]+1;
+                    q.push({a, b});
+                }
+            }
+        }
+    }
+};
+
+
+
+
+

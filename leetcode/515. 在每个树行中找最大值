@@ -1,0 +1,104 @@
+515. 在每个树行中找最大值
+
+您需要在二叉树的每一行中找到最大的值。
+
+示例：
+
+输入: 
+
+          1
+         / \
+        3   2
+       / \   \  
+      5   3   9 
+
+输出: [1, 3, 9]
+
+---------------------------- 0118 / 2021  self 
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        if(!root) return {};
+
+        vector<int> res;
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while(q.size())
+        {
+            vector<int> tmp;
+           
+            int n=q.size();
+            while(n--)
+            {
+                auto t=q.front();
+                q.pop();
+                tmp.push_back(t->val);
+                
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            sort(tmp.begin(), tmp.end());
+            res.push_back(tmp.back());
+        }
+
+        return res;
+    }
+};
+
+
+--------------  dfs yxc    0118 / 2021 / 
+
+时间空间都是On
+
+
+
+class Solution {
+public:
+    unordered_map<int ,int > hash;
+    int maxd=0; // 最大层数
+
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> res;
+        dfs(root, 1);
+
+        for(int i=1;i<=maxd;++i)  
+            res.push_back(hash[i]);
+
+        return res;    
+    }
+
+
+    void dfs(TreeNode* rt, int d)
+    {
+        if(!rt) return ;
+        maxd=max(maxd, d);
+
+        if(hash.count(d)==0) hash[d]=rt->val; // 层数第一次出现
+        else hash[d]=max(hash[d], rt->val);
+
+        dfs(rt->left, d+1);
+        dfs(rt->right , d+1);
+    }
+
+};
+
+
+
+
+
+

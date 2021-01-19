@@ -52,7 +52,8 @@ public:
         {
             if(tmp.empty() || tmp.back()<= nums[i])
             {
-                if(s.count(nums[i])) continue; // 当前位置的数不能是重复的，如果当前选择一个3，就不能在当前位置继续选择后面的3，会造成重复
+                // 只要当前位置去重复就可以了 就可以得到最后res
+                if(s.count(nums[i])) continue; // 当前位置的数不能是重复的，如果当前选择第一个3，就不能在当前位置继续选第二个第三个的3，会造成重复
                 
                 s.insert(nums[i]);
                 tmp.push_back(nums[i]);

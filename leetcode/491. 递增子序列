@@ -1,0 +1,70 @@
+491. 递增子序列
+
+给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
+
+示例:
+
+输入: [4, 6, 7, 7]
+输出: [[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]
+说明:
+
+给定数组的长度不会超过15。
+数组中的整数范围是 [-100,100]。
+给定数组中可能包含重复数字，相等的数字应该被视为递增的一种情况。
+
+
+
+-----------------------------------  0119 /2021 / yxc  简单的dfs
+
+
+
+
+// 返回所有方案 ---> dfs? 搜索顺序？
+// 暴力搜索每一个数是否选择，判重，要改变搜索顺序，去枚举从哪个位置开始搜索，维护一个序列，看序列的下一个数从哪里开始选择
+// 时间 2^n * n
+
+
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+
+        dfs(nums, 0,{});
+
+        return res;
+    }
+
+
+    void dfs(vector<int>& nums, int u, vector<int> tmp)
+    {
+        if(tmp.size()>=2)  // 要先放入答案，然后判断是否搜索结束
+        {
+            res.push_back(tmp);
+        }
+
+        if(u==nums.size()) return ;
+
+        unordered_set<int> s;
+        for(int i=u;i<nums.size();++i) // 4 6 7 7
+        {
+            if(tmp.empty() || tmp.back()<= nums[i])
+            {
+                if(s.count(nums[i])) continue; // 当前位置的数不能是重复的，如果当前选择一个3，就不能在当前位置继续选择后面的3，会造成重复
+                
+                s.insert(nums[i]);
+                tmp.push_back(nums[i]);
+                dfs(nums, i+1, tmp);
+                tmp.pop_back();
+            }
+        }
+
+    }
+};
+
+
+
+
+

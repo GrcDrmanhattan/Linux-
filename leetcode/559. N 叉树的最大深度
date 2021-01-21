@@ -56,7 +56,7 @@ public:
         if(!root) return 0;
 
         int res=0;
-        for(auto c:root->children) res=max(res, maxDepth(c));
+        for(auto c:root->children) res=max(res, maxDepth(c)); // 先求每个孩子为根的树的最大深度，最后加当前节点的1 作为 当前的深度
 
         return res+1;
 

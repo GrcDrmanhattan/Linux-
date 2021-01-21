@@ -65,7 +65,7 @@ public:
             if(f[i]<0) continue;
             for(int j=n-i;j;--j)
             {
-                if(s.count(x.substr(i, j)))
+                if(s.count(x.substr(i, j))) // 存在，说明f[i]可以更新f[i+j]
                     f[i+j] = max(f[i+j], f[i]+1); // 用f[i] 更新i往后j长度的单词 ，i+j<= n, 所以j最大是n-i
                 if(f[n]>1) return true;
             }

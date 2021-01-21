@@ -78,8 +78,11 @@ public:
 
 ------------ yxc  dfs / 2021 / 0119 
 
+
 深度最大的一层中
 先搜索左子树再右子树
+
+
 
 
 class Solution {
@@ -107,6 +110,37 @@ public:
 };
 
 
+
+
+
+--------------------- 0121 / 2021 / self 
+
+
+
+class Solution {
+public:
+    int maxd=0;
+    int res=0;
+
+    int findBottomLeftValue(TreeNode* root) {
+        dfs(root, 1);
+        return res;
+    }
+
+    void dfs(TreeNode* rt, int d)
+    {
+        if(!rt) return;
+
+        if(d>maxd)
+        {
+            maxd=d;
+            res=rt->val;
+        }
+
+        dfs(rt->left, d+1);
+        dfs(rt->right, d+1);
+    }
+};
 
 
 

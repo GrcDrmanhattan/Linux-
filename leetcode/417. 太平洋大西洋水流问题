@@ -1,0 +1,87 @@
+417. 太平洋大西洋水流问题
+
+给定一个 m x n 的非负整数矩阵来表示一片大陆上各个单元格的高度。“太平洋”处于大陆的左边界和上边界，而“大西洋”处于大陆的右边界和下边界。
+
+规定水流只能按照上、下、左、右四个方向流动，且只能从高到低或者在同等高度上流动。
+
+请找出那些水流既可以流动到“太平洋”，又能流动到“大西洋”的陆地单元的坐标。
+
+ 
+
+提示：
+
+输出坐标的顺序不重要
+m 和 n 都小于150
+ 
+
+示例：
+
+ 
+
+给定下面的 5x5 矩阵:
+
+  太平洋 ~   ~   ~   ~   ~ 
+       ~  1   2   2   3  (5) *
+       ~  3   2   3  (4) (4) *
+       ~  2   4  (5)  3   1  *
+       ~ (6) (7)  1   4   5  *
+       ~ (5)  1   1   2   4  *
+          *   *   *   *   * 大西洋
+
+返回:
+
+[[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]] (上图中带括号的单元).
+
+
+------------------------------------------- 0122 /2021 / yxc
+
+// 反向看是否可以从太平洋大西洋走到里面，
+// 用两位表示状态 ： 01 太平洋，10 大西洋 ， 11 都可以到达， 00 都不可以
+
+class Solution {
+public:
+
+    vector<vector<int>> st;
+    vector<vector<int>> g;
+    int dx[4]={0,1,0,-1};
+    int dy[4]={1,0,-1,0};
+    int n,m;
+
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return {};
+
+        g=matrix;
+        n=matrix.size();
+        m=matrix[0].size();
+        st=vector<vector<int>>( n, vector<int>(m));
+
+        vector<vector<int>> res;
+
+        
+        for(int i=0;i<n;++i) dfs(i, 0, 1);// 最上面太平洋
+        for(int i=0;i<m;++i) dfs(0, i, 1); // 最左面太平洋
+        for(int i=0;i<n;++i) dfs(i, m-1, 2); // 最右面 大西洋
+        for(int i=0;i<m;++i) dfs(n-1 , i ,2);
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(st[i][j]==3) res.push_back({i, j});
+
+        return res;
+    }
+
+
+    void dfs(int x,int y, int t)
+    {
+        if(st[x][y] & t) return; // 当前状态和t相等，说明已经遍历过
+        st[x][y] |= t;
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b] >= g[x][y]) dfs(a, b ,t);
+        }
+    }
+};
+

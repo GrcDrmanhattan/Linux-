@@ -74,3 +74,25 @@ public:
 -------------------------- 0122 /2021 / yxc 树形dp
 
 
+// 考虑某个节点和儿子的关系，去递归就可
+
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        auto f=dfs(root) ;
+
+        return max(f[0], f[1]);
+    }
+
+    vector<int> dfs(TreeNode* rt)
+    {
+        if(!rt) return {0,0};
+
+        auto l=dfs(rt->left);
+        auto r=dfs(rt->right);
+        // 不选择rt， 选择rt
+        return {max(l[0], l[1])+max(r[0], r[1]), rt->val + l[0]+r[0]};
+
+    }
+};
+

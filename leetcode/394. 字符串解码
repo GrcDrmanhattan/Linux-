@@ -24,6 +24,7 @@
 
 ============================================== 从前到后统计一下
 
+
 class Solution 
 {
 public:
@@ -74,4 +75,54 @@ public:
         return res;
     }
 };
+
+
+
+------------------------------------- 0122 / 2021 /yxc
+
+
+
+// 递归去做
+
+
+class Solution {
+public:
+
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s, u);
+    }
+
+    
+    string dfs(string& s, int &u)
+    {
+        string res;
+
+        while(u<s.size() && s[u] != ']')
+        {
+            if(s[u]>='a' && s[u]<='z' || s[u]>='A' && s[u]<='Z') res += s[u++];
+            else if(s[u]>='0' && s[u]<='9')
+            {
+                int k=u;
+                while(k<s.size() && s[k]>='0' && s[k]<='9') k++;
+                int x=stoi(s.substr(u, k-u)); // 先计算x
+                
+                
+                u=k+1;//跳过左括号
+
+                string y=dfs(s, u);
+                u++;// 跳过右括号
+                
+                while(x--) res+=y;
+
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+
 

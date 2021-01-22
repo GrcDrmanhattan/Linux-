@@ -57,6 +57,7 @@ public:
 
         vector<vector<int>> res;
 
+        //分别从太平洋和大西洋边界位置出发遍历，同时被它们两遍历到的，就是答案
         
         for(int i=0;i<n;++i) dfs(i, 0, 1);// 最上面太平洋
         for(int i=0;i<m;++i) dfs(0, i, 1); // 最左面太平洋

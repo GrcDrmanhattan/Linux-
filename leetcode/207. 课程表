@@ -164,3 +164,46 @@ public:
     }
 };
 
+
+
+
+--------------------------------- 0123 / 2021 /
+
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& edge) {
+        vector<vector<int>> g(n);
+        vector<int> d(n);
+        queue<int> q;
+
+        for(auto x:edge)
+        {
+            int a=x[1];
+            int b=x[0];
+            g[a].push_back(b);
+            d[b]++;
+        }
+
+        for(int i=0;i<n;++i)
+        {
+            if(d[i]==0) q.push(i);
+        }
+
+        int cnt=0;
+        while(q.size())
+        {
+            int t=q.front();
+            q.pop();
+            cnt++;
+
+            for(int i=0;i<g[t].size();++i)
+            {
+                d[g[t][i]]--;
+                if(d[g[t][i]]==0) q.push(g[t][i]);
+            }
+        }
+
+        return cnt==n;
+    }
+};
+

@@ -107,3 +107,59 @@ public:
  
  
  
+
+--------------------------------- 0123/ 2021 / 
+
+class WordDictionary {
+public:
+    struct Node{
+        bool is_end;
+        Node* son[26];
+        Node(){
+            is_end=false;
+            for(int i=0;i<26;++i) son[i]=nullptr;
+        }
+    }*rt;
+
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        rt=new Node();
+    }
+    
+    void addWord(string word) {
+        auto p=rt;
+        for(auto x:word)
+        {
+            int u=x-'a';
+            if(!p->son[u]) p->son[u]=new Node();
+            p=p->son[u];
+        }
+
+        p->is_end=true;
+    }
+    
+    bool search(string word) {
+        return dfs(word,  rt, 0);
+    }
+
+    bool dfs(string& word , Node* rt, int u)
+    {
+        if(u==word.size()) return rt->is_end;
+        if(word[u]!='.') // 是字母
+        {
+            int x=word[u]-'a';
+            if(!rt->son[x]) return false;
+            return dfs(word, rt->son[x], u+1);
+        }
+        else
+        {
+            for(int j=0;j<26;++j)
+            {
+                if(rt->son[j] && dfs(word, rt->son[j], u+1)) return true; // 有下一个孩子并且可以从下一个搜到，返回true
+            }
+            return false;
+        }
+    }
+};
+
+

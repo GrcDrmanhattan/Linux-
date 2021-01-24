@@ -80,7 +80,7 @@ public:
             {
                 if(f[x][i])
                 {
-                    cnt[i]++;
+                    cnt[i]++; // 掌握第i个语言的人数++
                     tmp=max(tmp, cnt[i]);
                 }
             }

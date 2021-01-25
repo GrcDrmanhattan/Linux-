@@ -1,0 +1,76 @@
+114. 二叉树展开为链表
+
+给定一个二叉树，原地将它展开为一个单链表。
+
+ 
+
+例如，给定二叉树
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+将其展开为：
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+
+
+
+------------------------------------------------------- 0125/ 2021 / yxc
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+
+
+// 根左右
+
+// 时间 On。 空间O1
+
+
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if(!root) return ;
+        while(root)
+        {
+            auto p=root->left;
+
+            if(p) // 如果当前节点存在左子树，将左子树的右链插入到当前节点到右边,左链不变
+            {
+                while(p->right) p=p->right;
+
+                p->right = root->right;
+                root->right = root->left;
+
+                root->left=nullptr;//因为左子树到右链包含根节点，所以将左子树清空
+            }
+
+            root=root->right;
+        }
+    }
+};
+
+
+

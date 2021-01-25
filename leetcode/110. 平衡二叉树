@@ -94,3 +94,31 @@ public:
     }
 };
 
+
+
+--------------------------------------------- 0125 / 2021 
+
+
+class Solution {
+public:
+    int get(TreeNode* u)
+    {
+        if(!u) return 0;
+        int l=get(u->left);
+        int r=get(u->right);
+
+        return max(l, r)+1;
+    }
+
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+
+        int l=get(root->left);
+        int r=get(root->right);
+
+        if(abs(l-r)>1) return false;
+
+        return isBalanced(root->left) && isBalanced(root->right);
+    }
+};
+

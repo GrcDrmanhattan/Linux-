@@ -64,3 +64,20 @@ public:
 
 
 
+
+
+--------------------------------------- 0125 / 2021 / 
+
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int s) {
+        if(!root) return false;
+        if(!root->left && !root->right) return root->val  == s;
+
+        return hasPathSum(root->left, s-root->val) || hasPathSum(root->right, s-root->val);
+    }
+};
+
+
+

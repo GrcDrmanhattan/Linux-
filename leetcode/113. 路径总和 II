@@ -148,3 +148,37 @@ public:
 
 
 
+
+--------------------------------------- 0125 / 2021 /
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    int tar;
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        if(!root) return {};
+        tar=targetSum;
+        dfs(root, {});
+
+        return res;
+    }
+
+    void dfs(TreeNode* rt, vector<int> tmp)
+    {
+        if(!rt) return ;
+        tmp.push_back(rt->val);
+
+        if(!rt->left && !rt->right)
+        {
+            int sum=0;
+            for(auto x:tmp) sum+=x;
+
+            if(sum==tar) res.push_back(tmp);
+        }
+
+        dfs(rt->left, tmp);
+        dfs(rt->right, tmp);
+    }
+};
+

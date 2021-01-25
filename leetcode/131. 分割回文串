@@ -72,3 +72,52 @@ public:
 };
 
 
+
+
+-------------------------------------------- 0125 / 2021 / 
+
+
+
+class Solution {
+public:
+    vector<vector<string>> res;
+    vector<vector<bool>> f;
+    vector<string> tmp;
+
+    vector<vector<string>> partition(string s) {
+        
+        int n=s.size();
+        
+        f=vector<vector<bool>>(n, vector<bool>(n));
+
+        for(int j=0;j<n;++j)   // 先枚举j， 后枚举i
+            for(int i=0;i<n;++i)
+            {
+                if(i==j) f[i][j]=1;
+                else if(s[i]==s[j])
+                {
+                   if(i+1>j-1 || f[i+1][j-1]) f[i][j]=1; 
+                   
+                }
+            }
+
+        dfs(s, 0);
+        return res;
+    }
+
+    void dfs(string& s, int u)
+    {
+        if(u==s.size()) res.push_back(tmp);
+        for(int i=u;i<s.size();++i)
+        {
+            if(f[u][i])
+            {
+                tmp.push_back(s.substr(u, i-u+1));
+                dfs(s, i+1);
+                tmp.pop_back();
+            }
+        }
+    }
+};
+
+

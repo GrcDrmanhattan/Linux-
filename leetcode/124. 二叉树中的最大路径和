@@ -61,3 +61,45 @@ public:
         return root->val + max(ll,rr);//递归向上一层返回什么
     }
 };
+
+
+
+
+
+
+
+
+-------------------------------------- 0125 / 2021 / 
+
+
+// res 不一定经过根
+
+class Solution {
+public:
+    int res=INT_MIN;
+
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+
+        dfs(root);
+        return res;
+    }
+
+       
+    int dfs(TreeNode* rt) // rt是最高点， 返回从rt向下延伸的路径最大值，可以向左延伸也可以向右，没有交集，互相独立
+    {
+        if(!rt) return 0;
+
+        int l = max(0, dfs(rt->left));
+        int r = max(0, dfs(rt->right));
+
+        res=max(res, l+r+rt->val);
+
+        return max(l, r)+rt->val;//左右独立
+    }
+};
+
+
+
+
+

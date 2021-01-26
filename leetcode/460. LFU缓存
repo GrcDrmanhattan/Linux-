@@ -126,3 +126,172 @@ public:
  * int param_1 = obj->get(key);
  * obj->put(key,value);
  */
+
+
+
+
+
+--------------------------------------------- 0126 / 2021  / yxc
+
+两个双链表， 一个维护调用次数，一个维护多久使用
+
+
+// 双链表维护使用(次数频率，调用次数)block节点的有序序列
+// 在每一个block里有含有双链表存储，node节点，最近使用在队头，未使用在尾部
+
+
+class LFUCache {
+public:
+    struct Node{ // blcok里面的双链表节点，链表头部是最近使用，尾部是最久使用
+        int key,val;
+        Node* left;
+        Node* right;
+
+        Node(int k, int v)
+        {
+            key=k, val=v;
+            right=nullptr;
+            left=nullptr;
+        }
+    };
+
+
+    struct Block{ // 调用次数的双链表的节点
+        int cnt;
+        Node* head;
+        Node* tail;
+
+        Block* left;// block 双链表的左指针，右指针,哨兵，左右边界
+        Block* right;
+
+        Block(int c)
+        {
+            cnt=c;
+            head=new Node(-1,-1);
+            tail=new Node(-1, -1);
+
+            head->right= tail;
+            tail->left=head;
+
+            left=right=nullptr;
+        }
+
+        ~Block()
+        {
+            delete head;
+            delete tail;
+        }
+
+        void remove(Node* p)
+        {
+            p->right->left = p->left;
+            p->left->right = p->right;
+            
+        }
+
+        void insert(Node* p)
+        {
+            p->right = head->right;
+            p->left = head;
+
+            head->right->left = p;
+            head->right = p;
+
+        }
+
+        bool empty()
+        {
+            return head->right == tail;
+        }
+
+    }*LB, *RB; // block双链表的哨兵
+    
+    void remove(Block* p)
+    {
+        p->right->left = p->left;
+        p->left->right = p->right;
+    }
+
+    void insert(Block* p) // 在p的右侧插入一个新块
+    {
+        auto cur=new Block(p->cnt + 1);
+
+        cur->right = p->right;
+        cur->left = p;
+
+        p->right->left = cur;
+        p->right = cur;
+    }
+
+    int n;
+    unordered_map<int, Block*> hash_b;
+    unordered_map<int, Node*> hash_n;
+
+
+    LFUCache(int capacity) {
+        n=capacity;
+
+        LB=new Block(0);
+        RB=new Block(INT_MAX);
+        LB->right = RB;
+        RB->left = LB;
+    }
+    
+    int get(int key) {
+        if(hash_b.count(key) == 0) return -1;
+
+        auto block=hash_b[key];
+        auto node=hash_n[key];
+
+        block->remove(node);
+        // if(block->empty()) remove(block);
+
+        if(block->right->cnt != block->cnt+1) insert(block);
+        block->right->insert(node);
+
+        hash_b[key]=block->right;
+
+        if(block->empty()) remove(block);
+        hash_n[key]=node;
+
+        return node->val;
+    }
+    
+    void put(int key, int value) {
+        if(!n) return ;
+        if(hash_b.count(key)==0)
+        {
+            if(hash_b.size()==n)
+            {
+                auto p=LB->right->tail->left;//第一个块里的双链表的最后一个节点
+                LB->right->remove(p);
+
+                if(LB->right->empty()) remove(LB->right);
+
+                hash_b.erase(p->key);
+                hash_n.erase(p->key);
+                delete p;
+            }
+
+            auto p=new Node(key, value);
+            if(LB->right->cnt >1) insert(LB); // 第一个块的次数大于1，说明没有使用次数为1的块，要新建一个块
+            LB->right->insert(p);
+            hash_n[key]=p;
+            hash_b[key]=LB->right;
+        }
+        else
+        {
+            hash_n[key]->val=value;
+            get(key);
+        }
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+ 
+ 

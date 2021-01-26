@@ -116,3 +116,66 @@ public:
     }
 
 };
+
+
+
+
+----------------------------------- 0126 / 2021/  yxc
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+
+
+// p指向要翻转的前一个节点
+// k个节点要修改k-1个边， 所以要循环k-1次
+
+
+
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        auto d=new ListNode(-1);
+        d->next=head;
+   
+        for(auto p=d;;)
+        {
+            auto q=p;//先看后面是否足够k个节点，不够就break
+            for(int i=0;i<k && q;++i) q=q->next;
+
+            if(!q) break;
+
+            //循环k-1次，改变边的指向
+            auto a=p->next;
+            auto b=a->next;
+        
+            for(int i=0;i<k-1;++i)
+            {
+                auto c=b->next;//暂时存存储
+                b->next=a;
+                a=b;
+                b=c;
+            }
+
+            auto tmp=p->next;
+            p->next=a;
+            tmp->next=b;
+            
+            p=tmp; // p 指向下一组k个节点的前一个节点， 画图就看明白
+        }
+
+        return d->next;
+    }
+};
+
+
+

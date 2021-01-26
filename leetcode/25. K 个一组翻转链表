@@ -140,6 +140,8 @@ public:
 // k个节点要修改k-1个边， 所以要循环k-1次
 
 
+// d->1 -> 2 - >3 -> 4 -> 5 -> #
+
 
 class Solution {
 public:
@@ -150,7 +152,7 @@ public:
         for(auto p=d;;)
         {
             auto q=p;//先看后面是否足够k个节点，不够就break
-            for(int i=0;i<k && q;++i) q=q->next;
+            for(int i=0;i<k && q;++i) q=q->next; // 正好移动3次，q从d开始，移动三次到节点3
 
             if(!q) break;
 

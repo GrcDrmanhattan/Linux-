@@ -364,3 +364,95 @@ public:
     }
 };
 
+
+
+
+
+
+
+----------------------------------------- 0126 / 2021 / yxc
+ 
+
+
+// 维护一个双链表，头是最近访问的，尾部是最久没有访问的
+class LRUCache {
+public:
+    struct Node{ // 双向链表的节点定义
+        int key,val;
+
+        Node* left;
+        Node* right;
+        Node(int k, int v): key(k), val(v), left(nullptr), right(nullptr){}
+
+    }*L, *R;
+
+    int n;
+    unordered_map<int ,Node*> hash;
+
+    void remove(Node* p) // remove和insert是对双链表进行操作
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+
+    void insert(Node* p) // 插入到队头，也就是L的右边,第一个元素的左边
+    {
+        p->right=L->right;
+        p->left=L;
+
+        L->right->left=p;
+        L->right=p;
+    }
+
+    LRUCache(int capacity) {
+        n=capacity;
+        L=new Node(-1, -1);
+        R=new Node(-1, -1);
+
+        L->right = R;
+        R->left = L;
+    }
+    
+    int get(int key) {
+        if(hash.count(key)==0) return -1;
+        auto p=hash[key];
+
+        remove(p);
+        insert(p);
+        return p->val;
+    }
+    
+    void put(int key, int value) { // 插入元素
+        if(hash.count(key)==0)
+        {
+            if(n==hash.size()) // 没找到元素， 并且已经满了，就lru要删除元素
+            {
+                auto p=R->left;
+                remove(p);
+                hash.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+            hash[key]=p;
+            insert(p);
+        }
+        else{
+            auto p=hash[key];
+            p->val=value;
+            remove(p);
+            insert(p); // 插入到队头
+        }
+    }
+};
+
+
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+

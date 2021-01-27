@@ -47,3 +47,24 @@ public:
     }
 
 };
+
+
+------------------------------------------ 0127 / 2021  / self
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        auto d=new ListNode(-1);
+        d->next=head;
+        int l=0;
+        for(auto p=head;p;p=p->next) l++;
+
+        int k=l/2+1;
+        auto p=d;
+        for(int i=0;i<k;++i) p=p->next;
+
+        return p;
+    }
+};
+
+

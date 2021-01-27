@@ -77,3 +77,54 @@ public:
 };
 
 
+
+
+--------------------------------------------------- 0126 / 2021 / yxc
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+
+        int s=0;
+        for(auto x:nums)
+        {
+            if(s<=0) s=x;
+            else s+=x;
+
+            res=max(res, s);
+        }
+
+        return res;
+    }
+};
+
+
+
+---------------------------------  dp
+
+
+// f[i]=max(nums[i], (nums[i] + f[i-1]))
+// 转换为 f[i]=nums[i] + max(0 , f[i-1])
+//将f[i-1]用last记录
+
+// 时间On，空间只记录last，不开数组，O1
+
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+
+        for(int i=0, last=0;i<nums.size();++i)// 用last记录f[i-1],因为每次只用到f[i-1],就不用开数组
+        {
+            last=nums[i]+max(last, 0);// 新的last用旧的last也就是f[i-1]更新
+            res=max(res, last);
+        }
+        return res;
+    }
+};
+
+

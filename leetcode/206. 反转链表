@@ -60,3 +60,30 @@ public:
     }
 };
 
+
+
+----------------------------------------------  0127 / 2021 / yxc 
+
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head) return head;
+
+        auto a=head;
+        auto b=a->next;
+
+        while(b)
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;    
+            b=c;
+        }
+
+        head->next=nullptr;
+        return a;
+    }
+};
+
+

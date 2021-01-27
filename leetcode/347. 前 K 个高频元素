@@ -77,3 +77,37 @@ public:
 //     }
 // };
 
+
+
+
+------------------------------------------- 0127  / 2021 / yxc 
+
+时间On
+
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> res;
+        unordered_map<int, int > cnt;
+        for(auto x:nums) cnt[x]++;
+        int n=nums.size();
+
+        vector<int> s(n+1);//n个数，出现的次数在1到n之间，数组s存储出现当前次数的元素有多少个
+
+        for(auto [x, c] : cnt) s[c]++;
+
+        int i=n;//从出现n次开始枚举
+        int t=0;
+        while(t<k) t+=s[i--]; // 当满足条件的k个数满足后，所有出现次数大于i的数就是答案
+
+        for(auto [x, c]:cnt)
+        {
+            if(c>i) res.push_back(x);
+        }
+
+        return res;
+    }
+};
+
+

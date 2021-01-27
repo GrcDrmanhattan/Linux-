@@ -128,3 +128,57 @@ public:
 };
 
 
+
+
+
+
+---------------------------------------- 0127 
+
+
+
+// 分治方法
+// 时间On，空间logn层
+// 线段树
+
+
+class Solution {
+public:
+
+    struct Node{
+        int sum;// 当前段段总和
+        int s;//当前段的最大连续子数组的和
+        int ls, rs;// 最大前缀 ， 最大后缀
+    };
+
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+        for(auto x:nums) res=max(res ,x);// 如果全是负数
+        if(res<0) return res; // 如果最大值都小于0，则表示全部都是负数
+
+        auto t=build(nums, 0, nums.size()-1);
+        return t.s;
+    }
+
+    Node build(vector<int> nums, int l, int r)
+    {
+        if(l==r)
+        {
+            int v=max(nums[l], 0);
+            return {nums[l], v, v, v}; // 区间就一个数，全部和当然是本身，但连续数组和、前缀、后缀不一定，因为有可能是负数
+        }
+
+        int mid= l + r >>1;
+        auto ll=build(nums , l, mid);
+        auto rr=build(nums, mid+1, r);
+
+        Node res;
+        res.s=max(max(ll.s, rr.s), (ll.rs + rr.ls));
+        res.sum=ll.sum + rr.sum;
+        res.ls=max(ll.sum + rr.ls, ll.ls);
+        res.rs=max(ll.rs + rr.sum, rr.rs);
+
+        return res;
+    }
+};
+
+

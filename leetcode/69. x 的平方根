@@ -118,3 +118,35 @@ public:
     }
 };
 
+
+--------------------------------- 0128 / 2021 / yxc 
+
+
+寻找平方根下取整，找到一个最大的y， 使得y平方小于等于x，所以最大的y要一直向右找
+
+二分
+
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        int l=0;
+        int r=x;
+
+        while(l<r)
+        {
+            int mid=l+1ll+r>>1;
+            if( mid <=x/mid) l=mid;
+            else r=mid-1;
+        }
+
+        return l;
+    }
+};
+
+
+
+
+
+
+

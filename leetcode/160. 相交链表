@@ -117,3 +117,29 @@ public:
         return b;
     }
 };
+
+
+
+----------------------------------- 0128 / 2021/  
+
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        auto p1=headA;
+        auto p2=headB;
+
+        while(p1 != p2)
+        {
+            if(p1) p1=p1->next;
+            else p1=headB;
+
+            if(p2) p2=p2->next;
+            else p2=headA;
+        }
+
+        return p1;
+    }
+};
+
+

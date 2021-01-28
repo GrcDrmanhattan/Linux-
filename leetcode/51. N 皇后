@@ -100,3 +100,52 @@ public:
 
 
 
+---------------------------------- 0128 / 2021/  
+
+class Solution {
+public:
+    bool col[20],d[20],ud[20];
+    char g[10][10] ;
+    vector<vector<string>> res;
+    int sz;
+
+    vector<vector<string>> solveNQueens(int n) {
+        sz=n;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<n;++j) g[i][j]='.';
+
+        dfs(0);
+        return res;
+    }
+
+    void dfs(int u)
+    {
+        if(u==sz)
+        {
+            vector<string> tmp;
+            
+            for(int i=0;i<sz;++i)
+            {
+                string  t;
+                for(int j=0;j<sz;++j) t+=g[i][j];
+                tmp.push_back(t);
+            }
+
+            res.push_back(tmp);
+        }
+
+        for(int i=0;i<sz;++i)
+        {
+            if( !col[i] && !d[u+i] && !ud[u-i+sz])
+            {
+                g[u][i]='Q';
+                col[i]=d[u+i]=ud[u-i+sz]=true;
+                dfs(u+1);
+                g[u][i]='.';
+                col[i]=d[u+i]=ud[u-i+sz]=false;
+            }
+        }
+    }
+};
+

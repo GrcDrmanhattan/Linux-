@@ -54,5 +54,31 @@ public:
 
 -------------------------------------------- 0128 / 2021 / yxc
 
-二分
+
+二分 最坏情况下需要删除n次，时间复杂度On
+
+
+
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int l=0;
+        int r=nums.size()-1;
+
+        while(l<r && nums[r]==nums[0]) r--;
+
+        if(nums[r]>=nums[l]) return nums[0];
+
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid] < nums[0]) r=mid;
+            else l=mid+1;
+        }
+
+        return nums[l];
+    }
+};
+
+
 

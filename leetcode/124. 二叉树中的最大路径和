@@ -69,10 +69,17 @@ public:
 
 
 
--------------------------------------- 0125 / 2021 / 
+-------------------------------------- 0125 / 2021 / yxc
+
 
 
 // res 不一定经过根
+
+对于res来说是当前节点加上左右最大路径和，在树中枚举路径，要枚举路径的最高点
+
+对于dfs来说，返回从当前节点向下的最大路径和
+
+
 
 class Solution {
 public:
@@ -85,7 +92,8 @@ public:
         return res;
     }
 
-       
+         // 以rt为最高点的所有路径的最大是多少，rt是起点
+         
     int dfs(TreeNode* rt) // rt是最高点， 返回从rt向下延伸的路径最大值，可以向左延伸也可以向右，没有交集，互相独立
     {
         if(!rt) return 0;
@@ -93,11 +101,12 @@ public:
         int l = max(0, dfs(rt->left));
         int r = max(0, dfs(rt->right));
 
-        res=max(res, l+r+rt->val);
+        res=max(res, l+r+rt->val); // 左右独立， 从rt往左走的最大值加上向右走的最大值，加上本身的值和res取max
 
         return max(l, r)+rt->val;//左右独立
     }
 };
+
 
 
 

@@ -86,3 +86,89 @@ public:
 
 
 
+------------------------------------ 0129 / 2021 / yxc 
+
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        long long res=0;
+        int k=0;
+        while(k<s.size() && s[k] == ' ') k++;
+        if(k==s.size()) return 0;
+
+        int f=1;
+        if(s[k]=='-')
+        {
+            f=-1;
+            k++;
+        }
+        else if(s[k]=='+') k++;
+
+        while(k<s.size() && s[k]>='0' && s[k]<='9')
+        {
+            res = res * 10 + s[k]-'0';
+            k++;
+            if(res>INT_MAX) break;
+        }
+
+        res *= f;
+        if(res > INT_MAX) res=INT_MAX;
+        if(res < INT_MIN) res=INT_MIN;
+
+        return res;
+    }
+};
+
+
+
+
+-------------------------------- 0129 / 
+
+
+不使用long long 
+ 
+
+当res正数：res * 10 + x > max -----> res > (max-x) /10
+当res负数： -res * 10 -x < min -----> - res < (min + x ) /10
+
+
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        int res=0;
+        int k=0;
+        while(k<s.size() && s[k] == ' ') k++;
+        if(k==s.size()) return 0;
+
+        int f=1;
+        if(s[k]=='-')
+        {
+            f=-1;
+            k++;
+        }
+        else if(s[k]=='+') k++;
+
+        while(k<s.size() && s[k]>='0' && s[k]<='9')
+        {
+            int x=s[k]-'0';
+            if(f>0 && res > (INT_MAX-x) / 10) return INT_MAX;
+            if(f<0 && -res < (INT_MIN + x) / 10) return INT_MIN;
+            if(-res * 10 - x == INT_MIN) return INT_MIN;
+
+            res = res * 10 + x;
+            k++;
+            if(res>INT_MAX) break;
+        }
+
+        res *= f;
+        if(res > INT_MAX) res=INT_MAX;
+        if(res < INT_MIN) res=INT_MIN;
+
+        return res;
+    }
+};
+
+
+

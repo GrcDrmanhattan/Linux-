@@ -149,4 +149,27 @@ public:
 
 
 
+---------------------------------------------- 0129  / 2021 / 
+
+
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        int l=0;
+        int r=x;
+
+        while(l<r)
+        {
+            int mid = l+1ll+r>>1;
+            if(mid <= x/mid) l=mid; //求平方小于等于x的最大值, l可以取到，
+            else r=mid-1; // r不可以取到
+        }
+
+        return l;
+    }
+};
+
+
+
 

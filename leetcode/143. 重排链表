@@ -1,0 +1,66 @@
+143. 重排链表
+
+给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例 1:
+
+给定链表 1->2->3->4, 重新排列为 1->4->2->3.
+示例 2:
+
+给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
+
+------------------------------------------------ 0129 /  2021 / yxc
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if(!head) return ;
+        int n=0;
+        for(auto p=head;p;p=p->next) n++;
+
+        auto mid=head;
+        for(int i=0;i< (n+1)/2-1; ++i) mid=mid->next;//找到mid
+
+        ListNode* a;
+        ListNode* b;
+        for(a=mid, b=a->next;b;) // 将后半部分反转
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;
+            b=c;
+        }
+
+        auto p=head;
+        auto q=a;//结束时a时链表尾部
+
+        for(int i=0;i<n/2;++i) // 将q插入到p的右边
+        {
+            auto tmp=q->next;
+            q->next=p->next;
+            p->next=q;
+
+            q=tmp; // q移动到下一个
+            p=p->next->next; // p移动到下一个
+        }
+
+        if(n%2) mid->next=nullptr; // 长度是奇数是特判一下
+        else mid->next->next=nullptr;
+
+    }
+};
+

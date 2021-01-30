@@ -78,11 +78,8 @@ public:
         d->next= head;
         if(!head) return head;
 
-        int l=0;
-        for(auto p=head;p;p=p->next) l++;
-
         auto p=d;
-        for(int i=0;i<m;++i) p=p->next; // p前进m到位置m
+        for(int i=0;i<m;++i) p=p->next; // p前进m到位置m ，从虚拟头要前进m步，从head开始要前进m-1步
 
         auto q=d;
         for(int i=0;i<n;++i) q=q->next;// q到n
@@ -90,6 +87,7 @@ public:
         ListNode* a=p;
         ListNode* b=a->next;
 
+        // 反转m到n之间
         for(int i=0;i<n-m;++i) // 结束后a指向位置n， b指向n的下一个位置
         {
             auto c=b->next;
@@ -107,7 +105,5 @@ public:
         return d->next;
     }
 };
-
-
 
 

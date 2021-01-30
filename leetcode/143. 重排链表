@@ -33,7 +33,7 @@ public:
         for(auto p=head;p;p=p->next) n++;
 
         auto mid=head;
-        for(int i=0;i< (n+1)/2-1; ++i) mid=mid->next;//找到mid
+        for(int i=0;i< (n+1)/2-1; ++i) mid=mid->next;//找到mid ,在n+1/2下取整的位置，所以要从head开始（n+1）/2-1 步， 
 
         ListNode* a;
         ListNode* b;

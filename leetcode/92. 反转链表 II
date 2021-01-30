@@ -59,4 +59,55 @@ public:
 
 
 
+------------------------------------------------------ 0120 / 2021/  self
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        auto d=new ListNode(-1);
+        d->next= head;
+        if(!head) return head;
+
+        int l=0;
+        for(auto p=head;p;p=p->next) l++;
+
+        auto p=d;
+        for(int i=0;i<m;++i) p=p->next; // p前进m到位置m
+
+        auto q=d;
+        for(int i=0;i<n;++i) q=q->next;// q到n
+
+        ListNode* a=p;
+        ListNode* b=a->next;
+
+        for(int i=0;i<n-m;++i) // 结束后a指向位置n， b指向n的下一个位置
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;
+            b=c;
+        }
+        
+        auto t=d;
+        for(int i=0;i<m-1;++i) t=t->next; // 要先找到m的前一个位置，
+
+        t->next=a;
+        p->next=b; // 
+
+        return d->next;
+    }
+};
+
+
+
 

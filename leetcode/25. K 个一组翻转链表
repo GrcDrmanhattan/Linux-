@@ -201,7 +201,7 @@ public:
         auto d=new ListNode(-1);
         d->next=head;
 
-        for(auto p=d;p;)
+        for(auto p=d;p;) // 每次循环开始p始终指向k个节点的前一个节点
         {
             auto q=p;
             for(int i=0;i<k && q ;++i) q=q->next; // 先看看是否够k个元素，看看第k个元素是否存在

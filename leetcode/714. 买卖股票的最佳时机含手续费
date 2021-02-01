@@ -50,3 +50,27 @@ public:
     }
 };
 
+
+
+--------------------------------- 0201 
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int n=prices.size();
+        vector<int> f(n+1);
+        vector<int> g(n+1);
+
+        f[0]=0;
+        g[0]=-1e8;
+
+        for(int i=1;i<=n;++i)
+        {
+            f[i]=max(f[i-1], g[i-1]+prices[i-1]);
+            g[i]=max(g[i-1], f[i-1]-prices[i-1]-fee); // 要么买入时付手续费，要么卖出付手续费 都可以
+        }
+
+        return f[n];
+    }
+};
+

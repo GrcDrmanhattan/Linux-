@@ -109,6 +109,10 @@ public:
 -------------------------------------- 0202 /2021 / yxc 
 
 
+时间n^2
+空间二维数组 n^2
+
+
 class Solution {
 public:
     int uniquePathsWithObstacles(vector<vector<int>>& g) {

@@ -74,3 +74,33 @@ public:
     }
 };
 
+
+
+
+-------------------------------------- 0202 /2021 / 
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& g) {
+        vector<vector<int>> res;
+        int n=g.size();
+        if(n==0 || n==1) return g;
+
+        sort(g.begin(), g.end());
+
+        for(int i=0;i<n;++i)
+        {
+            int l=g[i][0];
+            int r=g[i][1];
+
+            if(res.size()==0 || l>res.back()[1]) res.push_back({l ,r});
+            else
+            {
+                res.back()[1]=max(r, res.back()[1]);
+            }
+        }
+
+        return res;
+    }
+};
+

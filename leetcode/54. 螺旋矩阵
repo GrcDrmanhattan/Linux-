@@ -1,0 +1,107 @@
+54. 螺旋矩阵
+给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+
+ 
+
+示例 1：
+
+
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+示例 2：
+
+
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+ 
+
+提示：
+
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 10
+-100 <= matrix[i][j] <= 100
+
+----------------------- 0203 / 2021/ 
+
+
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        int n=matrix.size();
+        int m=matrix[0].size();
+
+        if(matrix.empty()) return {};
+
+        int up=0;
+        int down=n-1;
+        int ll=0;
+        int rr=m-1;
+
+        while(1)
+        {
+            
+            for(int i=ll;i<=rr;++i) res.push_back(matrix[up][i]);
+
+            if(++up>down) break;
+            for(int i=up;i<=down;++i) res.push_back(matrix[i][rr]);
+
+            if(--rr<ll) break;
+            for(int i=rr;i>=ll;--i) res.push_back(matrix[down][i]);
+
+            if(--down<up) break;
+            for(int i=down;i>=up;--i) res.push_back(matrix[i][ll]);
+
+            if(++ll>rr) break;
+        }
+
+        return res;
+    }
+};
+
+
+------------------------------ yxc
+
+// On的空间，因为st数组
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        int n=matrix.size();
+        int m=matrix[0].size();
+
+        if(matrix.empty()) return {};
+
+        int dx[4]={0, 1, 0, -1};
+        int dy[4]={1, 0, -1, 0};
+        int d=0;
+
+        int x=0;
+        int y=0;
+        vector<vector<bool>> st(n, vector<bool>(m));
+
+        for(int i=0;i<n*m;++i)
+        {
+            res.push_back(matrix[x][y]);
+            st[x][y]=true;
+
+            int a=x+dx[d];
+            int b=y+dy[d];
+
+            if(a<0 || a>=n || b<0 || b>=m || st[a][b])
+            {
+                d=(d+1)%4;
+                a=x+dx[d];
+                b=y+dy[d];
+            }
+
+            x=a;y=b;
+        }
+
+        return res;
+    }
+};
+

@@ -92,3 +92,42 @@ public:
     }
 };
 
+
+
+------------------------------ 0205 / 2021 / 
+
+
+class Solution {
+public:
+    struct cmp{
+        bool operator()(ListNode* a, ListNode* b)
+        {
+            return a->val > b->val; // 如果b的值小于a，则a（）b 成立，也就是b的优先级高于a，也就是值越小的优先级越高越在堆顶
+        }
+    };
+
+  
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<ListNode* ,vector<ListNode*> , cmp> q;
+
+        for(auto x:lists) if(x) q.push(x);
+
+        auto d=new ListNode(-1);
+        auto c=d;
+
+        while(q.size())
+        {
+            auto t=q.top();
+            q.pop();
+
+            c=c->next=new ListNode(t->val);
+
+            if(t->next) q.push(t->next);
+
+        }
+
+        return d->next;
+    }
+};
+
+

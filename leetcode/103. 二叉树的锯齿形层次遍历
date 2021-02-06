@@ -152,3 +152,42 @@ public:
     }
 };
 
+
+
+---------------------------------------------- 0206 / 2021/  self
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root) return {};
+
+        queue<TreeNode*> q;
+        q.push(root);
+        int l=0; // 刚开始0，每次进入一层l++。因此根是1，第二层是2，所以偶数反转
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+            l++;//队列不空，说明有有一层存在，l++
+
+            while(n--)
+            {
+                auto t=q.front();
+                tmp.push_back(t->val);
+                q.pop();
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            if(l % 2==0)  reverse(tmp.begin(), tmp.end());
+            res.push_back(tmp);
+            
+        }
+
+        return res;
+    }
+};
+

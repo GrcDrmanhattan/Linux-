@@ -164,6 +164,8 @@ public:
 --------------------------------- 0206  / self
 
 
+时间最坏On
+
 class Solution {
 public:
     bool hasCycle(ListNode *head) {

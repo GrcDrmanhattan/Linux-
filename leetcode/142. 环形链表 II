@@ -1,7 +1,8 @@
 142. 环形链表 II
 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
 
-为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
+注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
 
 说明：不允许修改给定的链表。
 
@@ -68,6 +69,43 @@ public:
             {
                 i=head;
                 while( i != j)
+                {
+                    i=i->next;
+                    if(j) j=j->next;
+                }
+
+                return i;
+            }
+        }
+
+        return nullptr;
+    }
+};
+
+
+
+------------------------- 0206 / 2021/ self
+
+yxc视频讲解nb，很清楚的知道原理
+
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        auto i=head;
+        auto j=head;
+
+        while(i&&j)
+        {
+            i=i->next;
+            j=j->next;
+            if(j) j=j->next;
+
+            if(i==j)
+            {
+                i=head;
+
+                while(i!=j)
                 {
                     i=i->next;
                     if(j) j=j->next;

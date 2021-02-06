@@ -102,3 +102,39 @@ public:
 
 
 
+---------------------------- 0206 /2021/  self
+
+
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        for(int i=0;i<inorder.size();++i) mp[inorder[i]] = i;
+
+        return dfs(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
+    }
+
+    TreeNode* dfs(vector<int>& ino, int is,int  ie, vector<int>& po, int ps, int pe)
+    {
+        if(is>ie || ps > pe) return nullptr;
+        auto res= new TreeNode(po[pe]);
+        int k=mp[po[pe]];
+
+        int ll=k-is;// 根据右子树的后续序列长度和右子树的中序序列长度相同，可以求出后序的起始坐标
+
+        // is        k-1 , k ,k+1         ie
+        // ps         ?  ,   ,  ?             pe
+        // k-1 - is = ? - ps, ?=ps+k-1-is
+        
+        res->left =dfs(ino, is, k-1, po, ps , ps+ll-1);
+        res->right=dfs(ino, k+1, ie, po, ps+ll, pe-1);
+
+        return res;
+    }
+};
+
+
+
+

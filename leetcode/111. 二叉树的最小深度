@@ -116,6 +116,9 @@ public:
 
 //局部结构 f(u) 可以通过f(a) f(b),所以可以递归求f(root)
 
+一共算n个状态，每个状态常数次计算
+空间复杂度和递归的层数有关
+
 class Solution {
 public:
     int minDepth(TreeNode* root) {

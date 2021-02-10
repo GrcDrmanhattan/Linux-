@@ -110,3 +110,23 @@ public:
 };
 
 
+
+---------------------------- 0210  /2021 
+
+
+//局部结构 f(u) 可以通过f(a) f(b),所以可以递归求f(root)
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if(!root) return 0;
+
+        if(!root->left && !root->right) return 1; //当前是叶子节点
+        else if(root->left && root->right) return min(minDepth(root->left), minDepth(root->right)) + 1;
+        else if(root->left) return minDepth(root->left)+1;
+        else return minDepth(root->right)+1;
+    }
+};
+
+
+

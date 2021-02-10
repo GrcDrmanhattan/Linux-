@@ -57,12 +57,12 @@ public:
 
         while(i<j)
         {
-            while(nums[++i]>x);
+            while(nums[++i]>x); // 第k大的元素， 要把符号反转一下
             while(nums[--j]<x);
             if(i<j) swap(nums[i], nums[j]);
         }
 
-        if(k<=j) return help(nums, l ,j, k);
+        if(k<=j) return help(nums, l ,j, k); // 递归左边
         else return help(nums, j+1, r, k);
 
     }

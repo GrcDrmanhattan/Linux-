@@ -68,3 +68,22 @@ public:
 };
 
 
+
+--------------------------------- 0211 /2021/ 
+
+
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        int n=0;
+        for(auto p=head;p;p=p->next) n++;
+
+        auto p=head;
+        for(int i=0;i<n/2;++i) p=p->next; // 奇数返回中间， 偶数返回第二个节点
+
+        return p;
+    }
+};
+
+

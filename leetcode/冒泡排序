@@ -1,0 +1,96 @@
+0212 / 2021 / yxc
+
+
+
+-------------------------------------------
+
+时间On^2 
+
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=2e5+10;
+
+int n;
+vector<int> q;
+
+
+void bubble()
+{
+    for(int i=q.size()-1 ;i > 0;--i) // 第一次循环n-2， n-3， 。。。 总计和是n^2级别
+        for(int j=0;j + 1 <=i ;++j)
+            if(q[j]>q[j+1]) swap(q[j] , q[j+1]); // 每次循环就可以将最大的放到后面
+}
+
+
+
+int main()
+{
+    
+    cin>>n;
+    int t;
+    for(int i=0;i<n;++i) 
+    {
+        cin>>t;
+        q.push_back(t);
+    }
+    
+    bubble();
+    
+    for(int i=0;i<n;++i) cout<<q[i]<<' ';
+    cout<<endl;
+    
+    return 0;
+}
+
+
+---------------------- 优化
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=2e5+10;
+
+int n;
+vector<int> q;
+
+
+void bubble()
+{
+    for(int i=q.size()-1 ;i > 0;--i)
+    {
+        bool f=false; // 没有交换过    
+    
+        for(int j=0;j + 1 <=i ;++j)
+            if(q[j]>q[j+1]) {
+                swap(q[j] , q[j+1]);
+                f=true;
+            }
+            
+        if(!f) break;//如果一次循环没有交换过，既说明已经排序完
+    }
+}
+
+int main()
+{
+    
+    cin>>n;
+    int t;
+    for(int i=0;i<n;++i) 
+    {
+        cin>>t;
+        q.push_back(t);
+    }
+    
+    bubble();
+    
+    for(int i=0;i<n;++i) cout<<q[i]<<' ';
+    cout<<endl;
+    
+    return 0;
+}

@@ -1,0 +1,63 @@
+0212 / 2021/ yxc
+
+------------------------------- 
+
+
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=2e5+10;
+
+int n;
+vector<int> q;
+
+
+void bubble()
+{
+    for(int i=q.size()-1 ;i > 0;--i)
+    {
+        bool f=false; // 没有交换过    
+    
+        for(int j=0;j + 1 <=i ;++j)
+            if(q[j]>q[j+1]) {
+                swap(q[j] , q[j+1]);
+                f=true;
+            }
+            
+        if(!f) break;//如果一次循环没有交换过，既说明已经排序完
+    }
+}
+
+void select()
+{
+    for(int i=0;i<q.size();++i) // 从i开始排序，i之前已经排好序
+        for(int j=i+1; j< q.size();++j)
+        {
+            if(q[j] < q[i]) swap(q[i], q[j]); //每次将小的交换到最开始
+        }
+}
+
+int main()
+{
+    
+    cin>>n;
+    int t;
+    for(int i=0;i<n;++i) 
+    {
+        cin>>t;
+        q.push_back(t);
+    }
+    
+    // bubble();
+    select();
+    
+    for(int i=0;i<n;++i) cout<<q[i]<<' ';
+    cout<<endl;
+    
+    return 0;
+}
+
+

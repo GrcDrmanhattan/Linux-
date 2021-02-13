@@ -78,7 +78,7 @@ void count_sort() //计数排序
 
 int get(int x,int i) // 取出x的某一位 ，假设三位数， 0个位 ，1 十位， 2 百位
 {
-    while(i--) x/=10;
+    while(i--) x/=10; // 除法 取模 的运算常数很大 ，几十个时钟周期， 实际基数排序效果不好
     return x%10;
 }
 

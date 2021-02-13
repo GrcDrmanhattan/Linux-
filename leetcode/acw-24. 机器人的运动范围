@@ -121,3 +121,53 @@ public:
 
 
 
+-------------------------- 0213 / 2021/  yxc
+
+
+class Solution {
+public:
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    
+    bool st[110][110];
+    int res=0;
+    int get(int x ,int y)
+    {
+        return x%10 + x/10 + y%10 + y/10;
+    }
+
+    int movingCount(int m, int n, int k) {
+        if(!m || !n) return 0;
+        
+        memset(st ,false, sizeof(st));
+        queue<pair<int, int >> q;
+        q.push({0 , 0});
+
+        while(q.size())
+        {
+            auto t=q.front();
+            q.pop();
+
+            if(get(t.first, t.second)> k || st[t.first][t.second]) continue;
+            res++;
+            st[t.first][t.second]=true;
+
+            for(int i=0;i<4;++i)
+            {
+                int a=t.first+dx[i];
+                int b=t.second+dy[i];
+
+                if(a>=0 && a< m && b>=0 && b<n )
+                {
+                    q.push({a, b});
+
+                }
+            }
+        }
+
+        return res;
+    }
+
+};
+
+

@@ -65,3 +65,40 @@ public:
  */
  
  
+------------------------------- 0213 / 2021 / 
+
+
+
+class CQueue {
+public:
+    stack<int> s1, s2;
+    CQueue() {
+        
+    }
+    
+    void appendTail(int value) {
+        s1.push(value);
+    }
+    
+    int deleteHead() {
+        if(s1.empty()) return -1;
+        int res;
+        while(s1.size())
+        {
+            s2.push(s1.top());
+            s1.pop();
+        }
+        res=s2.top();
+        s2.pop();
+
+        while(s2.size())
+        {
+            s1.push(s2.top());
+            s2.pop();
+        }
+        return res;
+    }
+};
+
+
+

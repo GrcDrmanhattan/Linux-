@@ -35,3 +35,26 @@ public:
         return cnt;
     }
 };
+
+
+--------------------------- 0214 / 2021 / 
+
+class Solution {
+public:
+    int lb(uint32_t x)
+    {
+        return x & (~x+1);
+    }
+
+    int hammingWeight(uint32_t n) {
+        uint32_t cnt=0;
+        while(n)
+        {
+            n -=lb(n);
+            cnt++;
+        }
+
+        return cnt;
+    }
+};
+

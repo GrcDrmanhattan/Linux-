@@ -46,3 +46,24 @@ public:
 };
 
 
+----------------------------------- 0214 / 2021 / 
+
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        typedef long long ll;
+        double res=1;
+
+        for(ll k= abs((ll) n) ; k ;k>>=1) // 先预处理x^(2^0), x^(2^1), x^(2^2)...，如果当前位是1，就乘到res
+        {
+            if(k&1) res *= x;
+
+            x*=x;
+        }
+        if(n<0) res = 1/res;
+        return res;
+    }
+};
+
+

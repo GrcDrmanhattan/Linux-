@@ -58,3 +58,23 @@ public:
     }
 };
 
+
+
+---------------------------------- 0214 / 2021 / yxc
+
+
+class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        int res=0;
+        while(n)
+        {
+            res += n&1; // 每次加上个位，然后把个位去除
+            n>>=1;
+        }
+        return res;
+    }
+};
+
+
+

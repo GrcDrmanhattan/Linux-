@@ -82,3 +82,50 @@ public:
 };
 
 
+---------------------------- 
+
+// 最大值最小考虑 二分
+// 对所有可能的球的数目的范围进行二分，，假设球的数目x，满足性质：操作m次，最大的数目小于等于x，这样边界就是答案 
+// 边界就是答案，最大的数最多就是边界这么多个， 在边界右边的所有的数都满足，左半区间肯定不满足，不够答案的数目，右半区间比答案多可以满足
+
+//时间Onlogn
+
+class Solution {
+public:
+    vector<int> nums;
+    int m;
+
+    int minimumSize(vector<int>& _nums, int op) {
+        m=op;
+        nums=_nums;
+        int l=1;
+        int r=1e9; //答案的左右边界
+
+        while(l<r) // 
+        {
+            int mid=l+r>>1;
+            if(check(mid)) r=mid; // mid成立，说明答案可能等于mid或者小于mid
+            else l=mid+1;
+        }
+
+        return l;
+    }
+
+    bool check(int mid){ 
+        // 检查对初始的每一个袋里最少操作多少次，使得分成的堆里球的数目小于等于x，mid是球的数目，因为是独立的，所以可以分别考虑每一堆
+        // 使得操作的次数最少并且满足数目都小于等于x，所以每次最多拿出越多越好，就最多x个
+        //所以要分割[k/x]上取整次，然后减去最后一次， cpp只有下取整
+
+        int res=0;
+        for(auto k:nums)
+        {
+            res += (k+mid-1)/mid -1; // res统计次数
+            if(res > m) return false;
+        }
+
+        return true; // 有需要的次数小于等于m就返回true
+    }
+};
+
+
+

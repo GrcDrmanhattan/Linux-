@@ -73,3 +73,27 @@ public:
     }
 };
 
+
+------------------------------ 0216  /2021/  
+
+
+class Solution {
+public:
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        
+        if(!A || !B) return false;
+
+        if(check(A, B)) return true;// 先判断以当前节点a为根是否匹配b，可以匹配返回true，否则递归判断
+
+        return isSubStructure(A->left, B) || isSubStructure(A->right, B);
+    }
+
+    bool check(TreeNode* p , TreeNode* q)
+    {
+        if(!q) return true;
+        if(!p || p->val != q->val) return false;
+
+        return check(p->left, q->left) && check(p->right, q->right);
+    }
+};
+

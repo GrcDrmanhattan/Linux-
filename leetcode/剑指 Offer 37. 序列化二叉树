@@ -1,0 +1,80 @@
+ 剑指 Offer 37. 序列化二叉树
+ 
+ 请实现两个函数，分别用来序列化和反序列化二叉树。
+
+示例: 
+
+你可以将以下二叉树：
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+
+序列化为 "[1,2,3,null,null,4,5]"
+
+--------------------------------------- 0216  /2021/  yxc
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string res;
+    string serialize(TreeNode* root) {
+        dfs_s(root);
+        return res;
+    }
+
+    void dfs_s(TreeNode* rt)
+    {
+        if(!rt)
+        {
+            res += "#,";
+        }else{
+            res += to_string(rt->val) + ',';
+            dfs_s(rt->left);
+            dfs_s(rt->right);
+        }
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dfs_d(data, u);
+    }
+
+    TreeNode* dfs_d(string& data, int &u)
+    {
+        if(data[u]=='#')
+        {
+            u+=2;
+            return NULL;
+        }else{
+            int k=u;
+            while(data[u]!=',') u++;
+            auto rt=new TreeNode(stoi(data.substr(k, u-k))); // 字符串转换为整数
+            u++; // 跳过逗号
+ 
+            rt->left=dfs_d(data, u);
+            rt->right=dfs_d(data, u);
+
+            return rt;
+        }
+    }
+};
+
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));

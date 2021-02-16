@@ -98,3 +98,56 @@ public:
 // Codec ser, deser;
 // TreeNode* ans = deser.deserialize(ser.serialize(root));
 
+
+
+----------------------------- 0216/  2021/  
+
+
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string res;
+    string serialize(TreeNode* root) {
+        dfs_s(root);
+        return res;
+    }
+
+    void dfs_s(TreeNode* root)
+    {
+        if(!root) res+="#,";
+        else{
+            res+=to_string(root->val) + ',';
+            dfs_s(root->left);
+            dfs_s(root->right);
+        }
+        
+    }
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dfs_d(data, u);
+    }
+
+    TreeNode* dfs_d(string & data, int &u)
+    {
+        if(data[u]=='#')
+        {
+            u+=2;
+            return nullptr;
+        }
+        else{
+            int k=u;
+            while( data[u]!=',') u++;
+            auto rt=new TreeNode(stoi(data.substr(k ,u-k)));
+            u++;// 跳过逗号
+            rt->left= dfs_d(data, u);
+            rt->right = dfs_d(data, u);
+            return rt;
+        }
+
+    }
+};
+
+

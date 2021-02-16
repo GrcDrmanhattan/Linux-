@@ -85,4 +85,33 @@ public:
 };
 
 
+--------------------------------- 0216 / 2021/ 
+
+
+class Solution {
+public:
+    vector<int> g;
+
+    bool verifyPostorder(vector<int>& postorder) {
+        if(postorder.empty()) return true;
+        g=postorder;
+        return check(0, g.size()-1);
+    }
+
+    bool check(int l, int r)
+    {
+        if(l>=r) return true;
+
+        int rt=g[r];
+        int k=l;
+        while(k<r && g[k]<rt) k++;
+
+        for(int i=k;i<r;++i)
+            if(g[i]<rt) return false;
+        
+        return check(l, k-1) && check(k, r-1);
+    }
+};
+
+
 

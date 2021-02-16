@@ -23,6 +23,11 @@ minStack.min();   --> 返回 -2.
 ----------------------------- 0216  /2021/  
 
 
+单调栈的一种做法 ， 
+
+m最小栈维护存储和原栈相同数目的元素
+
+
 class MinStack {
 public:
     /** initialize your data structure here. */
@@ -56,4 +61,7 @@ public:
         return m.top();
     }
 };
+
+
+
 

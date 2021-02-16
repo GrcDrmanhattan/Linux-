@@ -25,7 +25,7 @@ minStack.min();   --> 返回 -2.
 
 单调栈的一种做法 ， 
 
-m最小栈维护存储和原栈相同数目的元素
+m最小栈维护存储和原栈相同数目的元素，但是可以优化使得m栈里面少存一些1元素
 
 
 class MinStack {
@@ -58,6 +58,36 @@ public:
     }
     
     int min() {
+        return m.top();
+    }
+};
+
+
+------------------- 优化一点点，但没有减少空间和时间
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int> s1, m;
+    MinStack() {
+
+    }
+    
+    void push(int x) {
+        s1.push(x);
+        if(m.empty() || m.top()>= x) m.push(x);
+    }
+    
+    void pop() {
+        if(s1.top() == m.top()) m.pop();
+        s1.pop();
+    }
+    
+    int top() {
+        return s1.top();
+    }
+    
+    int getMin() {
         return m.top();
     }
 };

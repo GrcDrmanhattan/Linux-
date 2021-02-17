@@ -26,6 +26,9 @@
 ---------------------------------- 0217 / 2021/  
 
 
+对于相同的数，只用第一个没有用过的
+
+
 class Solution {
 public:
     vector<vector<int>> res;

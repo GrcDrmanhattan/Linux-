@@ -76,7 +76,7 @@ public:
             for(int j=1;j<=n;++j) // 枚举当前i位可以放哪个数
             {
                 if(!st[j]){
-                    if(fact < k) k -= fact;
+                    if(fact < k) k -= fact; // 当前位填好数后，余下的位还有fact种可能的数目不满足k， 
                     else{
                         res += to_string(j);
                         st[j]=true;

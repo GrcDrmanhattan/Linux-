@@ -78,7 +78,7 @@ public:
                 if(!st[j]){
                     if(fact < k) k -= fact; // 当前位填好数后，余下的位还有fact种可能的数目不满足k， 
                     else{
-                        res += to_string(j);
+                        res += to_string(j); // 满足，则第k个数的第i位填j
                         st[j]=true;
                         break;
                     }

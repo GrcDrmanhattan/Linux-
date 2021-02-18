@@ -55,5 +55,41 @@ public:
 
 
 
--------------------------
+------------------------- 0218 / 
+
+
+// 有n位，最坏要在每一位上遍历所有的n个数， 时间On^2
+
+class Solution {
+public:
+    
+    string getPermutation(int n, int k) {
+        
+        string res; 
+        vector<bool>st(10);
+
+        for(int i=0;i<n;++i)// 枚举每一位
+        {
+            int fact=1;
+            for(int j=1;j<= n-i-1; ++j) fact *= j; // 当前位填好数后，余下的位还有fact种可能
+
+            for(int j=1;j<=n;++j) // 枚举当前i位可以放哪个数
+            {
+                if(!st[j]){
+                    if(fact < k) k -= fact;
+                    else{
+                        res += to_string(j);
+                        st[j]=true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
 

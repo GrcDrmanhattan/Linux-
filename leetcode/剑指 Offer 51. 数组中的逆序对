@@ -67,3 +67,44 @@ public:
     }
 };
 
+
+
+---------------------------- 0219 / 2021/  
+
+class Solution {
+public:
+    int reversePairs(vector<int>& nums) {
+        if(nums.empty()) return 0;
+        return merge(nums , 0, nums.size()-1);
+    }
+
+    int merge(vector<int>& nums, int l, int r)
+    {
+        if(l>=r) return 0;
+        int mid=l + r >> 1;
+        int res=merge(nums, l , mid) + merge( nums ,mid+1, r);
+
+        int i=l;
+        int j=mid+1;
+        vector<int> tmp;
+
+        while(i<= mid && j<= r)
+        {
+            if(nums[i]<= nums[j]) tmp.push_back(nums[i++]);
+            else{
+                res += mid -i +1 ;
+                tmp.push_back(nums[j++]);
+            }
+        }
+
+        while(i<=mid) tmp.push_back(nums[i++]);
+        while(j<=r) tmp.push_back(nums[j++]);
+
+        int t=l;
+        for(auto x:tmp) nums[t++]=x;
+
+        return res; 
+    }
+};
+
+

@@ -48,3 +48,25 @@ public:
     }
 };
 
+
+----------------------------- 0219 
+
+
+class Solution {
+public:
+    int findNthDigit(int n) {
+        long long w=1, cnt =9, st=1;
+        while(n > w*cnt){
+            n -= w*cnt;
+            w++;
+            cnt *= 10;
+            st *= 10;
+        }
+
+        st += (n+w-1)/w -1;//落在三位数的区间，是哪一个三位数呢，是从st开始 n/w 上取整 个
+        n = n% w ? n%w : w; // 是这个三位数的哪一个数字
+        return to_string(st)[n-1]-'0';
+    }
+};
+
+

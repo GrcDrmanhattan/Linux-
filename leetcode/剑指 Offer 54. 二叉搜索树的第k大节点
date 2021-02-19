@@ -65,3 +65,28 @@ public:
 };
 
 
+------------------------ 0220 / 2021/ 
+
+
+class Solution {
+public:
+    vector<int> tmp;
+
+    int kthLargest(TreeNode* root, int k) {
+        dfs(root);
+        reverse(tmp.begin(), tmp.end());
+        return tmp[k-1];
+    }
+
+    void dfs(TreeNode* u)
+    {
+        if(!u) return ;
+        dfs(u->left);
+        tmp.push_back(u->val);
+        dfs(u->right);
+    }
+};
+
+
+
+

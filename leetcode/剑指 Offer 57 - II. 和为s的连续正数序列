@@ -61,25 +61,23 @@ class Solution {
 public:
     vector<vector<int>> findContinuousSequence(int target) {
         vector<vector<int>> res;
-        for(int i=1, j=1, s=1 ; i<=target; ++i)
+        for(int i=1, j=1, s=1; i<=target;++i)
         {
-            while(s < target)
-            {
-                j++;
+            while(s < target){
+                j++;//将下一个数加进来，因为s初始已经是1了
                 s+=j;
             }
 
-            if(s==target && j-i + 1 > 1){
+            if(s== target && j-i+1 > 1)
+            {
                 vector<int> tmp;
-                for(int k=i;k<=j;++k) tmp.push_back(k);
+                for(int k=i; k<= j;++k) tmp.push_back(k);
                 res.push_back(tmp);
             }
 
             s-=i;
         }
-
         return res;
     }
 };
-
 

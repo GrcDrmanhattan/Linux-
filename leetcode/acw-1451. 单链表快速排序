@@ -77,6 +77,8 @@ public:
 
 期望是每层分成一半，总计logn层，每层On，所以时间nlogn
 
+空间logn
+
 
 
 /**

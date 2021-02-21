@@ -71,7 +71,13 @@ public:
 };
 
 
--------------------------
+-------------------------  时间Onlogn
+
+
+
+期望是每层分成一半，总计logn层，每层On，所以时间nlogn
+
+
 
 /**
  * Definition for singly-linked list.

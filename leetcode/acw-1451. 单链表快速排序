@@ -1,0 +1,74 @@
+1451. 单链表快速排序
+
+给定一个单链表，请使用快速排序算法对其排序。
+
+要求：期望平均时间复杂度为 O(nlogn)，期望额外空间复杂度为 O(logn)。
+
+思考题： 如果只能改变链表结构，不能修改每个节点的val值该如何做呢？
+
+数据范围
+链表中的所有数大小均在 int 范围内，链表长度在 [0,10000]。
+
+输入样例：
+[5, 3, 2]
+输出样例：
+[2, 3, 5]
+
+
+----------------------------------- 0221/ 2021/  yxc 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+
+class Solution {
+public:
+    ListNode* quickSortList(ListNode* head) {
+        if(!head || !head->next) return head;
+
+        ListNode* ll=new ListNode(-1); // 定义虚拟头节点
+        ListNode* rr=new ListNode(-1);
+        ListNode* mid=new ListNode(-1);
+
+        auto ltail=ll;
+        auto mtail=mid;
+        auto rtail=rr;
+
+        int x=head->val;
+
+        for(auto p=head;p;p=p->next){
+            if(p->val < x) ltail=ltail->next=p;
+            else if(p->val == x) mtail=mtail->next=p;
+            else rtail=rtail->next=p;
+
+        } 
+
+        ltail->next=nullptr;
+        rtail->next=nullptr;
+        mtail->next=nullptr;
+
+        // 递归排序左边
+        ll->next=quickSortList(ll->next);
+        rr->next=quickSortList(rr->next);
+
+        get_tail(ll)->next=mid->next;
+        get_tail(ll)->next=rr->next;
+
+        return ll->next;
+    }
+
+    ListNode* get_tail(ListNode* p){
+        while(p->next) p=p->next;
+        return p;
+    }
+};
+
+
+

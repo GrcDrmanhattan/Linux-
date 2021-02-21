@@ -71,4 +71,65 @@ public:
 };
 
 
+-------------------------
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+
+class Solution {
+public:
+    ListNode* quickSortList(ListNode* head) {
+        if(!head || !head->next) return head;
+
+        ListNode* ll=new ListNode(-1); // 定义虚拟头节点
+        ListNode* rr=new ListNode(-1);
+        ListNode* mid=new ListNode(-1);
+
+        auto ltail=ll;
+        auto mtail=mid;
+        auto rtail=rr;
+
+        int x=head->val;
+
+        for(auto p=head;p;p=p->next){
+            if(p->val < x) ltail=ltail->next=p;
+            else if(p->val == x) mtail=mtail->next=p;
+            else rtail=rtail->next=p;
+
+        } 
+
+        ltail->next=nullptr;
+        rtail->next=nullptr;
+        mtail->next=nullptr;
+
+        // 递归排序左边
+        ll->next=quickSortList(ll->next);
+        rr->next=quickSortList(rr->next);
+
+        get_tail(ll)->next=mid->next;
+        get_tail(ll)->next=rr->next;
+        
+        auto p=ll->next;
+        delete ll;
+        delete mid;
+        delete rr;
+
+        return p;
+    }
+
+    ListNode* get_tail(ListNode* p){
+        while(p->next) p=p->next;
+        return p;
+    }
+};
+
+
+
 

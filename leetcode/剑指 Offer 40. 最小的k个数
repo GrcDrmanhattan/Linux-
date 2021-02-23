@@ -44,3 +44,27 @@ public:
 };
 
 
+
+----------------------------- 0223 / 2021/  
+
+class Solution {
+public:
+    vector<int> getLeastNumbers(vector<int>& arr, int k) {
+        vector<int> res;
+        priority_queue<int > q; // 大根堆 ，每次弹出堆顶的最大元素，插入小的，这样剩下的就是最小的k个元素
+
+        for(auto x:arr){
+            q.push(x);
+            while(q.size() > k) q.pop();
+        }       
+
+        while(q.size()){
+            res.push_back(q.top());
+            q.pop();
+        }
+
+        return res;
+    }
+};
+
+

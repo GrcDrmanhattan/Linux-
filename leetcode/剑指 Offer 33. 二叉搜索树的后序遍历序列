@@ -115,3 +115,31 @@ public:
 
 
 
+----------------------------------- 0223/ 2021/  
+
+
+class Solution {
+public:
+    vector<int> g;
+    bool verifyPostorder(vector<int>& postorder) {
+        g=postorder;
+        if(g.empty()) return true;
+        return dfs(0 ,g.size()-1);
+    }
+
+    bool dfs(int l, int r){
+        if(l>=r) return true;
+
+        int rt=g[r];
+        int k=l;
+        while(k<r && g[k] <= rt) k++;
+
+        for(int i=k;i<=r;++i)
+            if(g[i] < rt) return false;
+
+        return dfs(l, k-1) && dfs(k, r-1);
+    }
+};
+
+
+

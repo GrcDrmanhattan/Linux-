@@ -130,4 +130,39 @@ public:
     }
 };
 
+---------------------------- 0223 / 2021 / 
+
+
+class Solution {
+public:
+    struct cmp{
+        bool operator()(ListNode* a, ListNode*b){
+            return a->val > b->val;
+        }
+    };
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.empty()) return nullptr;
+
+        auto d=new ListNode(-1);
+        auto c=d;
+
+        priority_queue<ListNode* ,vector<ListNode*>, cmp> q;
+        for(auto x:lists) if(x) q.push(x);
+
+        while(q.size())
+        {
+            auto t=q.top();
+            q.pop();
+            c=c->next = t;
+
+            if(t->next) q.push(t->next);
+        }
+
+        return d->next;
+    }
+};
+
+
+
 

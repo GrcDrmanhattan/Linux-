@@ -134,3 +134,28 @@ public:
 
 
 
+-------------------------- 0223 / 2021/ 
+
+
+class Solution {
+public:
+    int minArray(vector<int>& numbers) {
+        int l=0;
+        int r=numbers.size()-1;
+
+        while(r && numbers[r]==numbers[0]) r--;
+        if(numbers[l]<=numbers[r]) return numbers[0];
+
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(numbers[mid]>=numbers[0]) l=mid+1;
+            else r=mid;
+        }
+
+        return numbers[l];
+    }
+};
+
+
+

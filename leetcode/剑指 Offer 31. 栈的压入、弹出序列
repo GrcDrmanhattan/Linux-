@@ -78,3 +78,27 @@ public:
 };
 
 
+------------------------- 0223/ 2021/  
+
+
+class Solution {
+public:
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        vector<int> q;
+        int idx=0;
+
+        for(auto x:pushed)
+        {
+            q.push_back(x);// 要先放入x
+            while(q.size() &&  q.back()==popped[idx]){
+                idx++;
+                q.pop_back();
+            }
+            
+        }
+
+        return q.empty();
+    }
+};
+
+

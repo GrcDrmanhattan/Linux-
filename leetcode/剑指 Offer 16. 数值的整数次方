@@ -78,7 +78,7 @@ public:
         
         double res=1;
 
-        for(ll k = abs(n) ; k; k>>=1)
+        for(ll k = abs(n) ; k; k>>=1) // 将n次幂进行分解，看哪一位是否是1，对应相乘
         {
             if(k&1) res *= x;
             x*=x;

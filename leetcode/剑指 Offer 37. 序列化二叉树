@@ -78,3 +78,60 @@ public:
 // Your Codec object will be instantiated and called as such:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
+
+
+
+----------------------- 0223  .2021 
+
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string res;
+    string serialize(TreeNode* root) {
+        dfs_s(root);
+        return res;
+    }
+
+
+    void dfs_s(TreeNode* u){
+        if(!u) {
+            res +="#,";
+            return;
+        }
+
+        res += to_string(u->val) + ',';
+        dfs_s(u->left);
+        dfs_s(u->right);
+
+    }
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dfs_d(data, u);
+    }
+
+    TreeNode* dfs_d(string& data, int &u){
+        if(u==data.size()) return nullptr;
+
+        if(data[u] == '#'){
+            u+=2;
+            return nullptr;
+        }
+
+        int k=u;
+        while(data[u] != ',') u++;
+
+        auto rt=new TreeNode(stoi(data.substr(k , u-k)));
+
+        u++;
+
+        rt->left=dfs_d(data, u);
+        rt->right=dfs_d(data, u);
+
+        return rt;
+    }
+};
+
+

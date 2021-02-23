@@ -82,7 +82,7 @@ public:
 
         for(int i=0;i<n;++i)
             for(int j=0;j<m;++j)
-                if(dfs(word, i, j, 0)) return true;
+                if(dfs(word, i, j, 0)) return true; // 只要从某一个位置搜索找到路径就返回true
 
         return false;
     }

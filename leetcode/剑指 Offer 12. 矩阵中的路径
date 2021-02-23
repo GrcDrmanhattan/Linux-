@@ -1,6 +1,7 @@
 剑指 Offer 12. 矩阵中的路径
 
-请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。
+如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
 
 [["a","b","c","e"],
 ["s","f","c","s"],
@@ -63,4 +64,58 @@ public:
         return false;
     }
 };
+
+
+------------------------------ 0223 / 2021 / 
+
+
+class Solution {
+public:
+    int n,m;
+    vector<vector<char>> g;
+
+    bool exist(vector<vector<char>>& board, string word) {
+        if(board.empty()) return false;
+        n=board.size();
+        m=board[0].size();
+        g=board;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(dfs(word, i, j, 0)) return true;
+
+        return false;
+    }
+
+    bool dfs(string& word, int x, int y, int u)
+    {
+        if(g[x][y] != word[u]) return false;
+        if(u==word.size()-1) return true;
+
+        bool st[210][210];
+        memset(st, 0 ,sizeof st);
+
+        int dx[]={0, 1 ,0, -1};
+        int dy[]={1, 0, -1, 0};
+        
+        char c=word[u];
+        g[x][y]='*';
+
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b])
+            {
+                st[a][b]=true;
+                if(dfs(word, a , b , u+1)) return true;
+            }
+        }
+
+        g[x][y]=c;
+        return false;
+    }
+};
+
+
+
 

@@ -57,3 +57,47 @@ public:
     }
 };
 
+
+
+----------------------------- 0223 / 2021/ 
+
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        if(matrix.empty()) return res;
+
+        int n=matrix.size();
+        int m=matrix[0].size();
+
+        int dx[]={0, 1, 0, -1};
+        int dy[]={1, 0, -1, 0};
+        int x=0;
+        int y=0;
+        int d=0;
+        bool st[110][110];
+        memset(st , false , sizeof(st));
+        
+        for(int i=0;i<n*m;++i)
+        {
+            st[x][y]=true;
+            res.push_back(matrix[x][y]);
+            int a=x+dx[d];
+            int b=y+dy[d];
+
+            if(a<0 || a>=n || b<0 || b>=m || st[a][b])
+            {
+                d=(d+1)%4;
+                a=x+dx[d];
+                b=y+dy[d];
+            }
+
+            x=a;y=b;
+        }
+
+        return res;
+    }
+};
+
+

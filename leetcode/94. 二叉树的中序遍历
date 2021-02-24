@@ -172,3 +172,33 @@ public:
 };
 
 
+------------------------- 0224 / 2021/  
+
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+
+        auto cur=root;
+        while(s.size() || cur)
+        {
+            if(cur)
+            {
+                s.push(cur);
+                cur=cur->left;
+            }
+            else{
+                auto t=s.top();
+                s.pop();
+                res.push_back(t->val);
+
+                cur=t->right;
+            }
+        }
+
+        return res;
+    }
+};
+

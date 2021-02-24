@@ -39,8 +39,32 @@ public:
             return p;
         }
         //如果没有右子树，则向上寻找
+        while(p->father && p==p->father->right) p=p->father; // 如果有father或者是father的右儿子， 就一直向上，直到是左儿子或者没有father为止
+        return p->father;
+    }
+};
+
+
+
+--------------------------------------------- 0224 / 2021/  
+
+
+
+class Solution {
+public:
+    TreeNode* inorderSuccessor(TreeNode* p) {
+        if(p->right){
+            p=p->right;
+            
+            while(p->left) p=p->left;
+            
+            return p;
+        }
+        
         while(p->father && p==p->father->right) p=p->father;
         return p->father;
     }
 };
+
+
 

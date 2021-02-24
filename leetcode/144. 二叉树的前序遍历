@@ -164,4 +164,31 @@ public:
 };
 
 
+---------------------------------0224 /2021 ..
+
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+
+        while(s.size() || root)
+        {
+            while(root)
+            {
+                res.push_back(root->val);
+                s.push(root);
+                root=root->left;
+            }
+
+            root=s.top()->right;
+            s.pop();
+        } 
+
+        return res;
+    }
+};
+
+
 

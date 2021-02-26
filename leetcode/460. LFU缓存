@@ -443,3 +443,143 @@ public:
 
     }
 };
+
+
+
+--------------------------------- 0226 / 2021 /  
+
+
+class LFUCache {
+public:
+    struct Node{
+        int key;
+        int val;
+        Node* left;
+        Node* right;
+
+        Node(int k , int v)
+            :key(k), val(v), left(nullptr), right(nullptr){}
+    };
+
+    struct Block{
+        int cnt;
+        Block* left;
+        Block* right;
+
+        Node* head;
+        Node* tail;
+
+        Block(int c)
+            :cnt(c), left(nullptr), right(nullptr)
+            {
+                head=new Node(-1, -1);
+                tail=new Node(-1, -1);
+                head->right=tail;
+                tail->left=head;
+            }
+
+        ~Block(){
+            delete head;
+            delete tail;
+        }
+
+        void insert(Node* p)
+        {
+            p->right=head->right;
+            p->left=head;
+
+            head->right->left=p;
+            head->right=p;
+        }
+
+        void remove(Node* p)
+        {
+            p->left->right=p->right;
+            p->right->left=p->left;
+        }
+
+        bool empty()
+        {
+            return head->right==tail;
+        }
+
+    }*Lb, *Rb;
+
+    void remove(Block *p)
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+    void insert(Block* p)
+    {
+        auto q=new Block(p->cnt+1);
+
+        q->right=p->right;
+        q->left=p;
+
+        p->right->left=q;
+        p->right=q;
+
+    }
+
+    int n;
+    unordered_map<int ,Node*> hashnode;
+    unordered_map<int, Block*> hashblock;
+
+    LFUCache(int capacity) {
+        n=capacity;
+        Lb=new Block(0);
+        Rb=new Block(INT_MAX);
+
+        Lb->right=Rb;
+        Rb->left=Lb;
+    }
+    
+    int get(int key) {
+        if(hashblock.count(key)==0) return -1;
+
+        auto node=hashnode[key];
+        auto block=hashblock[key];
+
+        block->remove(node);
+
+        if(block->right->cnt != block->cnt + 1) insert(block);
+        block->right->insert(node);
+
+        hashblock[key]=block->right;
+
+
+        if(block->empty()) remove(block);
+        return node->val;
+    }
+    
+    void put(int key, int value) {
+        if(!n) return ;
+        if(hashblock.count(key)==0)
+        {
+            if(n==hashblock.size())
+            {
+                auto p=Lb->right->tail->left;
+                Lb->right->remove(p);
+
+                hashblock.erase(p->key);
+                hashnode.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+            if(Lb->right->cnt > 1) insert(Lb);
+            Lb->right->insert(p);
+
+            hashnode[key]=p;
+            hashblock[key]=Lb->right;
+        }
+        else
+        {
+            hashnode[key]->val=value;
+            get(key);
+        }
+    }
+};
+
+

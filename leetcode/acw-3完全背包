@@ -71,3 +71,101 @@ int main()
 
 
 
+-------------------------0227 / 2021/  
+
+
+TLE  最坏时间 n * v * v
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1010;
+
+int n,m;
+int f[N][N];
+
+int v[N], w[N];
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=1;i<=n ;++i) cin>>v[i]>>w[i];
+    
+    for(int i=1;i<=n;++i)
+        for(int j=0;j<=m;++j)
+            for(int k=0;k * v[i] <= j ;++k)
+                f[i][j]=max(f[i][j], f[i-1][j- k* v[i]] + w[i] * k);
+                
+    cout<<f[n][m]<<endl;
+    
+    return 0;
+}
+
+
+--------------------------- 优化一次
+
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1010;
+
+int n,m;
+int f[N][N];
+
+int v[N], w[N];
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=1;i<=n ;++i) cin>>v[i]>>w[i];
+    
+    for(int i=1;i<=n;++i)
+        for(int j=0;j<=m;++j)
+        {
+            f[i][j]=f[i-1][j];
+            if(j>=v[i]) f[i][j]=max(f[i][j] , f[i][j - v[i]] + w[i]);
+        }
+                
+    cout<<f[n][m]<<endl;
+    
+    return 0;
+}
+
+
+
+-----------------------   
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1010;
+
+int n,m;
+int f[N];
+
+int v[N], w[N];
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=1;i<=n ;++i) cin>>v[i]>>w[i];
+    
+    for(int i=1;i<=n;++i)
+        for(int j=v[i];j<=m;++j)
+        {
+            
+            f[j]=max(f[j] , f[j - v[i]] + w[i]); // 第i层第j-vi
+        }
+                
+    cout<<f[m]<<endl;
+    
+    return 0;
+}
+

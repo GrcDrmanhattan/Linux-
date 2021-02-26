@@ -124,3 +124,39 @@ int main()
 }
 
 
+------------------------0226 
+
+fi只会用到fi-1所以考虑滚动数组
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1010;
+
+int f[N];
+int v[N],w[N];
+int n,m;
+
+int main()
+{
+    cin>>n>>m;
+    
+    for(int i=1;i<=n;++i) cin>>v[i]>>w[i];
+    
+    for(int i=1;i<=n;++i)
+        for(int j=m;j>=v[i];--j)
+        {
+        
+            f[j]=max( f[j] ,f[j-v[i]] + w[i]); 
+            // 优化后如果从小到大则是j-vi在j之前算过了已经被更新了，就属于i层 的j-vi和原来不同， 改为从大到小优化，j-vi就在j之后算过，还没有被更新， 就属于第i-1层的了
+            //f[i][j]=max(f[i][j], f[i-1][j-v[i]] + w[i]) 原来的是i-1层的j-vi
+        }
+        
+    cout<<f[m]<<endl;
+    
+    return 0;
+}
+
+

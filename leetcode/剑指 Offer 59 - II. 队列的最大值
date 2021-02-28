@@ -71,3 +71,39 @@ public:
  * int param_3 = obj->pop_front();
  */
 
+
+
+---------------------------------- 0228 /  2021/  
+
+
+class MaxQueue {
+public:
+    deque<int> m;
+    queue<int> q;
+
+    MaxQueue() {
+
+    }
+    
+    int max_value() {
+        if(q.empty()) return -1;
+        return m.front();
+    }
+    
+    void push_back(int value) {
+        while(m.size() && m.back() <= value) m.pop_back();
+        m.push_back(value);
+        q.push(value);
+    }
+    
+    int pop_front() {
+        if(q.empty()) return -1;
+        int res=q.front();
+        if(res==m.front()) m.pop_front();
+        q.pop();
+        return res;
+    }
+};
+
+
+

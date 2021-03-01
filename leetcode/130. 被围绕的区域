@@ -141,3 +141,62 @@ public:
 
 
 
+------------------------- 0301/ 2021 /
+
+
+
+
+class Solution {
+public:
+    vector<vector<char>> g;
+    int n,m;
+
+    void solve(vector<vector<char>>& board) {
+        g=board;
+        if(g.empty()) return ;
+
+        n=g.size();
+        m=g[0].size();
+
+        for(int i=0;i<n;++i)
+        {
+            if(g[i][0]=='O') dfs(i ,0);
+            if(g[i][m-1]=='O') dfs(i, m-1);
+        }
+
+        for(int i=0;i<m;++i)
+        {
+            if(g[0][i]=='O') dfs(0, i);
+            if(g[n-1][i]=='O') dfs(n-1, i);
+        }
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(g[i][j]=='*') g[i][j]='O';//说明是和边界相连的O，要恢复O，其余的就改为X
+                else g[i][j]='X';
+            }
+
+        board=g;
+    }
+
+    void dfs(int x, int y)
+    {
+        g[x][y]='*';
+
+        int dx[]={0, 1, 0, -1};
+        int dy[]={1 , 0, -1, 0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]=='O') dfs(a, b);
+        }
+    }
+};
+
+
+
+

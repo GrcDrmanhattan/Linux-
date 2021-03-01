@@ -222,6 +222,47 @@ public:
 };
 
 
--------------------   
+-------------------   0301/ 2021/ 百度一面  要求一次遍历
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+
+// 时间Ol， 空间O1
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        auto dummy=new ListNode(-1);
+        dummy->next = head;
+
+        auto i=dummy;
+        auto j=dummy;
+        
+        for(int l=0;l<=n;++l) i=i->next; // i先走n+1步 保持ij之间距离n，当i达到结尾时，j下一个就是要删除的节点
+
+        while( i) //直到i为空，j是删除节点的前一个节点
+        {
+            i=i->next;
+            j=j->next;
+        }
+
+        j->next=j->next->next;
+
+        return dummy->next;  
+    }
+};
+
+
+
 
 

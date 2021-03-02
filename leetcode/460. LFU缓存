@@ -582,4 +582,151 @@ public:
     }
 };
 
+---------------------------- 0302 / 2021/  
+
+
+class LFUCache {
+public:
+    struct Node{
+        int key ;
+        int val;
+        Node* left;
+        Node* right;
+
+        Node(int k ,int v)
+        {
+            key=k;
+            val=v;
+            left=nullptr;
+            right=nullptr;
+        }
+
+    };
+
+
+    struct Block{
+        int cnt;
+        Block* left;
+        Block* right;
+
+        Node* head;
+        Node* tail;
+
+        Block(int c)
+        {
+            cnt=c;
+            left=right=nullptr;
+
+            head=new Node(-1, -1);
+            tail=new Node(-1 , -1);
+
+            head->right=tail;
+            tail->left=head;
+        }
+
+        ~Block()
+        {
+            delete head;
+            delete tail;
+        }
+
+        void insert(Node* p)
+        {
+            p->right=head->right;
+            p->left=head;
+
+            head->right->left=p;
+            head->right=p;
+
+        }
+
+        void remove(Node* p)
+        {
+            p->left->right=p->right;
+            p->right->left=p->left;
+        }
+
+        bool empty()
+        {
+            return head->right == tail;
+        }
+
+    }*Lb, *Rb;
+
+    void remove(Block* p)
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+    void insert(Block* p)
+    {
+        auto cur=new Block(p->cnt + 1);
+
+        cur->right=p->right;
+        cur->left=p;
+
+        p->right->left=cur;
+        p->right=cur;
+    }
+
+    int n;
+    unordered_map<int ,Node*> hn;
+    unordered_map<int, Block*> hb;
+
+    LFUCache(int capacity) {
+        n=capacity;
+        Lb=new Block(0);
+        Rb=new Block(INT_MAX);
+
+        Lb->right=Rb;
+        Rb->left=Lb;
+    }
+    
+    int get(int key) {
+        if(hb.count(key)==0) return -1;
+        auto p=hn[key];
+        auto b=hb[key];
+
+        b->remove(p);
+
+        if(b->right->cnt != b->cnt + 1) insert(b);
+        b->right->insert(p);
+
+        hb[key]=b->right;
+
+        if(b->empty()) remove(b);
+        return p->val;
+    }
+    
+    void put(int key, int value) {
+        if(!n) return ;
+        if(hb.count(key)==0)
+        {
+            if(n==hb.size())
+            {
+                auto p=Lb->right->tail->left;
+                Lb->right->remove(p);
+                if(Lb->right->empty()) remove(Lb->right);
+
+                hb.erase(p->key);
+                hn.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+
+            if(Lb->right->cnt > 1) insert(Lb);
+            Lb->right->insert(p);
+
+            hb[key]=Lb->right;
+            hn[key]=p;
+        }
+        else{
+            hn[key]->val=value;
+            get(key);
+        }
+    }
+};
+
+
 

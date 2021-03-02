@@ -138,4 +138,36 @@ public:
 };
 
 
+--------------------- 0302/ 2021/  
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int l=0;
+        int r=nums.size()-1;
+        while(l<r)
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid] >= nums[0]) l=mid;
+            else r=mid-1;
+        }
+
+        if(target >= nums[0]) l=0;
+        else l=r+1, r=nums.size()-1;
+
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid] >= target) r=mid;
+            else l=mid+1;
+        }
+// 这里写成nums[r], 当数组只有一个元素时, 两个二分查找代码都没有走, 而l在上面被+1, 这时会越界, 而r是length-1还是0, 不会产生越界
+        if(nums[r] != target) return -1;
+        return r;
+    }
+};
+
+
+
 

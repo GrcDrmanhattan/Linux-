@@ -456,3 +456,88 @@ public:
  */
 
 
+
+----------------------- 0302/ 2021/  
+
+
+class LRUCache {
+public:
+    struct Node{
+        int key;
+        int val;
+        Node* left;
+        Node* right;
+
+        Node(int k ,int v)
+        {
+            key=k;
+            val=v;
+            left=nullptr;
+            right=nullptr;
+        }
+
+    }*head, *tail;
+
+    void remove(Node* p)
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+    void insert(Node* p)
+    {
+        p->right=head->right;
+        p->left=head;
+
+        head->right->left=p;
+        head->right=p;
+    }
+
+    int n;
+    unordered_map<int, Node*> hn;
+
+    LRUCache(int capacity) {
+        n=capacity;
+        head=new Node(-1, -1);
+        tail=new Node(-1, -1);
+        head->right=tail;
+        tail->left=head;
+    }
+
+
+    
+    int get(int key) {
+        if(hn.count(key)==0) return -1;
+        auto p=hn[key];
+
+        remove(p);
+        insert(p);
+
+        return p->val;
+    }
+    
+    void put(int key, int value) {
+        if(hn.count(key)==0)
+        {
+            if(n==hn.size())
+            {
+                auto p=tail->left;
+                remove(p);
+                hn.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+            insert(p);
+            hn[key]=p;
+        }else
+        {
+            auto p=hn[key];
+            p->val=value;
+            remove(p);
+            insert(p);
+        }
+    }
+};
+
+
+

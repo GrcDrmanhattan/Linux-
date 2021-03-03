@@ -46,3 +46,34 @@ public:
 };
 
 
+------------------- 0303 /2021/ 
+
+
+class Solution {
+public:
+    vector<string> res;
+    string mp[10]={
+        "","","abc","def",
+        "ghi","jkl","mno",
+        "pqrs","tuv","wxyz"
+    };
+
+    vector<string> letterCombinations(string digits) {
+        if(digits.empty()) return res;
+        dfs(digits, 0, "");
+        return res;
+    }
+
+    void dfs(string& digits,int u,  string tmp)
+    {
+        if(u==digits.size()) {
+            res.push_back(tmp);
+            // return ;
+        }
+        else{
+            for(auto x:mp[digits[u] - '0'])
+                dfs(digits, u+1, tmp+x);
+        }
+    }
+};
+

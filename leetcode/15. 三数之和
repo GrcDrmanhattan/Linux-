@@ -16,152 +16,7 @@
 
 =================
 
-// class Solution 
-// {
-// public:
-//     unordered_map<int,int> m;//不需要排序
-//     set<int> s;
-//     vector<vector<int>> threeSum(vector<int>& nums) 
-//     {
-//         vector<vector<int>> res;
-//         if(nums.size()==0 || nums.size()<3) return {};
 
-//         // for(int i=0;i<nums.size();++i) s.insert(nums[i]);
-        
-//         // set<int>::iterator it;
-//         // vector<int> v;
-//         // for(it=s.begin();it!=s.end();it++)
-//         // {
-//             // v.push_back(*it);
-//         // }
-
-//         for(int i=0;i<nums.size();++i)
-//         {
-//             int a=0-nums[i];
-//             res.push_back(sumtwo(nums,a));
-            
-//         }
-//         return res;       
-//     }
-//     vector<int> sumtwo(vector<int>& nums,int tar)
-//     {
-//         vector<int> tem;
-//         for(int i=0;i<nums.size();++i)
-//         {
-//             for(int j=i+1;j<nums.size();++j)
-//             {
-//                 if(nums[i]+nums[j]==tar)
-//                 {
-//                     tem.push_back(nums[i]);
-//                     tem.push_back(nums[j]);
-//                     cout<<tem[0]<<" "<<tem[1]<<endl;
-//                 }   
-//             }
-//         }
-//         return tem;
-//     }
-    
-
-// };
-
-// class Solution
-// {
-// public:
-//     vector<vector<int>> threeSum(vector<int>& nums)
-//     {
-//         if(nums.size()<3) return {};
-//         int s=nums.size();
-//         sort(nums.begin(),nums.end());
-//         vector<vector<int>> res;
-//         int sum;
-//         int l,r;
-//         for(int i=0;i<s;++i)   //固定num【i】  
-//         {
-//             if(nums[i]>0) break; // 如果当前数字大于0，则三数之和一定大于0，所以结束循环
-//             if(i>0&&nums[i]==nums[i-1]) continue;  //去除重复
-
-//             l=i+1;
-//             r=s-1;
-//             while(l<r)
-//             {
-//                 sum=nums[i]+nums[l]+nums[r];
-//                 if(sum==0) 
-//                 {
-//                     res.push_back(vector<int> {nums[i],nums[l],nums[r]});
-//                     while(l<r && nums[l]==nums[l+1]) ++l;//判断左右边界是否重复，去除重复
-//                     while(l<r && nums[r]==nums[r-1]) --r;
-                        //如果不满足重复就继续
-//                     ++l;
-//                     --r;
-//                 }
-//                 else if(sum>0) --r;//和大于零r--,因为升序
-//                 else ++l;
-                
-//             }
-//         }
-//        return res;
-//     }
-
-// };
-
-
-
-class Solution
-{
-public: 
-    vector<vector<int>> threeSum(vector<int>& nums)
-    {   
-        vector<vector<int>> res;
-        sort(nums.begin(),nums.end());
-        int n=nums.size();
-        if(n<3) return {};
-        int sum;
-        int ll;
-        int rr;
-
-        for(int i=0;i<n;++i)
-        {
-            //i大于0，后面的指针的元素更大于0，不可能相加时0
-            if(nums[i]>0) break;
-            if(i>0 && nums[i]==nums[i-1]) continue; 
-            
-            ll=i+1;
-            rr=n-1;
-
-            while(ll<rr)
-            {
-                sum=nums[i]+nums[ll]+nums[rr];
-                if(sum==0)
-                {
-                    res.push_back(vector<int>{nums[i],nums[ll],nums[rr]});
-                    ++ll;
-                    --rr;//放在while前，ll要和ll-1比较，rr和rr+1比较
-                    
-                    while(ll<rr && nums[ll]==nums[ll-1])
-                    {
-                        ++ll;
-                    }
-                    while(ll<rr && nums[rr]==nums[rr+1])
-                    {
-                        --rr;
-                    }
-                }
-                else if(sum>0)
-                {
-                    --rr;
-                }
-                else 
-                {
-                    ++ll;
-                }
-            }
-
-        }
-
-        return res;
-    }
-
-};
 
 ####################################################3
 
@@ -284,5 +139,32 @@ public:
     }
 };
 
+
+----------------------- 0303  / 2021/  
+
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<nums.size();++i)
+        {
+            if(i && nums[i-1]==nums[i] ) continue;
+            for(int l=i+1, r=nums.size()-1;l<r;++l)
+            {
+                if(l>i+1 && nums[l-1]==nums[l]) continue;
+
+                while( l<r-1 && nums[i] + nums[l] +nums[r-1]>=0) r--;
+                if(nums[l]+nums[r]+nums[i]==0)
+                    res.push_back({nums[i], nums[l], nums[r]});
+            }
+        }
+
+        return res;
+    }
+};
 
 

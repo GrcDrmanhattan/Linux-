@@ -265,4 +265,49 @@ public:
 
 
 
+-------------------- 0303 /2021/ 
+两次遍历
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        auto d=new ListNode(-1);
+        d->next=head;
+       
+        int l=0;
+        for(auto p=head;p;p=p->next) l++;
+
+        auto p=d;
+        for(int i=0;i<l-n;++i) p=p->next;
+
+        p->next=p->next->next;
+        return d->next;
+    }
+};
+
+
+--------------------- 一次遍历
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        auto d=new ListNode(-1);
+        d->next=head;
+       
+        auto i=d;
+        auto j=d;
+
+        for(int l=0;l<=n;++l) i=i->next;
+
+        while(i)
+        {
+            i=i->next;
+            j=j->next;
+        }
+
+        j->next=j->next->next;
+        return d->next;
+    }
+};
+
 

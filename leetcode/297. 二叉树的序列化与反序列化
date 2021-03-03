@@ -151,3 +151,55 @@ public:
 };
 
 
+------------------------------ 0303 /2021/  
+
+每个节点遍历两次，时间On
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string res;
+    string serialize(TreeNode* root) {
+        dfs_s(root);
+        return res;
+    }
+
+    void dfs_s(TreeNode* u)
+    {
+        if(!u){
+            res+="#,";
+            return;
+        }
+
+        res+= to_string(u->val) + ',';
+        dfs_s(u->left);
+        dfs_s(u->right);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dfs_d(data, u);
+    }
+
+    TreeNode* dfs_d(string&data, int &u)
+    {
+        if(data[u]=='#')
+        {
+            u+=2;
+            return nullptr;
+        }
+        else{
+            int k=u;
+            while(u<data.size() && data[u] != ',') u++;
+            auto rt=new TreeNode(stoi(data.substr(k, u-k)));
+
+            u++;
+            rt->left=dfs_d(data, u);
+            rt->right=dfs_d(data, u);
+            return rt;
+        }
+    }
+};
+

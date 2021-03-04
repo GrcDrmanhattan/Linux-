@@ -126,6 +126,9 @@ public:
 
 ----------------------------- 0304 / 2021 
 
+时间logn
+
+
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {

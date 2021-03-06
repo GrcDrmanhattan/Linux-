@@ -65,3 +65,34 @@ public:
 };
 
 
+
+---------------- 0306 /2021/ 
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        int res=0;
+        stack<int> st;
+        int start=-1;
+
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(s[i]=='(') st.push(i);
+            else{
+                if(st.size())
+                {
+                    st.pop();
+                    if(st.size()) res=max(res, i-st.top());
+                    else res=max(res, i-start);
+                }
+                else{
+                    start= i;
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+

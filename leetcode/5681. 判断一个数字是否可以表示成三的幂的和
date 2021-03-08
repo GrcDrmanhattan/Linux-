@@ -56,7 +56,7 @@ public:
         while(n)
         {
             if(n % 3 ==2) return false;
-            n/=3;
+            n/=3; // 将当前位去掉
         }
         return n == 0;
     }

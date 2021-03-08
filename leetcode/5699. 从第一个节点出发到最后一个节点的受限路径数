@@ -61,7 +61,7 @@ public:
     const int inf=0x3f3f3f3f;
     
     int countRestrictedPaths(int n, vector<vector<int>>& edges) {
- 
+        
         g.resize(n+1);
         dis.resize(n+1, inf);
         f.resize(n+1);
@@ -84,11 +84,10 @@ public:
         {
             auto t=q.front();
             q.pop();
-            st[t]=false; // 不在队列就记为false
+            st[t]=false;
             
-            for (auto& p: g[t]) { // 枚举从t出发的每个点
+            for (auto& p: g[t]) {
                 int j = p.x, w = p.y;
-                
                 if (dis[j] > dis[t] + w) {
                     dis[j] = dis[t] + w;
                     if (!st[j]) {
@@ -102,14 +101,14 @@ public:
         
         vector<pii> tmp;
         for(int i=1; i<=n ;++i) tmp.push_back({dis[i], i});
-        sort(tmp.begin(), tmp.end());
+        sort(tmp.begin(), tmp.end()); // 将每个点到n的距离从小到大排序
         
         f[n]=1;
         for(auto &v :tmp)
         {
-            int d=v.x;
-            int u=v.y;
-            for(auto &p : g[u])
+            int d=v.x; // 当前点到n的距离
+            int u=v.y; // 当前节点编号
+            for(auto &p : g[u]) // 枚举从当前点出发的每个点，将集合按照出发的第一条边指向哪里去分类
             {
                 int j=p.x;
                 if(d > dis[j]) f[u] = (f[u] + f[j]) % md;

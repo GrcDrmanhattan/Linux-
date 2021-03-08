@@ -60,3 +60,31 @@ public:
 };
 
 
+--------------------- 0308 / 2021 
+
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int res=0;
+        int last=0;
+        stack<int> st;
+
+        for(int i=0; i<height.size();++i)
+        {
+            while(st.size() && height[st.top()] <= height[i])
+            {
+                res +=(i-st.top()-1) * (height[st.top()] - last);
+                last=height[st.top()];
+                st.pop();
+            }
+
+            if(st.size()) res += (i-st.top()-1) * (height[i]-last);
+            st.push(i);
+        }
+
+        return res;
+    }
+};
+
+

@@ -106,4 +106,40 @@ public:
 };
 
 
+------------------ 0308  /2021 
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> tmp;
+
+    vector<vector<int>> combinationSum(vector<int>& c, int target) {
+        dfs(c, 0, target);
+        return res;
+    }
+
+    void dfs(vector<int>& c, int u , int target)
+    {
+        if(target==0){
+            res.push_back(tmp);
+            return ;
+        }
+
+        if(u==c.size()) return ;
+
+        for(int i=0; i * c[u] <= target;++i)
+        {
+            if(i)
+                tmp.push_back(c[u]);
+            dfs(c, u+1, target-i*c[u]);
+            // tmp.push_back(c[u]);
+        }
+
+        for(int i=0; i * c[u] <= target;++i)
+            if(i)
+                tmp.pop_back();
+    }
+};
+
+
 

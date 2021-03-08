@@ -78,7 +78,7 @@ public:
         
         queue<int> q;// spfa 求每个点到n距离的最小值
         q.push(n);
-        dis[n]=0;
+        dis[n]=0; // dis数组存储的是n到每个点的距离，因为是从n开始的
         
         while(q.size())
         {

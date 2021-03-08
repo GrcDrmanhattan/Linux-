@@ -65,6 +65,43 @@ public:
 };
 
 
+------------------- 0308 / 2021.
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> tmp;
+
+    vector<vector<int>> combinationSum2(vector<int>& c, int target) {
+        sort(c.begin() , c.end());
+        dfs(c , 0, target);
+        return res;
+    }
+
+    void dfs(vector<int>& c, int u ,int target)
+    {
+        if(target==0){
+            res.push_back(tmp);
+            return;
+        }
+
+        if(u==c.size()) return;
+
+        int k=u+1;
+        while(k<c.size() && c[k]==c[u]) k++;
+        int cnt=k-u;
+
+        for(int i=0 ; i <= cnt && i * c[u] <= target; ++i)
+        {
+            dfs(c, k, target-i*c[u]); // 如果满足条件，就在这个分支进行搜索，
+            tmp.push_back(c[u]); // 将这个分支的数加上
+        }
+
+        for(int i=0; i<= cnt && i * c[u] <= target;++i)
+            tmp.pop_back();
+    }
+};
+
 
 
 

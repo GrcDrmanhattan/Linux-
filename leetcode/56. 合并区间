@@ -107,3 +107,28 @@ public:
     }
 };
 
+
+------------------- 0310 / 2021 
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> res;
+        if(intervals.empty()) return res;
+
+        sort(intervals.begin(), intervals.end());
+
+        for(auto &x:intervals)
+        {
+            int l=x[0];
+            int r=x[1];
+
+            if(res.empty() || l > res.back()[1]) res.push_back({l, r});
+            else res.back()[1]=max(r, res.back()[1]);
+        }
+
+        return res;
+    }
+};
+
+

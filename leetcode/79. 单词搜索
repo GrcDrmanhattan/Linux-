@@ -1,0 +1,75 @@
+79. 单词搜索
+
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+ 
+
+示例:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true
+给定 word = "SEE", 返回 true
+给定 word = "ABCB", 返回 false
+ 
+
+提示：
+
+board 和 word 中只包含大写和小写英文字母。
+1 <= board.length <= 200
+1 <= board[i].length <= 200
+1 <= word.length <= 10^3
+
+------------------------- 0310 / 2021/  
+
+
+class Solution {
+public:
+    int dx[4]={0 , 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    int n,m;
+    vector<vector<char>> g;
+
+    bool exist(vector<vector<char>>& board, string word) {
+        n=board.size();
+        m=board[0].size();
+        g=board;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(dfs(i, j, 0, word)) return true;
+
+        return false;
+
+    }
+
+    bool dfs(int x ,int y ,int u, string& word)
+    {
+        if(g[x][y] != word[u]) return false;
+
+        if(u==word.size()-1) return true;
+
+        char c =  word[u];
+        g[x][y]='*';
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m)
+                if(dfs(a, b, u+1, word)) return true;
+        }
+
+        g[x][y]=c;
+        return false;
+    }
+};
+
+

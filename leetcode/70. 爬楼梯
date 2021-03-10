@@ -70,7 +70,7 @@ public:
     int climbStairs(int n) {
         int a=1;
         int b=1;
-        while(--n)
+        while(--n) // 循环n-1次，返回b的值， 画图就明白了
         {
             int c=a+b;
             a=b;b=c;

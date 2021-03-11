@@ -30,6 +30,10 @@ board 和 word 中只包含大写和小写英文字母。
 ------------------------- 0310 / 2021/  
 
 
+时间n^2 * (3^k). k是单词长度
+
+
+
 class Solution {
 public:
     int dx[4]={0 , 1, 0, -1};
@@ -57,7 +61,7 @@ public:
         if(u==word.size()-1) return true;
 
         char c =  word[u];
-        g[x][y]='*';
+        g[x][y]='*'; // 标记防止重复使用一个位置
 
         for(int i=0;i<4;++i)
         {

@@ -1,0 +1,84 @@
+90. 子集 II
+
+
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+说明：解集不能包含重复的子集。
+
+示例:
+
+
+输入: [1,2,2]
+输出:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+
+
+------------------------- 0311 / 2021  yxc 
+
+
+
+
+// 每个数的个数不唯一了，不能二进制枚举
+// 已知每个数出现的次数，返回有多少不同的子集
+// 从前到后枚举每个数出现多少次
+
+
+
+不同子集的个数最多有 2^n个，另外存储答案时还需要 O(n)
+ 的计算量，所以时间复杂度是 O(n * 2^n)
+。
+
+
+先排序然后暴力搜索出所有方案，
+先枚举每个数，然后求出个数k，然后枚举在集合中放0，1，2， 。。。k个数的情况，总计k+1.
+当枚举完最后一个数，表示已经选定了一个集合
+放入res
+
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> tmp;
+
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        dfs(nums, 0);
+        return res;
+    }
+
+    void dfs(vector<int>& nums, int u)
+    {
+        if(u==nums.size())
+        {
+            res.push_back(tmp);
+            return;
+        }
+
+        int k=u+1;
+        while(k<nums.size() && nums[k] == nums[u]) k++;
+        int cnt=k-u;
+
+        for(int i=0;i<=cnt;++i) // 个数有可能是0个，所以要加一
+        {
+            dfs(nums, k);
+            tmp.push_back(nums[u]);
+        }
+
+        for(int i=0;i<= cnt;++i) tmp.pop_back();
+    }
+};
+
+
+
+
+
+ 

@@ -106,3 +106,67 @@ public:
 
 
 
+--------------------- 0311 /2021/  
+
+
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return 0;
+        int n=matrix.size();
+        int m=matrix[0].size();
+        
+        vector<vector<int>> h(n, vector<int>(m));
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(matrix[i][j]=='1')
+                {
+                    if(i==0) h[i][j]=1;
+                    else h[i][j] = h[i-1][j] + 1;
+                
+                }
+            }
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            res=max(res, get(h[i]));
+
+        return res;
+    }
+
+
+    int get(vector<int>& h) // 求每行的柱形图的体积
+    {
+        int res=0;
+        stack<int> st;
+        int n=h.size();
+        vector<int> l(n), r(n);
+
+        for(int i=0;i<n;++i)
+        {
+            while(st.size() && h[st.top()] >= h[i]) st.pop();
+            if(st.empty()) l[i]=-1;
+            else l[i]=st.top();
+            st.push(i);
+        }
+
+        st=stack<int>();
+
+        for(int i=n-1;i>=0;--i)
+        {
+            while(st.size() && h[st.top()] >= h[i]) st.pop();
+            if(st.empty()) r[i]=n;
+            else r[i]=st.top();
+            st.push(i);
+        }
+
+        for(int i=0;i<n;++i)
+            res=max(res, h[i] * (r[i]-l[i]-1));
+
+        return res;
+    }
+};
+
+

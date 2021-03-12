@@ -48,3 +48,31 @@ public:
         return dp[n][amount];
     }
 };
+
+
+
+
+------------------------------ 0312 / 2021/  yxc 
+
+
+求方案数 还是完全背包，每个硬币无限个
+
+
+// 一共有多少不同的方案装满背包
+
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        vector<int> f(amount+1);
+        f[0]=1;
+
+        for(auto v:coins)
+        {
+            for(int j=v;j<=amount;++j)
+                f[j] += f[j-v];
+        }
+
+        return f[amount];
+    }
+};
+

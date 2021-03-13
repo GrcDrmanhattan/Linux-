@@ -35,6 +35,7 @@ matrix[i][j] 为 '0' 或 '1'
 时间Omn
 空间Omn
 
+d[i][j]表示以ij为右下角，的最大正方形的长度
 
 
 class Solution {

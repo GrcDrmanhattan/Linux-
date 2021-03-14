@@ -73,4 +73,27 @@ public:
 };
 
 
+------------------- 0314 / 2021/  
+
+114. 二叉树展开为链表
+
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        while(root)
+        {
+            auto p=root->left;
+            if(p){
+                while(p->right) p=p->right;
+                p->right=root->right;
+                root->right=root->left;
+                root->left=nullptr;
+            }
+
+            root=root->right;
+        }
+    }
+};
+
+
 

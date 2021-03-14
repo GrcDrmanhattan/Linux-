@@ -45,4 +45,27 @@ public:
 };
 
 
+--------------- 0314/  
+
+
+卡特兰数
+
+
+
+class Solution {
+public:
+    int numTrees(int n) {
+        if (n <= 0) return 0;
+
+        long long res = 1;
+        for (int i = 1; i <= n; ++i){
+            res = res * (i + n) / i ;
+        }
+
+        return res / (n + 1);
+    }
+};
+
+
+
 

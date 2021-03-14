@@ -181,3 +181,35 @@ public:
     }
 };
 
+
+
+---------------------- 0314 / 2021 /
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int res=0;
+        unordered_set<int> s;
+        for(auto x:nums) s.insert(x);
+
+        for(auto x:nums)
+        {
+            if(s.count(x) && !s.count(x-1)) // 保证每段起点只枚举一次
+            {
+                int y=x;
+                s.erase(x);
+                while(s.count(y+1))
+                {
+                    y++;
+                    s.erase(y); // 保证不枚举重复的数
+                }
+
+                res=max(res, y-x+1);
+            }
+        }
+
+        return res;
+    }
+};
+
+

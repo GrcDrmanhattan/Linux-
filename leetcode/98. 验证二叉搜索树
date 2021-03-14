@@ -60,4 +60,32 @@ public:
 
 --------------------- 0107 / yxc
 
+--------------------- 0314 / 2021/  
+
+时间On
+
+如果当前结点超过了当前的大小范围，则返回false
+否则递归遍历左子树，将左子树的最大值的范围更新为当前结点的值；递归遍历右子树，将右子树的最小值的范围更新为当前结点的值。
+
+
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root, -1,-1);
+    }
+
+    bool dfs(TreeNode* rt, int l , int r) // l和r表示当前范围的最小值和最大值，
+    {
+        if(!rt) return true;
+        if(l != -1 && l >= rt->val) return false;
+        if(r != -1 && r <= rt->val) return false;
+
+        return dfs(rt->left , l, rt->val) && dfs(rt->right, rt->val, r);
+
+    }
+};
+
+
 

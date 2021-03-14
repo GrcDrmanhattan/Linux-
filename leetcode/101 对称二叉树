@@ -168,3 +168,23 @@ public:
 };
 
 
+------------------------- 0314/  2021/  
+
+递归On
+
+从上到下每个节点仅被遍历一遍
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root->left, root->right);
+    }
+
+    bool dfs(TreeNode* l, TreeNode* r)
+    {
+        if(!l && !r) return true;
+        if(!l || !r || l->val != r->val) return false;
+        return dfs(l->left, r->right) && dfs(l->right, r->left);
+    }
+};

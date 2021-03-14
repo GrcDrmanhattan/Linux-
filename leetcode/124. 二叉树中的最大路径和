@@ -110,5 +110,29 @@ public:
 
 
 
+---------------------------- 0314  / 2021/  
+
+
+class Solution {
+public:
+    int res=INT_MIN;
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* rt) // 返回以rt为最高点的所有路径和的最大和
+    {
+        if(!rt) return 0;
+        int l=max(0, dfs(rt->left));
+        int r=max(0, dfs(rt->right));
+
+        res=max(res, l+r+rt->val);
+        return max(l, r) + rt->val;
+    }
+};
+
+
 
 

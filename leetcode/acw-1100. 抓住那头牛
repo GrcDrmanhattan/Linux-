@@ -148,3 +148,65 @@ int main()
 }
 
 
+----------------------------- 0318   / 2021/  微软面试题
+
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int N=2e5+10;
+
+int n,k;
+int q[N];
+
+int dis[N];
+
+int bfs(){
+    int hh=0;
+    int tt=0;
+    
+    q[0]=n;
+    memset(dis, -1 ,sizeof(dis));
+    dis[n]=0;
+    
+    while(hh<=tt)
+    {
+        int t=q[hh++];
+        
+        if(t==k) return dis[k];
+        
+        if(t-1>=0 && dis[t-1]==-1)
+        {
+            dis[t-1]=dis[t]+1;
+            q[++tt]=t-1;
+        }
+        
+        if(t+1<N && dis[t+1]==-1)
+        {
+            dis[t+1]=dis[t]+1;
+            q[++tt]=t+1;
+        }
+        
+        if(t*2<=N && dis[t * 2]==-1)
+        {
+            dis[t*2]=dis[t]+1;
+            q[++tt]=t*2;
+        }
+        
+        
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    cin>>n>>k;
+    cout<<bfs()<<endl;
+    
+    return 0;
+}
+
+

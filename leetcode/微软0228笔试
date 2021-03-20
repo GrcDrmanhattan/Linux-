@@ -1,0 +1,81 @@
+------------ 第一题
+
+
+#include<bits/stdc++.h>
+
+unordered_map<int ,int > mp;
+
+
+// 2 5 3 2 4 1 
+// 2 4 5 3 2 1
+
+int solution(vector<int> &A) {
+    // write your code in C++14 (g++ 6.2.0)
+
+    // int n=A.size();
+    int maxv=INT_MIN;
+
+    for(auto x:A ) {
+        mp[x]++;
+        maxv=max(maxv, x);
+    }
+
+    int res=1;
+    for(auto x:mp){
+        if(x.first<maxv){
+            if(x.second <= 1) res++;
+            else res+=2;
+        }
+    }
+
+    return res;
+
+
+}
+
+
+
+--------------- 第二题
+
+
+
+
+unordered_map<string, int > mp;
+
+vector<int> solution(vector<string> &cars) {
+    // write your code in C++14 (g++ 6.2.0)
+    vector<int> res;
+    
+    mp.clear();
+    int n=cars.size();
+    for(auto x:cars){
+        mp[x]++;
+    }
+    
+    int num=0;
+    for(int i=0;i<n;++i){
+        num=mp[cars[i]]-1;
+        string tmp=cars[i];
+        int tmpsz=tmp.size();
+
+        for(int j=0;j<tmpsz;++j){
+
+            if(tmp[j]=='0') tmp[j]='1';
+            else tmp[j]='0';
+
+            if(mp.count(tmp)) num+=mp[tmp];
+
+            if(tmp[j]=='0') tmp[j]='1';
+            else tmp[j]='0';
+            
+        }   
+
+        res.push_back(num);
+    }
+
+    return res;
+}
+
+
+
+

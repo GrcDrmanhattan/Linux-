@@ -65,3 +65,40 @@ public:
 };
 
 
+---------------------- 0320 / /2021  
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        typedef long double ld;
+        
+
+        int res=0;
+        for(auto x:points){
+            int same=0;
+            int vs=0;
+            unordered_map<ld, int> mp;
+            
+            for(auto y:points)
+            {
+                if(x==y) same++;
+                else if(x[0]==y[0]) vs++;
+                else{
+                    ld k = (ld) (y[1]-x[1])/(y[0]-x[0]);
+                    mp[k]++;
+                }
+            }
+
+            int tmp=vs;
+            for(auto [k, v]:mp) tmp=max(tmp, v);
+            res=max(res, tmp+same);
+        }
+
+        return res;
+    }
+};
+
+
+
+

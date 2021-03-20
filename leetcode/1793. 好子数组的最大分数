@@ -1,0 +1,122 @@
+1793. 好子数组的最大分数
+
+给你一个整数数组 nums （下标从 0 开始）和一个整数 k 。
+
+一个子数组 (i, j) 的 分数 定义为 min(nums[i], nums[i+1], ..., nums[j]) * (j - i + 1) 。一个 好 子数组的两个端点下标需要满足 i <= k <= j 。
+
+请你返回 好 子数组的最大可能 分数 。
+
+ 
+
+示例 1：
+
+输入：nums = [1,4,3,7,4,5], k = 3
+输出：15
+解释：最优子数组的左右端点下标是 (1, 5) ，分数为 min(4,3,7,4,5) * (5-1+1) = 3 * 5 = 15 。
+示例 2：
+
+输入：nums = [5,5,4,5,4,1,1,1], k = 0
+输出：20
+解释：最优子数组的左右端点下标是 (0, 4) ，分数为 min(5,5,4,5,4) * (4-0+1) = 4 * 5 = 20 。
+ 
+
+提示：
+
+1 <= nums.length <= 105
+1 <= nums[i] <= 2 * 104
+0 <= k < nums.length
+
+--------------------------------------- 0320 /  2021/  yxc
+
+和最大矩形面积类似，微软的一面的一个题
+
+li ，ri表示左右第一个小的数，实际区间是[l+1 , r-1] 长度是 r-1-l-1+1  =  r-l-1
+
+
+
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, int k) {
+        int n=nums.size();
+        vector<int> l(n), r(n);
+        stack<int> st;
+
+        for(int i=0;i<n;++i){
+            while(st.size() && nums[st.top()] >= nums[i]) st.pop();
+            if(st.empty()) l[i]=-1;
+            else l[i]=st.top();
+            st.push(i);
+        }
+
+        st=stack<int>();
+
+        for(int i=n-1;i>=0;--i){
+            while(st.size() && nums[st.top()] >= nums[i]) st.pop();
+            if(st.empty()) r[i]=n;
+            else r[i]=st.top();
+            st.push(i);
+        }
+
+        int res=0;
+        for(int i=0;i<n;++i){   
+            if(k>l[i] && k < r[i]){
+                res=max(res, nums[i] * (r[i] - l[i] -1));
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+
+--------------------- yxc
+
+
+
+
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, int k) {
+        int n=nums.size();
+        vector<int> h(n+2, -1), l(n+2, -1) ,r(n+2, -1);
+        vector<int> st(n+2, -1);
+
+        for(int i=1;i<=n;++i) h[i]=nums[i-1];
+        h[0]=-1;
+        h[n+1]=-1;
+
+        int tt=0;
+        st[0]=0;
+        for(int i=1;i<=n;++i)
+        {
+            while(h[st[tt]]>=h[i]) tt--;
+            l[i]=st[tt];
+            st[++tt]=i;
+        }
+
+        tt=0;
+        st[0]=n+1;
+        for(int i=n;i;--i)
+        {
+            while(h[st[tt]]>=h[i]) tt--;
+            r[i]=st[tt];
+            st[++tt]=i;
+        }
+
+        int res=0;
+        k++;//解法坐标从1开始
+        for(int i=1;i<=n;++i)
+        {
+            if(k>l[i] && k<r[i])
+                res=max(res, h[i] * (r[i]-l[i]-1));
+        }
+
+        return res;
+    }
+};
+
+
+
+

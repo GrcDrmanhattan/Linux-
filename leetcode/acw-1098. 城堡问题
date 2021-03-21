@@ -135,3 +135,93 @@ int main()
     
     return 0;
 }
+
+
+---------------------- 0321 // 2021 
+
+#include<iostream>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+const int N=55;
+
+int g[N][N];
+
+int n,m;
+
+bool st[N][N];
+queue<pair<int, int>> q;
+
+
+int dx[4]={0, -1, 0, 1}; // 西北东南
+int dy[4]={-1, 0, 1, 0};
+
+
+int bfs(int x, int y)
+{
+    q.push({x, y});
+    st[x][y]=true;
+    int area=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        area++;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.first + dx[i];
+            int b=t.second + dy[i];
+            
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && (g[t.first][t.second]>>i&1)==0 ) // g判断当前位置是否可以走到i方向，
+            {
+                st[a][b]=true;
+                q.push({a, b});
+            }
+            // if(a<0 || a>=n || b<0 || b>=m) continue;
+            // if(st[a][b]) continue;
+            // if(g[t.first][t.second]>>i&1) continue;
+            
+            // st[a][b]=true;
+            // q.push({a, b});
+            
+        }
+    }
+    
+    return area;
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    int cnt=0;
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+        
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(!st[i][j])
+            {
+                res=max(res, bfs(i, j));
+                cnt++;
+            }
+            
+    cout<<cnt<<endl;
+    cout<<res<<endl;
+    
+    return 0;
+}
+
+
+
+

@@ -192,3 +192,76 @@ int main()
 
 
 
+-------------------------- 0321/  2021/  
+
+
+#include<iostream>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+const int N=1010;
+
+int g[N][N];
+bool st[N][N];
+int n;
+
+queue<pair<int ,int >> q;
+pair<int ,int> pre[N][N];
+
+int dx[4]={0, 1, 0, -1};
+int dy[4]={1, 0, -1, 0};
+
+
+void bfs(int x, int y)
+{
+    st[x][y]=true;
+    q.push({x, y});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.first + dx[i];
+            int b=t.second + dy[i];
+            
+            if(a>=0 && a<n && b>=0 && b<n && !st[a][b] && g[a][b]==0)
+            {
+                st[a][b]=true;
+                pre[a][b]=t;
+                q.push({a, b});
+            }
+        }
+        
+    }
+}
+
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            cin>>g[i][j];
+            
+    bfs(n-1, n-1);
+    
+    pair<int ,int> path({0, 0});
+    
+    while(1)
+    {
+        printf("%d %d\n", path.first, path.second);
+        if(path.first==n-1 && path.second==n-1) break;
+        else path=pre[path.first][path.second];
+    }
+    
+    return 0;
+}
+
+
+

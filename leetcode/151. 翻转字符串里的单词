@@ -97,7 +97,7 @@ public:
 
         }
 
-        if(k) k--;
+        if(k) k--; // k 大于0说明至少有一个空格，要把空格删除
         s.erase(s.begin()+k, s.end());
         reverse(s.begin() , s.end());
         return s;

@@ -104,3 +104,31 @@ public:
     }
 };
 
+
+
+---------------------- 0322/  2021 
+ 
+ class Solution {
+public:
+    string reverseWords(string s) {
+        int st=0; // 指向每个单词第一个字母开始的位置
+        int k=0;
+        for(int i=0;i<s.size();++i)
+        {
+            if(s[i]==' ') continue;
+            int j=i;
+            while(j<s.size() && s[j] != ' ') s[st++]=s[j++];//  结束后st指向空格的位置
+            reverse(s.begin()+k , s.begin()+st);//尾后迭代器
+            s[st++]=' ';
+            i=j;
+            k=st; // 指向每个单词第一个字母开始的位置
+        }
+
+        if(k) k--;
+        s.erase(s.begin()+k, s.end());
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};
+
+

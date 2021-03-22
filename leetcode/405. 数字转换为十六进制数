@@ -1,0 +1,75 @@
+405. 数字转换为十六进制数
+
+给定一个整数，编写一个算法将这个数转换为十六进制数。对于负整数，我们通常使用 补码运算 方法。
+
+注意:
+
+十六进制中所有字母(a-f)都必须是小写。
+十六进制字符串中不能包含多余的前导零。如果要转化的数为0，那么以单个字符'0'来表示；对于其他情况，十六进制字符串中的第一个字符将不会是0字符。 
+给定的数确保在32位有符号整数范围内。
+不能使用任何由库提供的将数字直接转换或格式化为十六进制的方法。
+示例 1：
+
+输入:
+26
+
+输出:
+"1a"
+示例 2：
+
+输入:
+-1
+
+输出:
+"ffffffff"
+
+-------------------- 0322/  2021/  
+
+
+依据yxc acw124 进制转换
+
+因为负数已经是补码 表示了，所以不需要考虑负数
+
+但是要注意转换位无符号数
+
+
+
+class Solution {
+public:
+    string toHex(unsigned int num) {
+        if(num==0) return "0";
+        vector<int> t;
+        while(num){
+            t.push_back(num%10);
+            num/=10;
+        }
+        // 26
+        // t ：62
+
+        string res;
+        
+        vector<int> tmp;
+        while(t.size())
+        {
+            int r=0;
+            for(int i=t.size()-1;i>=0;--i){
+                t[i] += r*10;
+                r=t[i] %16;
+                t[i]/=16;
+            }
+
+            tmp.push_back(r);
+            while(t.size() && t.back()==0) t.pop_back();
+
+        }
+
+        reverse(tmp.begin(), tmp.end());
+        for(auto x:tmp){
+            if(x>=0  && x<=9) res +=(char)(x-0+'0');
+            if(x>=10 && x<=16) res +=(char)(x-10+'a');
+        }
+
+        return res;
+    }
+};
+

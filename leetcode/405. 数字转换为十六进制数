@@ -72,4 +72,27 @@ public:
         return res;
     }
 };
+----------------- 0322 // 2021/  yxc
+
+
+// 将num分成8组， 每组四位数
+
+class Solution {
+public:
+    string toHex(unsigned int num) {
+        if(!num) return "0";
+
+        string tmp="0123456789abcdef";
+        string  res;
+
+        while(num){
+            res += tmp[num & 0xf]; // 每次取得num的后四位
+            num >>=4;
+        }
+
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
 

@@ -226,4 +226,92 @@ int main()
     return 0;
 }
 
+--------------------------------- 0323/  2021/ 
+
+
+#include<iostream>
+#include<queue>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int dx[]={1,2,2,1,-1,-2,-2,-1};
+int dy[]={2,1,-1,-2,-2,-1,1,2};
+
+const int N=155;
+char g[N][N];
+queue<pair<int, int>> q;
+int cnt=0;
+
+int dis[N][N];
+
+int n;
+int m;
+
+
+void bfs(int x, int y)
+{
+    
+    q.push({x , y});
+    memset(dis, -1, sizeof(dis));
+    
+    dis[x][y]=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        
+        for(int i=0;i<8;++i)
+        {
+            int a=t.first + dx[i];
+            int b=t.second + dy[i];
+            
+            if(a>=0 && a<n && b>=0 && b<m  && g[a][b] != '*' && dis[a][b]==-1)
+            {
+                if(g[a][b]=='H') cnt = dis[t.first][t.second] + 1;
+                
+                
+                q.push({a ,b});
+                
+                dis[a][b]=dis[t.first][t.second]+1;
+            }
+        }
+        
+    }
+    
+    
+}
+
+
+int main()
+{
+    
+    cin>>m>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            cin>>g[i][j];
+            
+            
+    int sx;
+    int sy;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]=='K')
+            {
+                sx=i;
+                sy=j;
+            }
+    
+    
+    bfs(sx, sy);
+    cout<<cnt<<endl;
+    
+    return 0;
+}
+
+
+
 

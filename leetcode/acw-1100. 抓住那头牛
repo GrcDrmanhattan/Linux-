@@ -210,3 +210,63 @@ int main()
 }
 
 
+-------------------------- 0323 / 2021 
+ 
+ 
+ #include<bits/stdc++.h>
+
+using namespace std;
+
+const int N=1e5+10;
+
+queue<int> q;
+int dis[N];
+
+int n, k;
+
+int bfs()
+{
+    memset(dis ,-1, sizeof(dis));
+    
+    q.push(n);
+    dis[n]=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        if(t==k) return dis[k];
+        
+        if(t+1<=N && dis[t+1]==-1)
+        {
+            dis[t+1]=dis[t]+1;
+            q.push(t+1);
+        }
+        
+        if(t-1>=0 && dis[t-1]==-1)
+        {
+            dis[t-1]=dis[t]+1;
+            q.push(t-1);
+        }
+        
+        if(t * 2<=N && dis[t*2]==-1)
+        {
+            dis[t*2]=dis[t]+1;
+            q.push(t*2);
+        }
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    cin>>n>>k;
+    cout<<bfs()<<endl;
+    return 0;
+}
+
+
+
+

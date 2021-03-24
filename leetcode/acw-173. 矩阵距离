@@ -107,3 +107,76 @@ int main()
 }
 
 
+---------------------- 0325 / 2021/  
+
+
+//  求每个点到最近的1的距离
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+const int N=1010;
+queue<pair<int ,int >> q;
+
+int n,m;
+int dx[4]={0,1 ,0,-1};
+int dy[4]={1, 0, -1, 0};
+
+char g[N][N];
+int dis[N][N];
+
+void bfs()
+{
+    memset(dis, -1, sizeof(dis));
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]=='1')
+            {
+                dis[i][j]=0;
+                q.push({i, j});
+            }
+        }
+        
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.first+dx[i];
+            int b=t.second+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && dis[a][b]==-1 )
+            {
+                dis[a][b]=dis[t.first][t.second]+1;
+                q.push({a, b});
+            }
+        }
+    }
+}
+
+
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i) scanf("%s", g[i]);
+    
+    bfs();
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+        {
+            cout<<dis[i][j]<<' ';
+        }
+        cout<<endl;
+    }
+    
+    return 0;
+}
+
+

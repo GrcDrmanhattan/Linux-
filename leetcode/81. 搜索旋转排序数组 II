@@ -21,13 +21,16 @@
 
 -------------------------------------------- 0325 / 2021/  self
 
+二分最坏时间是On
+和扫描一遍数组是等价的On
+
 
 class Solution {
 public:
     bool search(vector<int>& nums, int target) {
         int l=0;
         int r=nums.size()-1;
-        while(l<r && nums[r]==nums[0]) r--;
+        while(l<r && nums[r]==nums[0]) r--; // 最坏情况下执行n次
 
         while(l<r)
         {

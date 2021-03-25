@@ -65,4 +65,28 @@ public:
 };
 
 
+--------------------- 0325 / 2021  
+
+
+77. 翻转单词顺序
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        reverse(s.begin(), s.end());
+        
+        for(int i=0;i<s.size();++i)
+        {
+            int j=i; // j每次都指向单词开始的位置， 然后前进到空格位置
+            while(j<s.size() && s[j] != ' ') j++;
+            
+            reverse(s.begin()+i, s.begin() + j);
+            i=j;// 然后i++，又到了单词的开始
+        }
+        
+        return s;
+    }
+};
+
+
 

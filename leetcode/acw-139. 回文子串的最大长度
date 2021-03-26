@@ -23,6 +23,14 @@ Case 1: 13
 Case 2: 6
 ---------------------------------   0326 / 2021/  yxc 
 
+
+二分logn，然后遍历每个点作为中心点，On
+
+时间Onlogn
+
+
+
+
 #include<iostream>
 #include<algorithm>
 #include<cstring>

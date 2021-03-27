@@ -48,3 +48,26 @@ public:
 };
 
 
+
+--------------------- 0327 / 2021/  
+
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double res=1;
+
+        typedef long long ll;
+        for(ll k= abs(n) ;k; k>>=1)
+        {
+            if(k&1) res *=x;
+
+            x*=x;
+        }
+
+        if(n<0) res=1/res;
+        return res;
+    }
+};
+
+

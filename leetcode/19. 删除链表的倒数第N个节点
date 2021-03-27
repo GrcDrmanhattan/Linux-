@@ -17,40 +17,6 @@
  * };
  */
 
-// class Solution 
-// {
-// public:
-//     ListNode* removeNthFromEnd(ListNode* head, int n) 
-//     {
-//         ListNode* l1=head;
-//         ListNode* p=head;
-//         int len=0;
-//         while(p!=nullptr)
-//         {
-//             len++;
-//             // head=head->next;
-//             p=p->next;
-//         }   
-//         // cout<<len;        
-//         if(len==n) return head->next;
-//         int tem=len-n; //tem是倒数第n个节点的前一个节点的位置，看图
-        
-//         for(int i=1;i<=len;++i)
-//         {
-//             if(i==tem)
-//             {
-//                 l1->next=l1->next->next;
-//                 break;
-//             } 
-//             else  
-//             {
-//                 l1=l1->next;
-//             }
-//         }
-
-//         return head;
-//     }
-// };
 
 //---------解法2 ---
 
@@ -225,17 +191,6 @@ public:
 -------------------   0301/ 2021/ 百度一面  要求一次遍历
 
 
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
-
 
 // 时间Ol， 空间O1
 
@@ -306,6 +261,36 @@ public:
         }
 
         j->next=j->next->next;
+        return d->next;
+    }
+};
+
+
+
+
+------------------------------ 0327 /  2021 / 
+
+
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        auto d=new ListNode(-1);
+        d->next=head;
+
+        auto i=d;
+        auto j=d;
+
+        for(int l=0;l<=n;++l) i=i->next;
+
+        while(i)
+        {
+            i=i->next;
+            j=j->next;
+        }
+
+        j->next=j->next->next;
+
         return d->next;
     }
 };

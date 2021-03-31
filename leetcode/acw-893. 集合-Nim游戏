@@ -127,7 +127,7 @@ int sg(int x)
 {
     if(f[x] != -1) return f[x];
     
-    unordered_set<int> mp; // 存储每个点的sg值，终点的sg为0
+    unordered_set<int> mp; // 存储每个点的sg值，终点的sg为0， 存储每个局面可以到的局面
     for(int i=0;i<k;++i)
     {
         int tmp=s[i];

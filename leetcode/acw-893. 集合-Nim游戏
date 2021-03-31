@@ -107,8 +107,9 @@ int main()
 
 
 ----------------------- 0331
+
  
- #include<iostream>
+#include<iostream>
 #include<cstring>
 #include<unordered_set> 
 
@@ -119,14 +120,14 @@ const int M=10010;
 
 int n,k;
 int s[N];
-int f[M];
+int f[M]; // 存储没出现的最小值
 
 
 int sg(int x)
 {
     if(f[x] != -1) return f[x];
     
-    unordered_set<int> mp;
+    unordered_set<int> mp; // 存储每个点的sg值，终点的sg为0
     for(int i=0;i<k;++i)
     {
         int tmp=s[i];
@@ -138,10 +139,12 @@ int sg(int x)
         if(!mp.count(i))
         {
             f[x]=i;
-            return f[x];
+            return f[x]; // 返回起点x对应的没有出现的最小的自然数
         }
     }
 }
+
+
 
 int main()
 {
@@ -157,7 +160,7 @@ int main()
     {
         int x;
         cin>>x;
-        res ^= sg(x);
+        res ^= sg(x); // 将每个起点的sg值进行异或和
     }
     
     if(res) puts("Yes");

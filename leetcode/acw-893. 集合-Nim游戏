@@ -106,5 +106,65 @@ int main()
 }
 
 
+----------------------- 0331
+ 
+ #include<iostream>
+#include<cstring>
+#include<unordered_set> 
+
+using namespace std;
+
+const int N=1010;
+const int M=10010;
+
+int n,k;
+int s[N];
+int f[M];
+
+
+int sg(int x)
+{
+    if(f[x] != -1) return f[x];
+    
+    unordered_set<int> mp;
+    for(int i=0;i<k;++i)
+    {
+        int tmp=s[i];
+        if(x>=tmp) mp.insert(sg(x-tmp));
+    }
+    
+    for(int i=0;;i++)
+    {
+        if(!mp.count(i))
+        {
+            f[x]=i;
+            return f[x];
+        }
+    }
+}
+
+int main()
+{
+    cin>>k;
+    for(int i=0;i<k;++i) cin>>s[i];
+    
+    memset(f, -1 ,sizeof(f));
+    cin>>n;
+    
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+    {
+        int x;
+        cin>>x;
+        res ^= sg(x);
+    }
+    
+    if(res) puts("Yes");
+    else puts("No");
+    
+    return 0;
+}
+
 
 

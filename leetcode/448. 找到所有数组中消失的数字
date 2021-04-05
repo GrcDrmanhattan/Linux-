@@ -38,3 +38,28 @@ public:
 };
 
 
+
+-------------------------------   0405 / 2021/  yxc
+
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        vector<int> res;
+        // 将出现过的数标记为负数, 比如8出现，就将数组a[7]标记负数，因为8应该在数组的下标7位置
+
+        for(auto x:nums) {
+            x=abs(x);
+            if(nums[x-1] > 0) nums[x-1] *= -1;
+        }
+
+        for(int i=0;i<nums.size();++i){
+            if(nums[i] > 0) res.push_back(i+1);
+        }
+
+        return res;
+    }
+};
+
+
+
+

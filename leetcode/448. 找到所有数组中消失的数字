@@ -41,6 +41,13 @@ public:
 
 -------------------------------   0405 / 2021/  yxc
 
+每个数都应该出现在自己的对应的下标位置上， 每个数都有属于自己的下标，如果出现过，就将属于自己的下标标记
+
+然后将属于自己的下标的标记负数
+
+最后统计一下哪个下标没有被标记过
+
+
 class Solution {
 public:
     vector<int> findDisappearedNumbers(vector<int>& nums) {

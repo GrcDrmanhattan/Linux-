@@ -102,3 +102,46 @@ public:
 };
 
 
+------------------------ 0405 / /2021/  yxc 
+
+
+计算连续区间和是否满足， 要考虑前缀和， 后缀和
+
+
+/*
+    相当于在一维数组内，找到某个区间和，是给定值，用前缀和，转换到树，就是数的遍历方式不同
+    和560， 538类似
+    时间On
+*/
+
+
+
+
+class Solution {
+public:
+    int res=0;
+    unordered_map<int ,int> cnt;// 统计和 出现的次数
+    int pathSum(TreeNode* root, int sum) {
+        cnt[0]++;
+        dfs(root, sum ,0);
+        return res;
+    }
+
+    void dfs(TreeNode* u, int target, int cur)
+    {
+        if(!u) return ;
+
+        cur += u->val; // 计算前缀和
+        res += cnt[cur - target];
+
+        cnt[cur]++;
+        dfs(u->left, target, cur);
+        dfs(u->right, target, cur);
+        cnt[cur]--;
+    }
+};
+
+
+
+
+

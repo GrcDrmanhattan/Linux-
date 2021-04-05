@@ -41,7 +41,7 @@ class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
         vector<int> res;
-        unordered_map<char ,int > cnt;
+        unordered_map<char ,int > cnt; // 通过一个哈希表就可以，先存储p的次数，然后遍历s， 每当出现一个p中的字符就将次数减少，当减少为0满足要求
         for(auto x:p) cnt[x]++;
         int t=cnt.size();
 

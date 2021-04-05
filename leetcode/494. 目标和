@@ -88,7 +88,7 @@ public:
                 if(j - nums[i-1] >= -1000){// 当ai前添加正号 ,要满足和不超过边界内也可以写成两个比较大于-1000和小于等于1000
                     f[i][j+offset] += f[i-1][j-nums[i-1]+offset];
                 }
-                if(j + nums[i-1] <= 1000){ // ai添加负号，前i-1个数和是j+ai+1
+                if(j + nums[i-1] <= 1000){ // 要满足前i-1个和的范围 在[-1000, 1000]之间
                     f[i][j+offset] += f[i-1][j+nums[i-1]+offset];
                 }
             }

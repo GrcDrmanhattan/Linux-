@@ -188,3 +188,47 @@ public:
 
 
 
+-------------------- 0407  /2021/  
+
+
+class Solution {
+public:
+    vector<int> g;
+    vector<bool> st;
+    bool makesquare(vector<int>& nums) {
+        if(nums.empty()) return false;
+        int n=nums.size();
+        st.resize(n);
+        g=nums;
+        int sum=0;
+        for(auto x:nums) sum += x;
+        if(sum %4) return false;
+        sum /= 4;
+
+        sort(g.begin(), g.end(), greater<int>());
+        return dfs(0, 0, sum ,0);
+    }
+
+    bool dfs(int u, int cur, int len ,int cnt)
+    {
+        if(cnt==3) return true;
+        if(cur == len) return dfs(0, 0 , len, cnt+1);
+
+        for(int i=u;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len){
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], len ,cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i] == len) return false;
+            while(i + 1<g.size() && g[i+1] == g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+

@@ -94,3 +94,45 @@ public:
 
 
 
+-------------------------- 0407 / 2021/  
+
+floyd求任意两点最短距离，因为题目距离唯一，所以最短距也就是所求
+
+
+
+class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        unordered_set<string> s;
+        unordered_map<string, unordered_map<string, double>> d;
+
+        for(int i=0;i<equations.size();++i){
+            auto a=equations[i][0];
+            auto b=equations[i][1];
+            auto c=values[i];
+
+            s.insert(a);
+            s.insert(b);
+            d[a][b]=c;
+            d[b][a]=1/c;
+        }
+
+        for(auto k:s)
+            for(auto i:s)
+                for(auto j:s)
+                    if(d[i][k] && d[k][j]) d[i][j] = d[i][k] * d[k][j];
+
+        vector<double> res;
+        for(auto x:queries){
+            auto a=x[0];
+            auto b=x[1];
+            if(d[a][b]) res.push_back(d[a][b]);
+            else res.push_back(-1);
+        }
+
+        return res;
+    }
+};
+
+
+

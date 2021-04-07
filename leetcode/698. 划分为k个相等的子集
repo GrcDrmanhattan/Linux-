@@ -1,0 +1,67 @@
+698. 划分为k个相等的子集
+
+给定一个整数数组  nums 和一个正整数 k，找出是否有可能把这个数组分成 k 个非空子集，其总和都相等。
+
+示例 1：
+
+输入： nums = [4, 3, 2, 3, 5, 2, 1], k = 4
+输出： True
+说明： 有可能将其分成 4 个子集（5），（1,4），（2,3），（2,3）等于总和。
+ 
+
+提示：
+
+1 <= k <= len(nums) <= 16
+0 < nums[i] < 10000
+
+-------------------------- 0407 / 2021/  
+
+
+和473 火柴一样，都是拼成固定长度，看可以拼多少根
+
+
+
+class Solution {
+public:
+    vector<int> g;
+    vector<bool> st;
+    int k;
+
+    bool canPartitionKSubsets(vector<int>& nums, int k_) {
+        int n=nums.size();
+        k=k_;
+        st.resize(n);
+        g=nums;
+        int sum=0;
+        for(auto x:nums) sum += x;
+        if(sum % k) return false;
+        sum /= k;
+
+        sort(g.begin(), g.end(), greater<int>());
+
+        return dfs(0, 0, sum, 0);
+    }
+
+    bool dfs(int u, int cur ,int len , int cnt)
+    {
+        if(cnt == k-1) return true;
+        if(cur == len) return dfs(0, 0, len, cnt + 1);
+
+        for(int i=u;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len){
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], len, cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i] == len) return false;
+            while(i+1 < g.size() && g[i+1] == g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+

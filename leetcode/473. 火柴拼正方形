@@ -206,7 +206,8 @@ public:
         sum /= 4;
 
         sort(g.begin(), g.end(), greater<int>());
-        return dfs(0, 0, sum ,0);
+        return dfs(0, 0, sum ,0); // 从第0根开始，是因为看看是否可以搜索到满足拼成第一根的条件
+        
     }
 
     bool dfs(int u, int cur, int len ,int cnt)

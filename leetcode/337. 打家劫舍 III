@@ -96,3 +96,27 @@ public:
     }
 };
 
+
+----------------------- 0410 / /2021/ 
+
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        auto f=dfs(root);
+        return max(f[0], f[1]);
+    }
+
+    vector<int> dfs(TreeNode* u)
+    {
+        if(!u) return {0, 0};
+
+        auto l=dfs(u->left);
+        auto r=dfs(u->right);
+
+        return {max(l[0], l[1])+max(r[0], r[1]) , u->val + l[0]+r[0]};
+    }
+
+};
+
+
+

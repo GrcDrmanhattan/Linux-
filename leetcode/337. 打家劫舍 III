@@ -99,6 +99,9 @@ public:
 
 ----------------------- 0410 / /2021/ 
 
+每个点遍历一次On
+
+
 class Solution {
 public:
     int rob(TreeNode* root) {

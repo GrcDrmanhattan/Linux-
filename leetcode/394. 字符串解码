@@ -163,4 +163,54 @@ public:
 };
 
 
+--------------------- 0410  /2021/ 
+
+
+class Solution {
+public:
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s,  u);
+    }
+
+    string dfs(string& s, int &u)
+    {
+        string res="";
+        while(u<s.size() && s[u] != ']')
+        {
+            if(isalpha(s[u])) res += s[u++];
+            else if(isdigit(s[u])){
+                int j=u;
+                while(u<s.size() && isdigit(s[u])) u++;
+                int k=stoi(s.substr(j, u-j));
+                u++;// 跳过左括号
+
+                string y=dfs(s, u);//从字母开始下一次递归
+                cout<<y<<"--y: ";
+                while(k--) res += y;
+
+                u++;
+            }
+        }
+        cout<<res<<"-- res: ";
+        return res;
+    }
+};
+
+
+3[a2[c]]
+模拟过程
+
+
+/*
+3 ，res"", 
+    res=a, k=2,
+    res=c,遇到]跳出本次递归
+            res=acc, 又是],接着跳出
+                y=acc ,循环三次， res为空， accaccacc
+
+*/
+
+
+
 

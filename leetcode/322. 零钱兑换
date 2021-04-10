@@ -78,7 +78,8 @@ class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
         vector<int> f(amount + 1, 1e8);
-        f[0]=0;
+        f[0]=0; // 只有凑0的时候才有解，其余的初始化为1e8
+       
 
         for(auto x:coins){
             for(int j=x ; j<= amount;++j){

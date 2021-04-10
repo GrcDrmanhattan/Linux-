@@ -156,10 +156,10 @@ public:
 
         int i=n;
         int t=0;
-        while(t <k) t+=s[i--];
+        while(t <k) t+=s[i--];   // 先加i，然后i--，当t>=k满足条件时，i已经左移了多一位，所以答案在i+1开始
 
         for(auto [x, c]:cnt)
-            if(c > i) res.push_back(x);
+            if(c > i) res.push_back(x); 
 
         return res;
     }

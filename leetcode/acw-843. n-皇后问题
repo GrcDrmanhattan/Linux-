@@ -208,3 +208,65 @@ int main()
 
 
 
+--------------------- 0413 / 2021/  
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+
+char g[N][N];
+bool col[N];
+bool dg[N];
+bool udg[N];
+
+
+
+void dfs(int u)
+{
+    if(u==n) {
+        for(int i=0;i<n;++i) puts(g[i]);
+        cout<<endl;
+    }
+    
+    for(int i=0;i<n;++i){
+        if(!col[i] && !dg[u+i] && !udg[u-i+n]){
+            g[u][i]='Q';
+            col[i]=dg[u+i]=udg[u-i+n]=true;
+            dfs(u+1);
+            g[u][i]='.';
+            col[i]=dg[u+i]=udg[u-i+n]=false;
+        }
+    }
+    
+}
+
+
+int main()
+{
+    
+    cin>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            g[i][j]='.';
+            
+    dfs(0);
+    
+    // for(int i=0;i<n;++i){
+    //     for(int j=0;j<n;++j){
+    //         cout<<g[i][j]<<' ';
+    //     }
+    //     cout<<endl;
+    // }
+    
+    return 0;
+            
+}
+
+
+
+

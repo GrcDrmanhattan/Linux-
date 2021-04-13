@@ -152,3 +152,141 @@ int main()
 }
 
 
+
+------------------------- 0413 / 2021/  yxc 
+
+
+#include<iostream>
+#include<algorithm>
+#include<unordered_map>
+#include<queue>
+
+using namespace std;
+
+char g[2][4];
+unordered_map<string, int> dis;
+unordered_map<string , pair<char, string>> mp;
+queue<string> q;
+
+void set(string s){ // 将字符串变为矩阵
+    for(int i=0;i<4;++i) g[0][i]=s[i];
+    for(int i=3, j=4; i>=0; i--, j++) g[1][i]=s[j];
+}
+
+string get() // 矩阵转为字符串
+{
+    string res;
+    
+    for(int i=0;i<4;++i) res += g[0][i];
+    for(int i=3;i>=0;--i) res += g[1][i];
+    
+    return res;
+}
+
+
+string mv0(string s){ // 操作A
+    set(s);
+    
+    for(int i=0;i<4;++i) swap(g[0][i], g[1][i]);
+    
+    return get();
+}
+
+
+string mv1(string s){ // B
+    set(s);
+    
+    char v0=g[0][3];
+    char v1=g[1][3];
+    
+    for(int i=3;i>=0;--i)
+        for(int j=0;j<2;++j){
+            g[j][i] = g[j][i-1];
+        }
+        
+    g[0][0]=v0;
+    g[1][0]=v1;
+    
+    return get();
+}
+
+string mv2(string s){
+    set(s);
+    
+    char v=g[0][1];
+    
+    g[0][1]=g[1][1];
+    g[1][1]=g[1][2];
+    g[1][2]=g[0][2];
+    g[0][2]=v;
+    
+    return get();
+}
+
+void bfs(string st, string ed){
+    if(st == ed) return ;
+    q.push(st);
+    dis[st]=0;
+    
+    while(q.size()){
+        auto t=q.front();
+        q.pop();
+        
+        string m[3];
+        m[0]=mv0(t);
+        m[1]=mv1(t);
+        m[2]=mv2(t);
+        
+        for(int i=0;i<3;++i){ // 以通过abc的顺序得到的字符串加入队列，就可以满足最小字典序
+            string tmp=m[i];
+            
+            if(dis.count(tmp) == 0){
+                dis[tmp]=dis[t]+1;
+                mp[tmp]={(char(i + 'A')), t}; // 记录tmp从t状态经过操作i转移过来
+                
+                if(tmp==ed) break;
+                q.push(tmp);
+            }
+        }
+    }
+    
+}
+
+
+int main()
+{
+    string st;
+    string ed;
+    
+    for(int i=0;i<8;++i){
+        int x;
+        cin>>x;
+        ed += char(x + '0');
+    }
+    
+    
+    
+    for(int i=0;i<8;++i) st+=char(i + '1');
+    
+    // cout<<st<<endl;
+    
+    bfs(st, ed);
+    cout<<dis[ed]<<endl;
+    
+    string res;
+    while(st != ed){
+        res += mp[ed].first;
+        ed=mp[ed].second;
+    }
+    
+    reverse(res.begin(), res.end());
+    
+    
+    if(res.size()) cout<<res<<endl;
+    
+    
+    return 0;
+}
+
+
+

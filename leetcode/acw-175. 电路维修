@@ -152,3 +152,113 @@ int main()
     return 0;
 }
 
+
+
+--------------------- 0413 / 2021/  yxc 
+
+
+// 无向图的最短路
+// 每个点可能被更新多次，需要st数组，看作dijskra算法
+// 顺时针四个点的坐标关系dxdy，ixiy是顺时针输入数组种对应的字符的坐标关系，
+//cs数组是从中心顺时针到四个点的对角线怎么走
+
+// 狄杰斯特拉算法的写法
+
+
+#include<iostream>
+#include<algorithm>
+#include<deque>
+#include<cstring>
+
+using namespace std;
+
+#define x first
+#define y second
+
+const int N=510;
+
+int n,m;
+
+int dis[N][N];
+bool st[N][N];
+
+char g[N][N];
+
+int bfs()
+{
+    deque<pair<int, int>> q;
+    
+    memset(dis, 0x3f , sizeof(dis));
+    memset(st, 0, sizeof(st));
+    
+    int dx[4]={-1, -1 ,1 ,1};
+    int dy[4]={-1, 1, 1, -1};
+    
+    int ix[]={-1,-1,0,0};//求出每个方向上的边，四个方向的字符在数组里的下标
+    int iy[]={-1,0,0,-1};
+    
+    char cs[5]="\\/\\/";
+    
+    dis[0][0]=0;
+    q.push_back({0, 0});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop_front();
+        
+        int x=t.x;
+        int y=t.y;
+        
+        if(x==n && y==m) return dis[x][y];
+        
+        if(st[x][y]) continue;
+        st[x][y]=true;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            
+            if(a<0 || a > n || b<0 || b>m) continue;
+            
+            int ga= x + ix[i];
+            int gb= y + iy[i];
+            
+            int w= (g[ga][gb] != cs[i]);
+            
+            int d=dis[x][y] + w;
+            
+            if(d <= dis[a][b]){
+                dis[a][b]=d;
+                
+                if(!w) q.push_front({a, b});
+                else q.push_back({a, b});
+            }
+        }
+        
+    }
+    
+    return -1;
+    
+}
+
+int main()
+{
+    int t;
+    scanf("%d",&t);
+    while(t--)
+    {
+        cin>>n>>m;
+        
+        for(int i=0;i<n;++i) cin>>g[i];//字符从00开始
+        
+        
+        if((n + m )&1) puts("NO SOLUTION");//终点坐标之和奇数一定没有解,因为是从00点开始走的，所以只能到偶数点
+        else printf("%d\n",bfs());
+    }
+    
+    return 0;
+}
+
+

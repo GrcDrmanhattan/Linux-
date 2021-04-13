@@ -240,7 +240,7 @@ void bfs(string st, string ed){
         for(int i=0;i<3;++i){ // 以通过abc的顺序得到的字符串加入队列，就可以满足最小字典序
             string tmp=m[i];
             
-            if(dis.count(tmp) == 0){
+            if(dis.count(tmp) == 0){ // 没有被遍历过
                 dis[tmp]=dis[t]+1;
                 mp[tmp]={(char(i + 'A')), t}; // 记录tmp从t状态经过操作i转移过来
                 

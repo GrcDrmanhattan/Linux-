@@ -150,3 +150,71 @@ int main()
     return 0;
 }
 
+
+
+-----------------------   0414 / 2021. 
+
+简单的回溯
+要注意恢复现场，
+
+外部搜索，叫爆搜，也就是去按照某种搜索顺序，去搜索，在树中找到答案，一般是指数级别时间，所以会有剪支
+
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=10;
+
+int t;
+int n, m, x, y;
+bool st[N][N];
+
+int res;
+
+int dx[]={-2, -1, 1, 2, 2, 1, -1, -2};
+int dy[]={1 , 2, 2, 1, -1 ,-2, -2, -1};
+
+
+void dfs(int x, int y, int cnt)
+{
+    if(cnt == n*m){
+        res++;
+        return ;
+    }
+    
+    st[x][y]=true;
+    
+    for(int i=0;i<8;++i){
+        int a=x+dx[i];
+        int b=y+dy[i];
+        
+        if(a>=0 && a< n && b>=0 && b<m && !st[a][b] ){
+            dfs(a, b ,cnt +1);
+        }
+        
+    } // 从当前分支搜不下去了，要回溯
+    
+    st[x][y]=false;
+}
+
+
+int main()
+{
+    cin>>t;
+    while(t--){
+        res=0;
+        cin>>n>>m>>x>>y;
+        
+        dfs(x, y, 1); // 当前在搜索第一个点
+        cout<<res<<endl;
+    }
+    
+    return 0;
+}
+
+
+

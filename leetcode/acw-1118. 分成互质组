@@ -163,3 +163,74 @@ int main()
     cout<<res<<endl;
 }
 
+--------------------- 0414 / 2021/ 
+
+// 组内搜索，组合问题不考虑里面的数字顺序
+// 搜索顺序按照一组一组的搜索，先看第一组可以放哪些，然后继续向下搜索，属于爆搜问题
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=12;
+
+int s[N];
+int group[N][N];
+int res=N;
+
+bool st[N];
+int n;
+
+int gcd(int a, int b){
+    return b ? gcd(b, a%b) : a;
+}
+
+bool check(int g[], int gc, int i){
+    for(int j=0;j<gc;++j){
+        if(gcd(s[g[j]] , s[i]) > 1) 
+            return false;
+    }
+    
+    return true;
+}
+
+void dfs(int g ,int gc, int tc, int start){ // 当前搜第几组，组内元素下标，已经搜了多少个元素，从哪个开始
+    if(g >= res) return ;
+    
+    if(tc == n) res=g;
+    
+    bool f=true;
+    for(int i=start;i<n;++i){
+        if(!st[i] && check(group[g] , gc , i)){
+            st[i]=true;
+            group[g][gc]=i;
+            
+            dfs(g, gc+1, tc+1, i+1);
+            
+            st[i]=false;
+            f=false;
+            
+        }
+    }
+    
+    if(f) dfs(g+1, 0, tc, 0);
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>s[i];
+    
+    memset(st, 0 ,sizeof(st));
+    
+    dfs(1 , 0, 0, 0);
+    
+    cout<<res<<endl;
+    
+    return 0;
+}
+
+

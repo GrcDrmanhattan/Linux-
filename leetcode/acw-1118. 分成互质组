@@ -189,7 +189,7 @@ int gcd(int a, int b){
 }
 
 bool check(int g[], int gc, int i){
-    for(int j=0;j<gc;++j){
+    for(int j=0;j<gc;++j){ // 当前组内一共有gc个元素
         if(gcd(s[g[j]] , s[i]) > 1) 
             return false;
     }
@@ -197,7 +197,7 @@ bool check(int g[], int gc, int i){
     return true;
 }
 
-void dfs(int g ,int gc, int tc, int start){ // 当前搜第几组，组内元素下标，已经搜了多少个元素，从哪个开始
+void dfs(int g ,int gc, int tc, int start){ // 当前搜第几组，当前组内第几个元素，已经搜了多少个元素，从哪个开始
     if(g >= res) return ;
     
     if(tc == n) res=g;

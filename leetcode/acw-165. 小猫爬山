@@ -100,3 +100,59 @@ int main()
 }
 
 
+
+----------------- 0417 / 2021 . 
+重新了解dfs回溯
+
+// 将小猫进行分组，最少分成几组，重量不超过限值
+// 搜索树的根结点是从下标是0号开始，然后第一层将0号放入一辆车，第二层开始就分成两边，将1号猫放到一个车或者新开一个车，然后依次向下搜索
+// 爆搜问题
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=20;
+
+int n, m;
+int s[N];
+int sum[N];
+int res=N;
+
+void dfs(int u ,int cnt)
+{
+    if(cnt >= res) return ;
+    if(u==n){
+        res=cnt;
+        return ;
+    }
+    
+    for(int i=0;i<cnt;++i){
+        if(sum[i] + s[u] <= m){
+            sum[i] += s[u];
+            dfs(u+1, cnt);
+            sum[i] -= s[u];
+        }
+    }
+    
+    sum[cnt]=s[u];
+    dfs(u+1, cnt+1);
+    sum[cnt]=0;
+}
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i) cin>>s[i];
+    
+    sort(s, s+n);
+    reverse(s, s+n);
+    
+    dfs(0, 0);
+    
+    cout<<res<<endl;
+    return 0;
+}
+

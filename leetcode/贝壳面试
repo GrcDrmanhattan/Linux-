@@ -1,0 +1,50 @@
+0417 / 2021 
+
+大数加法
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+string help(string a, string b){
+    if(a.size() < b.size()) return help(b ,a);
+    
+    string res="";
+    vector<int> num_a;
+    vector<int> num_b;
+    // 123 4567
+    for(int i=0;i<a.size();++i) num_a.push_back(a[i] - '0');
+    for(int i=0;i<b.size();++i) num_b.push_back(b[i] - '0');
+    
+    reverse(num_a.begin(), num_a.end());// 321
+    reverse(num_b.begin(), num_b.end()); //7654
+    
+    vector<int> tmp;
+    //int minl=min(a.size(), b.size());
+    int t=0;
+    for(int i=0;i<num_a.size();++i){
+        t+=num_a[i];
+        if(i<num_b.size()) t+=num_b[i];
+        tmp.push_back(t%10);
+        t/=10;
+    }
+    
+    reverse(tmp.begin(), tmp.end());
+    
+    for(auto x:tmp) res+=to_string(x);
+    return res;
+}
+
+
+int main() {
+    //int a;
+    //cin >> a;
+    string a="123";
+    string b="4567";
+    auto res=help(a, b);
+    //cout<<123+4567<<endl; 4690
+    cout << res << endl;
+}
+
+

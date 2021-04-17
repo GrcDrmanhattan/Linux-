@@ -71,3 +71,25 @@ public:
 };
 
 
+
+----------------- 0417 / 2021/  
+
+先把前面的布满了，再补充后面的，当然不会有空位，最后会是数组长度
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        unordered_map<char ,int> mp;
+        for(auto x:tasks) mp[x]++;
+        int k=0;
+        int mc=0;
+        for(auto [x ,c]:mp) mc=max(c, mc);
+
+        for(auto [x ,c]:mp)
+            if(c==mc) k++;
+
+        return max((int)tasks.size(), (mc -1) * (n+1) + k);
+    }
+};
+
+

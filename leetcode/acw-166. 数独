@@ -368,3 +368,123 @@ int main()
 
 
 
+--------------- 0418 / /2021 
+
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int row[9];
+int col[9];
+int cell[3][3];
+
+int ones[1<<9];
+int map[1<<9];
+
+char str[100];
+
+void init()
+{
+    for(int i=0;i<9;++i) row[i]=col[i]=(1<<9)-1;
+    
+    for(int i=0;i<3;++i)
+        for(int j=0;j<3;++j)
+            cell[i][j] = (1<<9)-1;
+}
+
+int lowbit(int x)  // 返回末尾的1
+{
+    return x & -x;
+}
+
+int get(int x, int y)
+{
+    return row[x] & col[y] & cell[x/3][y/3];
+}
+
+
+bool dfs(int cnt)
+{
+    if(cnt == 0) return true;
+    
+    int mv=10;
+    int x;
+    int y;
+    for(int i=0;i<9;++i)
+        for(int j=0;j<9;++j)
+        {
+            if(str[i * 9 + j] == '.')
+            {
+                int t=ones[get(i, j)];
+                if(t < mv)
+                {
+                    mv=t;
+                    x=i;
+                    y=j;
+                }
+            }
+        }
+        
+    for(int i=get(x, y); i; i -= lowbit(i))
+    {
+        int t=map[lowbit(i)];
+        
+        row[x] -= 1<<t;
+        col[y] -= 1<<t;
+        cell[x/3][y/3] -= 1<<t;
+        str[x*9+y] = t+'1';
+        
+        if(dfs(cnt-1)) return true;
+        
+        row[x] += 1<<t;
+        col[y] += 1<<t;
+        cell[x/3][y/3] += 1<<t;
+        str[x*9+y] = '.';
+    }
+    
+    return false;
+}
+
+
+
+int main()
+{
+    for(int i=0; i< 1<<9;++i)
+        for(int j=0;j<9;++j)
+            ones[i] += i>>j&1;
+            
+    for(int i=0;i<9;++i ) map[1<<i]=i;
+    
+    while(cin>>str, str[0] != 'e')
+    {
+        init();
+        
+        int cnt=0;
+        for(int i=0; i<9;++i)
+            for(int j=0;j<9;++j)
+            {
+                if(str[i*9+j] != '.')
+                {
+                    int t=str[i*9+j]-'1';
+                    row[i] -= 1<<t;
+                    col[j] -= 1<<t;
+                    cell[i/3][j/3] -= 1<<t;
+                }
+                else cnt++;
+            }
+            
+        dfs(cnt);
+        
+        cout<<str<<endl;
+    }
+    
+    return 0;
+}
+
+
+
+
+

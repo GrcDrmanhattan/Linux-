@@ -1,0 +1,115 @@
+171. 送礼物
+
+达达帮翰翰给女生送礼物，翰翰一共准备了 N 个礼物，其中第 i 个礼物的重量是 G[i]。
+
+达达的力气很大，他一次可以搬动重量之和不超过 W 的任意多个物品。
+
+达达希望一次搬掉尽量重的一些物品，请你告诉达达在他的力气范围内一次性能搬动的最大重量是多少。
+
+输入格式
+第一行两个整数，分别代表 W 和 N。
+
+以后 N 行，每行一个正整数表示 G[i]。
+
+输出格式
+仅一个整数，表示达达在他的力气范围内一次性能搬动的最大重量。
+
+数据范围
+1≤N≤46,
+1≤W,G[i]≤231−1
+输入样例：
+20 5
+7
+5
+4
+18
+1
+输出样例：
+19
+
+
+---------------------------- 0419 /  2021/  yxc 
+
+双向dfs
+
+//在所有总重量不超过w的方案中取一个最大值
+// 爆搜
+
+// 先搜索前一半，然后搜索后一半
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 50;
+typedef long long LL;
+
+
+int n,m;
+int g[N];
+int w[1<<25];
+int cnt;
+int k;
+
+int res;
+
+void dfs1(int u, int s) // 搜索前一半到k， s是凑出的和
+{
+    if(u == k)
+    {
+        w[cnt++]=s;
+        return ;
+    }
+    
+    if((LL)s + g[u] <= m) dfs1(u+1, s+g[u]);//可以加上当前数
+    // 不可以加上
+    dfs1(u+1, s);
+}
+
+void dfs2(int u, int s)
+{
+    if(u==n)
+    {
+        int l=0;
+        int r=cnt-1;
+        while(l<r)
+        {
+            int mid=l+r+1>>1;
+            if(w[mid] + (LL)s <= m) l=mid;
+            else r=mid-1;
+        }
+        
+        if((LL) s + w[l] <= m) res=max(res, s+w[l]);
+        return ;
+    }
+    
+    if((LL)s + g[u] <= m) dfs2(u+1, s+g[u]);
+    dfs2(u+1, s);
+}
+
+int main()
+{
+    
+    cin>>m>>n;
+    for(int i=0;i<n;++i) cin>>g[i];
+    
+    sort(g, g+n);
+    reverse(g, g+n);
+    
+    k=n/2 + 2;
+    dfs1(0 , 0);
+    
+    sort(w, w+cnt);
+    cnt = unique(w, w+cnt) - w;
+    
+    dfs2(k, 0);
+    cout<<res<<endl;
+    
+    
+    return 0;
+}
+
+
+

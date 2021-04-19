@@ -111,6 +111,8 @@ int main()
 
 ------------------ 0419/  2021/  
 
+搜索顺序就是从小到大枚举len，然后dfs爆搜看是否可以用完所有木棍去拼成len的很多长棍，
+
 
 #include <iostream>
 #include <cstring>

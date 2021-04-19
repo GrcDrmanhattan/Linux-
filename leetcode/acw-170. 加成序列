@@ -118,8 +118,8 @@ bool dfs(int u, int md)
             int s=tmp[i]+tmp[j];
             if(!st[s] && s<=n && s>tmp[u-1])
             {
-                st[s]=true;
-                tmp[u]=s;
+                st[s]=true; // 需要恢复现场，但这个st数组不是现场的一部分，只是用来标记是否两个数的和搜索过
+                tmp[u]=s; // 这是现场，但是每次都被覆盖，所以也不用显示的恢复
                 if(dfs(u+1, md)) return true;
             }
         }

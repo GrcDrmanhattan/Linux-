@@ -65,3 +65,31 @@ public:
 };
 
 
+------------------ 0422 / 2021 
+ 
+ // f[i][j] j个鸡蛋测量i次的方案数中最多的高度是多少
+
+class Solution {
+public:
+    int superEggDrop(int k, int n) {
+        vector<vector<int>> f(n+1, vector<int>(k+1));
+        int res=0;
+
+        for(int i=1;i<=n;++i)
+        { // n层
+            for(int j=1;j<=k;++j) // k个鸡蛋
+            {
+                f[i][j] = f[i-1][j-1] + f[i-1][j] + 1; // 在某层碎了+在某层没碎 + 1 
+                
+            }
+            if(f[i][k] >= n) 
+            {
+                res= i;
+                break;
+            }
+        }
+        return res;
+    }
+};
+
+

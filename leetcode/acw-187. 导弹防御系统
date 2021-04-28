@@ -95,4 +95,66 @@ int main()
 }
 
 
+------------------- 0428 / 2021/  
+
+
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 55;
+
+int n;
+int a[N];
+int up[N];
+int down[N];
+
+int res;
+
+void dfs(int u, int su, int sd)
+{
+    if(su + sd >= res) return ;
+    if(u==n){
+        res= su + sd;
+        return ;
+    }
+    
+    int k=0;
+    while(k<su && up[k] >= a[u]) k++; // 放到上升子序列后，要找到第一个小于的位置
+    int t=up[k];
+    
+    up[k]=a[u];
+    if(k < su) dfs(u+1, su, sd);
+    else dfs(u+1, su+1, sd);
+    up[k]=t;
+    
+    k=0;
+    while(k<sd && down[k] <= a[u]) k++; // 放到下降子序列后，所以要找到第一个大于au的位置
+    t=down[k];
+    
+    down[k]=a[u];
+    if(k < sd) dfs(u+1, su, sd);
+    else dfs(u+1, su, sd+1);
+    down[k]=t;// 回溯恢复
+    
+}
+
+
+int main()
+{
+    while(cin>>n, n)
+    {
+        for(int i=0;i<n;++i) cin>>a[i];
+        res=n;
+        dfs(0, 0, 0);
+        cout<<res<<endl;
+    }
+    
+    return 0;
+}
+
+
 

@@ -135,7 +135,7 @@ int main()
     
     for(int i=1;i<=n;++i)
     {   
-        int mv=1;
+        int mv=1; // 因为fik的最大值和j没有关系，所以可以拿到j循环之外，用一个变量代替
         for(int j=1;j<=n;++j)
         {
             

@@ -102,3 +102,56 @@ int main()
 
 
 
+/*
+f[i][j] 表示集合，所有由第一个序列的前i个字母，第二个序列的前j个字母构成，并且以bj结尾的公共上生子序列，这样的集合的长度的最大值
+
+划分为两类，所有包含ai的，不包含ai的
+
+不包含ai的f[i-1][j]
+包含ai的是根据bj序列倒数第二个字母划分k类，f[i][k] +1 ，又因为结尾是bj，所以ai和bj要相等
+
+*/
+// 如果ai和bj每个都相等，则最坏On^3
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+const int N = 3010;
+
+int n;
+int a[N];
+int b[N];
+int f[N][N];
+
+int res=0;
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) scanf("%d", &a[i]);
+    for(int i=1;i<=n;++i) scanf("%d", &b[i]);
+    
+    for(int i=1;i<=n;++i)
+    {   
+        int mv=1;
+        for(int j=1;j<=n;++j)
+        {
+            
+            f[i][j]=f[i-1][j];// 
+            
+            // f[i][1]=1;
+            if(a[i]== b[j]) f[i][j]=max(f[i][j], mv);
+            if(b[j] < a[i]) mv=max(mv, f[i][j] + 1); // 
+        }
+        
+    }
+    for(int i=1;i<=n;++i) res=max(res, f[n][i]);
+    cout<<res<<endl;
+    
+    return 0;
+}
+
+
+

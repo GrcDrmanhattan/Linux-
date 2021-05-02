@@ -46,3 +46,52 @@ k == queries.length
 // 要学会如何在变换顺序后，输出答案对应的原数组的下标，因为要输出原来的下标
 
 
+class Solution {
+public:
+    struct Query{
+        int id;
+        int p;
+        int m;
+
+        bool operator<(const Query& t){
+            return m < t.m;
+        }
+    };
+
+    vector<int> closestRoom(vector<vector<int>>& rooms, vector<vector<int>>& queries) {
+        int n=queries.size();
+        vector<int> res(n);
+        vector<Query> q;
+
+        for(int i=0;i<n;++i){
+            q.push_back({i, queries[i][0], queries[i][1]});
+        }
+
+        sort(q.begin(), q.end()); // 将查询排序，按照minsize从小到大排序
+        sort(rooms.begin(), rooms.end(),[](vector<int>& a ,vector<int>& b){
+            return a[1] < b[1];
+        }); // 
+        const int inf=1e9;
+        set<int> s{-inf, inf};
+
+        for(int i=n-1, j=rooms.size()-1;i>=0;--i){ // 按照从大到小枚举每个查询，这样满足条件的房间数目是逐渐递增的，
+            while(j>=0 && rooms[j][1] >= q[i].m) s.insert(rooms[j--][0]); 
+            //将满足条件的房间id加入set，然后二分看左右最近的边界那个距离更小
+
+            int p=q[i].p;
+            int id=q[i].id;
+
+            auto k=s.lower_bound(p); // k是大于等于p的最小值
+            auto u=k;
+            --u;
+            // u  p  k
+            if(p - *u <= *k - p) res[id] = *u;
+            else res[id]=*k;
+
+            if(abs(res[id]) == inf) res[id]=-1;
+            
+        }
+        return res;
+    }
+};
+

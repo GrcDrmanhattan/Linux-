@@ -95,3 +95,61 @@ public:
     }
 };
 
+
+
+-------------------------- 0502  思路顺畅
+
+// 先找到满足大于等于minsize的所有id，然后在集合里二分找答案
+
+class Solution {
+public:
+    struct node{
+        int idx;
+        int p;
+        int m;
+        bool operator<(const node &t){
+            return m < t.m;
+        }
+    };
+
+    vector<int> closestRoom(vector<vector<int>>& rooms, vector<vector<int>>& queries) {
+        int n=queries.size();
+        vector<int> res(n);
+        const int inf=1e9;
+        vector<node> q;
+        for(int i=0;i<n;++i){
+            q.push_back({i, queries[i][0], queries[i][1]});
+        }
+
+        sort(rooms.begin(), rooms.end(), [](vector<int>& a, vector<int>& b){
+            return a[1] < b[1];
+        });
+
+        sort(q.begin(), q.end());
+        
+        set<int> s{-inf, inf};
+        for(int i=n-1, j=rooms.size()-1; i>=0;--i){
+            while(j>=0 && rooms[j][1] >= q[i].m){
+                s.insert(rooms[j][0]);
+                j--;
+            }
+
+            int p=q[i].p;
+            int idx=q[i].idx;
+
+            auto k=s.lower_bound(p);
+            auto u=k;
+            --u;
+
+            if(p - *u <= *k -p) res[idx] = *u;
+            else res[idx]= *k;
+
+            if(abs(res[idx]) == inf) res[idx]=-1;
+        }
+
+        return res;
+    }
+};
+
+
+

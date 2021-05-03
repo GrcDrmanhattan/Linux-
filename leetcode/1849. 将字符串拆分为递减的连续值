@@ -79,3 +79,42 @@ public:
 };
 
 
+------------------- 0504 / 2021/  
+
+// 用位运算时间 19 * 2^19
+// 因为至少要分成两段，所以状态从1开始才是分成两段，状态0表示没有分割不符合题意
+
+class Solution {
+public:
+    bool splitString(string s) {
+        int n=s.size();
+
+        for(int i=1 ; i< 1<<n-1;++i) // 枚举答案的所有选择空间
+        {
+            bool f=true;
+            unsigned long long last=-1 , cur =s[0]-'0';
+
+            for(int j=0;j<n-1;++j){// 对每种选择，看具体是怎么分割的
+                if(i>>j&1){  // 当前分割
+                    if(last != -1 && cur != last -1){
+                        f=false;
+                        break;
+                    }
+
+                    last = cur;
+                    cur=s[j+1] - '0';
+                }else{ // 当前没有分割
+                    cur = cur * 10 + s[j+1]-'0';
+                }
+            }
+
+            if(cur != last -1 ) f=false;
+            if(f) return true;
+        }
+
+        return false;
+    }
+};
+
+
+

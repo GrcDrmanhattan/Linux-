@@ -129,3 +129,39 @@ public:
 
 
 
+-------------------  
+class Solution {
+public:
+    int getMinSwaps(string num, int k) {
+        int n=num.size();
+        int res=0;
+        vector<int> cnt(10, 0);
+        vector<int> c(n);
+
+        string b=num;
+        while(k--) next_permutation(b.begin(), b.end());
+
+        for(int i=0;i<n;++i){
+            int x=num[i]-'0';
+            cnt[x]++;
+            int y=cnt[x];
+
+            for(int j=0;j<n;++j){
+                if(b[j] - '0' == x && y-- == 1){ // 或者y-- == 1， 假如y=4，则要找到出现次数是第四个的字符，y--是先拿y比较然后减少，所以是4， 3， 2，1， 减到1是正好第四个，
+                // --y是3，2，1，0 ，减到0是第四个，因为要先减少1再比较
+                    c[i]=j;
+                    break;
+                }
+            }
+
+        }
+
+        for(int i=0;i<n;++i){
+            for(int  j=i+1;j<n;++j)
+                if(c[i] > c[j]) res++;
+        }
+
+        return res;
+    }
+};
+

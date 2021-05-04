@@ -94,7 +94,7 @@ public:
             bool f=true;
             unsigned long long last=-1 , cur =s[0]-'0';
 
-            for(int j=0;j<n-1;++j){// 对每种选择，看具体是怎么分割的
+            for(int j=0;j<n-1;++j){// 对每种选择，看具体是怎么分割的, 4位数，中间有3个空隙分割，所以枚举到n-1位
                 if(i>>j&1){  // 当前分割
                     if(last != -1 && cur != last -1){
                         f=false;

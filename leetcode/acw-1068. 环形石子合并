@@ -1,0 +1,90 @@
+1068. 环形石子合并
+
+
+将 n 堆石子绕圆形操场排放，现要将石子有序地合并成一堆。
+
+规定每次只能选相邻的两堆合并成新的一堆，并将新的一堆的石子数记做该次合并的得分。
+
+请编写一个程序，读入堆数 n 及每堆的石子数，并进行如下计算：
+
+选择一种合并石子的方案，使得做 n−1 次合并得分总和最大。
+选择一种合并石子的方案，使得做 n−1 次合并得分总和最小。
+输入格式
+第一行包含整数 n，表示共有 n 堆石子。
+
+第二行包含 n 个整数，分别表示每堆石子的数量。
+
+输出格式
+输出共两行：
+
+第一行为合并得分总和最小值，
+
+第二行为合并得分总和最大值。
+
+数据范围
+1≤n≤200
+输入样例：
+4
+4 5 9 4
+输出样例：
+43
+54
+
+---------------------- 0504/  2021/  yxc 
+区间dp
+
+// 将环形dp化为链式，长度二倍
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 410;
+const int inf = 0x3f3f3f3f;
+
+int n;
+int g[N][N]; // 最大值
+int f[N][N]; // 最小值
+
+int w[N];
+int s[N];// 前缀和
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) {
+        cin>>w[i];
+        w[i+n]=w[i]; // 第n+1个点和第1个点一样，第n+2个点和第2个一样，。。。。
+    }
+    
+    for(int i=1;i<=n * 2;++i) s[i] = s[i-1] + w[i];
+    
+    memset(f, 0x3f, sizeof f);
+    memset(g, -0x3f, sizeof g);
+    
+    for(int len=1;len<=n;++len){
+        for(int l=1; l+len-1<= n*2 ;++l){
+            int r=l+len-1;
+            if(len ==1) g[l][r]=f[l][r]=0;
+            else{
+                for(int k=l;k<r;++k){
+                    f[l][r]=min(f[l][r], f[l][k] + f[k+1][r] + s[r] - s[l-1]);
+                    g[l][r]=max(g[l][r], g[l][k] + g[k+1][r] + s[r] - s[l-1]);
+                }
+            }
+        }
+    }
+    
+    int minv=inf;
+    int maxv=-inf;
+    
+    for(int i=1;i<=n;++i){
+        minv=min(minv, f[i][i+n-1]);
+        maxv=max(maxv, g[i][i+n-1]);
+    }
+    
+    cout<<minv<<endl;
+    cout<<maxv<<endl;
+}
+
+

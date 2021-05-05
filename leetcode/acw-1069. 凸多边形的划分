@@ -118,7 +118,7 @@ int cmp(LL a[], LL b[])
 void print(LL a[])
 {
     int k=M-1;
-    while(k && a[k] ==0) k--;
+    while(k && a[k] ==0) k--; // q去除前导0
     while(k>=0) cout<<a[k--];
     cout<<endl;
 }

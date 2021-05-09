@@ -42,15 +42,52 @@
 // 相当于求满足性质的连续子数组，返回最大值
 // 枚举固定最小值 ，然后左右最大的
 // 单调栈， 前缀和
+
+
+
+typedef long long ll;
+const int N=1e5+10;
+const int md=1e9+7;
+int q[N];
+int h[N];
+int l[N], r[N];
+ll s[N];
+
 class Solution {
 public:
-    typedef long long ll;
-    const int md=1e9+7;
-    
     int maxSumMinProduct(vector<int>& nums) {
-        // sort(nums.begin(), nums.end());
-        
-        
+        int n=nums.size();
+        for(int i=1;i<=n;++i){
+            h[i]= nums[i-1];
+            s[i] = s[i-1] + h[i];
+        }
+
+        h[0]=h[n+1]=0;
+
+        int tt=0;
+        q[0]=0;
+        for(int i=1;i<=n;++i){ // 找到左边第一个比i小的
+            while(h[q[tt]] >= h[i]) tt--;
+            l[i] = q[tt];
+            q[++tt]=i; // 因为q0已经有数了，所以下一个要从1开始
+        }
+
+        tt=0;
+        q[0]=n+1;
+        for(int i=n;i>=1;--i){
+            while(h[q[tt]] >= h[i]) tt--;
+            r[i]= q[tt];
+            q[++tt]=i;
+        }
+
+        ll res=0;
+        for(int i=1;i<=n;++i){
+            res = max(res, h[i] * (s[r[i] - 1] - s[l[i]]));
+            // res = max(res, h[i] * (s[r[i] - 1] - s[l[i]]));
+        }
+
+        return res % md;
     }
 };
+
 

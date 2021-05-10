@@ -90,7 +90,7 @@ int spfa(int start)  // 求start点到n号点的最短路距离，如果从1号�
     st[start]=true;
     
     int hh=0;
-    int tt=1;
+    int tt=1; // 使用循环队列 ，防止不知道开多少空间
     q[0]=start;
     
     while(hh != tt){

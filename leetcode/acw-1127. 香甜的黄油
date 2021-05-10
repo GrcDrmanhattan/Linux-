@@ -83,7 +83,7 @@ void add(int a, int b ,int c)
     idx++;
 }
 
-int spfa(int start)  // 求1号点到n号点的最短路距离，如果从1号点无法走到n号点则返回-1
+int spfa(int start)  // 求start点到n号点的最短路距离，如果从1号点无法走到n号点则返回-1
 {
     memset(dis, 0x3f , sizeof dis);
     dis[start]=0;

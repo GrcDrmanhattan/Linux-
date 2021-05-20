@@ -37,7 +37,7 @@ m≤105
 --------------------------------- 0521/  2021/ yxc 
 
 
-// 转换为没有负权边的dj求最短距离算法
+// 转换为没有负权边的dj求最短距离算法 ， 相当于求最大距离，和dj算法变化一下
 
 #include <iostream>
 #include <cstring>
@@ -64,7 +64,7 @@ void dj()
         st[t]=true;
         
         for(int j=1;j<=n;++j)
-            dis[j] =max(dis[j], dis[t] * g[t][j]);
+            dis[j] =max(dis[j], dis[t] * g[t][j]); // 最大值更新
     }
 }
 
@@ -75,7 +75,7 @@ int main()
         int a, b, c;
         cin>>a>>b>>c;
         double z = (100.0- c) / 100;
-        g[a][b]=g[b][a]=max(g[a][b], z);
+        g[a][b]=g[b][a]=max(g[a][b], z);  // 最大值更新
     }
     
     cin>>start>>e;

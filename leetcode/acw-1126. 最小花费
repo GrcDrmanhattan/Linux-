@@ -1,5 +1,6 @@
 1126. 最小花费
 
+
 在 n 个人中，某些人的银行账号之间可以互相转账。
 
 这些人之间转账的手续费各不相同。
@@ -33,6 +34,59 @@ m≤105
 103.07153164
 
 
---------------------- 0510  /2021/  yxc 
+--------------------------------- 0521/  2021/ yxc 
+
+
+// 转换为没有负权边的dj求最短距离算法
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 2010;
+
+int n ,m;
+int  start, e;
+double g[N][N]; 
+double dis[N];
+bool st[N];
+
+void dj()
+{
+    dis[start] = 1 ;//  初始化为1
+    
+    for(int i=0;i<n;++i){
+        int t=-1;
+        for(int j=1;j<=n;++j)
+            if(!st[j] && (t==-1 || dis[t] < dis[j])) // 求距离最大值， 所以用大的更新
+                t=j;
+                
+        st[t]=true;
+        
+        for(int j=1;j<=n;++j)
+            dis[j] =max(dis[j], dis[t] * g[t][j]);
+    }
+}
+
+int main()
+{
+    cin>>n>>m;
+    while (m -- ){
+        int a, b, c;
+        cin>>a>>b>>c;
+        double z = (100.0- c) / 100;
+        g[a][b]=g[b][a]=max(g[a][b], z);
+    }
+    
+    cin>>start>>e;
+    
+    dj();
+    
+    printf("%.8lf\n", 100 / dis[e]);
+    
+    return 0;
+}
+
+
 
 

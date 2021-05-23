@@ -45,3 +45,45 @@ public:
     }
 };
 
+
+
+----------------------- 0523 / 2021/  
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+class Solution {
+public:
+    
+
+    void dfs(TreeNode* u, vector<int> &tmp){ // 要加引用
+        if(!u) return ;
+
+        if(u->left == nullptr && u->right == nullptr) tmp.push_back(u->val);
+        dfs(u->left, tmp);
+        dfs(u->right, tmp);
+
+    }
+
+    bool leafSimilar(TreeNode* root1, TreeNode* root2) {
+        vector<int> tmp1;
+        vector<int> tmp2;
+        dfs(root1, tmp1);
+        dfs(root2, tmp2);
+
+        return tmp2 == tmp1;
+    }
+
+};
+
+

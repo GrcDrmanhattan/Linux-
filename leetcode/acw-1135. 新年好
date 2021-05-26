@@ -152,3 +152,103 @@ int main()
 
 
 
+-----------
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=50010;
+const int M=2e5+10;
+
+int n,m;
+int h[N];
+int ne[M];
+int e[M];
+int w[M];
+int idx;
+int q[N];
+int dis[6][N];
+bool st[N];
+int sour[6];
+
+
+void add(int a ,int b ,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+
+void spfa(int start ,int dis[])
+{
+    memset(dis, 0x3f, N *4);
+    int hh=0;
+    int tt=1;
+    q[0]=start;
+    dis[start]=0;
+    // st[start]=true;
+    
+    while(hh != tt)
+    {
+        int t=q[hh++];
+        if(hh==N) hh=0;
+        st[t]=false;
+        
+        for(int i=h[t];i!=-1;i=ne[i]){
+            int j=e[i];
+            if(dis[j] > dis[t] + w[i]){
+                dis[j] =dis[t] + w[i];
+                if(!st[j]){
+                    q[tt++]=j;
+                    if(tt==N) tt=0;
+                    st[j]=true;
+                }
+            }
+        }
+    }
+}
+
+int dfs(int u, int start ,int distance)
+{
+    if(u==6) return distance;
+    
+    int res=0x3f3f3f3f;
+    
+    for(int i=1;i<=5;++i){
+        if(!st[i]){
+            int next=sour[i];
+            st[i]=true;
+            res=min(res, dfs(u+1, i, distance + dis[start][next]));
+            st[i]=false;
+        }
+    }
+    
+    return res;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    memset(h, -1, sizeof h);
+    sour[0]=1;
+    for(int i=1;i<=5;++i) scanf("%d", &sour[i]);
+    
+    while(m--){
+        int a, b, c;
+        scanf("%d%d%d", &a , &b ,&c);
+        add(a, b ,c);
+        add(b, a ,c);
+    }
+    
+    for(int i=0;i<=5;++i) spfa(sour[i], dis[i]);
+    
+    cout<<dfs(1, 0, 0)<<endl;
+    
+    return 0;
+}
+
+

@@ -139,3 +139,70 @@ int main()
 
 
 
+---------------- 0526  
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 110;
+const int inf = 0x3f3f3f3f;
+
+int n,m;
+int w[N][N];
+int level[N];
+int dis[N];
+bool st[N];
+
+int dj(int l, int r)
+{
+    memset(dis, 0x3f, sizeof dis);
+    memset(st, 0 ,sizeof st);
+    dis[0]=0;
+    
+    for(int i=1;i<=n;++i)
+    {
+        int t=-1;
+        for(int j=0;j<=n;++j)
+            if(!st[j] && (t==-1 || dis[t] > dis[j]))
+                t=j;
+                
+        st[t]=true;
+        
+        for(int j=1;j<=n;++j)
+            if(level[j] >= l && level[j] <= r)
+                dis[j]=min(dis[j], dis[t] + w[t][j]);
+                
+    }
+    
+    return dis[1];
+}
+
+int main()
+{
+    cin>>m>>n;
+    memset(w, 0x3f, sizeof w);
+    for(int i=1;i<=n;++i) w[i][i]=0;
+    
+    for(int i=1;i<=n;++i){
+        int price;
+        int cnt;
+        cin>>price>>level[i]>>cnt;
+        w[0][i]=min(w[0][i], price);
+        
+        while(cnt--){
+            int id;
+            int cost;
+            cin>>id>>cost;
+            w[id][i]=min(w[id][i], cost);
+        }
+    }
+    
+    int res=inf;
+    for(int i=level[1]-m;i<=level[1];++i) res=min(res, dj(i, i+m));
+    cout<<res<<endl;
+    
+    return 0;
+}
+
+

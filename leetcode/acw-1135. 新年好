@@ -252,3 +252,92 @@ int main()
 }
 
 
+--------------- 0526   为什么不对？
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=50010, M=200010;
+
+int n,m;
+int h[N], e[M], ne[M], w[M], idx;
+int dis[6][N];
+bool st[N];
+int q[N];
+
+int sour[6];
+
+void add(int a, int b ,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+
+void spfa(int start ,int dis[])
+{
+    memset(dis, 0x3f , N *4);
+    dis[start]=0;
+    
+    int hh=0;
+    int tt=1;
+    q[0]=start;
+    
+    while(hh != tt)
+    {
+        int t=q[hh++];
+        if(hh == N) hh=0;
+        st[t]=false;
+        
+        for(int i=h[t];i!=-1;i=ne[i]){
+            int j=e[i];
+            if(dis[j] > dis[t] + w[i]){
+                dis[j] = dis[t] + w[i];
+                if(!st[j]){
+                    q[tt++]=j;
+                    if(tt==N) tt=0;
+                    st[j]=true;
+                }
+            }
+        }
+    }
+}
+
+int dfs(int u, int start, int d)
+{
+    if(u==6) return d;
+    int res=0x3f3f3f3f;
+    
+    for(int i=1;i<=5;++i){
+        if(!st[i]){
+            st[i]=true;
+            int next=sour[i];
+            res=min(res, dfs(u+1, i, d + dis[start][next]));
+            st[i]=false;
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    sour[0]=1;
+    for(int i=1;i<=5;++i) scanf("%d", &sour[i]);
+    
+    memset(h, -1, sizeof h);
+    while(m--){
+        int a, b, c;
+        scanf("%d%d%d", &a, &b ,&c);
+        add(a, b, c);
+        add(b, a, c);
+    }
+    
+    for(int i=0;i<=5;++i) spfa(sour[i], dis[i]);
+    printf("%d\n", dfs(1, 0 , 0));
+    return 0;
+}
+

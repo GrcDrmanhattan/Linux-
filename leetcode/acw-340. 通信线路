@@ -42,3 +42,102 @@
 
 ------------------------- 0527  /2021/  yxc
 
+
+
+// 路径的权重被定义是第k+1大的值
+// 1相当于求最大的最小，第k+1大的最小，所以可以二分
+
+// 图中边权只有0和1，可以双端bfs
+// 时间O（n+p）logl  大约20万
+// 求出从1到n最少经过几条长度大于x的边，这就是最短路问题，可以将图中大于x的权重为1，小于x的为0，求最短距离
+// 距离就是所求的条数
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include<deque>
+
+using namespace std;
+const int N = 1010;
+const int M=20010;
+
+int n,m,k;
+int h[N];
+int w[M];
+int ne[M];
+int e[M];
+int idx;
+
+int dis[N];
+bool st[N];
+deque<int> q;
+
+void add(int a, int b ,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+}
+
+bool check(int mid)
+{
+    memset(st, 0, sizeof(st));
+    memset(dis, 0x3f ,sizeof(dis));
+    dis[1]=0;
+    
+    q.push_back(1);
+    
+    while(q.size())
+    {
+        int t=q.front();
+        q.pop_front();
+        
+        if(st[t]) continue;
+        st[t]=true;
+        
+        for(int i=h[t];i!=-1;i=ne[i]){
+            int j=e[i];
+            int v=w[i] > mid;
+            
+            if(dis[j] > dis[t] + v){
+                dis[j] = dis[t] + v;
+                
+                if(v==0) q.push_front(j); // 权重0放入队列头
+                else q.push_back(j); // 权重1放入队列尾部
+            } 
+        }
+    }
+    
+    return dis[n] <= k;
+}
+
+int main()
+{
+    cin>>n>>m>>k;
+    memset(h, -1, sizeof h);
+    
+    while (m -- ){
+        int a, b, c;
+        cin>>a>>b>>c;
+        add(a, b ,c);
+        add(b, a, c);
+    }
+    
+    
+    int l=0;
+    int r=1e6+1;
+    while(l<r){
+        int mid=l+r>>1;
+        if(check(mid)) r=mid;
+        else l=mid+1;
+    }
+    
+    if(r==1e6+1) r=-1;
+    cout<<r<<endl;
+    
+    return 0;
+}
+
+

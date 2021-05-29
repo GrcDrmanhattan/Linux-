@@ -52,3 +52,142 @@ NO PATH
 
 --------------------- 0528  /2021/  yxc 
 
+
+// spfa被卡，Okm，k是常数，最坏是Onm为bellford算法
+// 所有边权是非负的可以，堆优化dj算法，mlogn
+// 按照拓扑序更新每个点，可以保证到每个点时最短距离可以求，时间是线性的，边权可以正负
+// 单源最短路和拓扑排序的结合
+
+// 时间瓶颈要看dj算法，每个团内dj 时间m1logn1+m2logn2 +... 扩大为(m1+m2+m3..)logn 就是mlgon
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+
+using namespace std;
+const int N = 25010 , M=150010;
+const int inf =0x3f3f3f3f;
+
+#define x first
+#define y second
+typedef pair<int, int> PII;
+
+
+int n, mr,mp, S;
+
+int h[N];
+int e[M];
+int ne[M];
+int w[M];
+int idx;
+
+int din[N];// 入度
+int id[N];// 每个点对应的连通块的id
+int cnt; // 连通块的个数
+vector<int> block[N]; // 每个连通块包含的点
+
+int dis[N];
+queue<int> q;
+bool st[N];
+
+void add(int a, int b ,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+
+void dfs(int u ,int cur) // cur当前的连通块的id
+{
+    id[u]=cur;
+    block[cur].push_back(u);
+    
+    for(int i=h[u];i!=-1;i=ne[i]){ //遍历当前点的邻居
+        int j=e[i];
+        if(!id[j]) dfs(j, cur);
+    }
+}
+
+
+void dj(int bid) // 堆优化dj算法
+{
+    priority_queue<PII, vector<PII> , greater<PII>> hp;
+    
+    for(auto x:block[bid]) hp.push({dis[x], x});
+    
+    while(hp.size()){
+        auto t=hp.top();
+        hp.pop();
+        
+        int v=t.y;
+        // int d=t.x;
+        if(st[v]) continue;
+        st[v]=true;
+        
+        for(int i=h[v];i!=-1;i=ne[i]){
+            int j=e[i];
+            if(dis[j] > dis[v] + w[i]){
+                
+                dis[j]=dis[v] + w[i];
+                if(id[j] == id[v]) hp.push({dis[j], j});
+            }
+            
+            if(id[j] != id[v] && --din[id[j]] == 0) q.push(id[j]);
+        }
+    }
+}
+
+void topsort()
+{
+    memset(dis, 0x3f ,sizeof dis);
+    dis[S]=0;
+    
+    for(int i=1;i<=cnt;++i)
+        if(!din[i])
+            q.push(i); // 将入度为0的块id放入队列
+            
+    while(q.size()){
+        int t=q.front();
+        q.pop();
+        dj(t);
+    }
+}
+
+int main()
+{
+    scanf("%d%d%d%d", &n, &mr, &mp, &S);
+    memset(h, -1, sizeof h);
+    
+    while(mr -- ){
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        add(a, b, c);
+        add(b, a, c);
+    }
+    
+    for(int i=1;i<=n;++i){
+        if(!id[i])
+            dfs(i, ++cnt);
+    }
+    
+    while(mp -- ){
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        add(a, b ,c);
+        din[id[b]]++;
+    }
+    
+    topsort();
+    
+    for(int i=1;i<=n;++i){
+        if(dis[i] > inf/ 2) puts("NO PATH");
+        else printf("%d\n", dis[i]);
+    }
+    
+    return 0;
+}
+
+

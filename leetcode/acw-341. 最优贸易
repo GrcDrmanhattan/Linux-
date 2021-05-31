@@ -77,7 +77,7 @@ const int N = 100010, M=2e6+10;
 int n ,m;
 int hs[N]; // 正向边
 int ht[N]; // 反向边
-int w[N] ;
+int w[N] ; // 点的权重 范围是N
 int ne[M];
 int e[M];
 int idx;

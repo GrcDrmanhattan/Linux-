@@ -1,0 +1,79 @@
+472. 连接词
+
+给定一个不含重复单词的列表，编写一个程序，返回给定单词列表中所有的连接词。
+
+连接词的定义为：一个字符串完全是由至少两个给定数组中的单词组成的。
+
+示例:
+
+输入: ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]
+
+输出: ["catsdogcats","dogcatsdog","ratcatdogcat"]
+
+解释: "catsdogcats"由"cats", "dog" 和 "cats"组成; 
+     "dogcatsdog"由"dog", "cats"和"dog"组成; 
+     "ratcatdogcat"由"rat", "cat", "dog"和"cat"组成。
+说明:
+
+给定数组的元素总数不超过 10000。
+给定数组中元素的长度总和不超过 600000。
+所有输入字符串只包含小写字母。
+不需要考虑答案输出的顺序。
+
+
+
+-------------------------------------- 0121 /2021 / yxc
+
+
+
+// 一个字符串一般一维dp
+// f[i] 前i个字符可以由哪些单词组成的集合，取单词数最大的为f[i]
+// 正常是枚举i从前到后的长度，然后枚举j最后一个单词的长度从1到i，f[i]=max(f[i], f[i-j]+1 ) ,先枚举i，然后看从哪个状态可以更新状态i
+
+
+//但是为了剪枝方便，从每个子状态开始枚举可以更新哪个状态
+
+// 时间 ：n^3 * m, n是每个单词长度，m是有多少个单词 
+
+
+
+class Solution {
+public:
+    unordered_set<string> s;
+
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        vector<string> res;
+        for(auto x:words) s.insert(x);
+        
+        for(auto &x:words)
+        {
+            if(check(x)) res.push_back(x);
+        }
+
+        return res;
+    }
+
+
+    bool check(string& x)
+    {
+        int n = x.size();
+        vector<int> f(n+1, INT_MIN);
+        f[0]=0;
+
+        for(int i=0;i<=n;++i) // 
+        {
+            if(f[i]<0) continue;
+            for(int j=n-i;j;--j)
+            {
+                if(s.count(x.substr(i, j))) // 存在，说明f[i]可以更新f[i+j]
+                    f[i+j] = max(f[i+j], f[i]+1); // 用f[i] 更新i往后j长度的单词 ，i+j<= n, 所以j最大是n-i
+                if(f[n]>1) return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+
+

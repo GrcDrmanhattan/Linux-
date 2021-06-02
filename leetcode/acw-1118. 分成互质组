@@ -1,0 +1,236 @@
+1118. 分成互质组
+ 题目描述
+给定 n 个正整数，将它们分组，使得每组中任意两个数互质。
+
+至少要分成多少个组？
+
+输入格式
+第一行是一个正整数 n。
+
+第二行是 n 个不大于10000的正整数。
+
+输出格式
+一个正整数，即最少需要的组数。
+
+数据范围
+1≤n≤10
+
+输入样例：
+6
+14 20 33 117 143 175
+输出样例：
+3
+
+################################################333   难度++
+
+//分组使得每组内没有边连接，有边连接相当于有因数关系
+//组合问题不考虑顺序,按照组合枚举
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+int p[N];
+int group[N][N];
+int res=N;
+bool st[N];
+
+
+int gcd(int a,int b)//ab是否互质
+{
+    return b ? gcd(b,a%b) :a ;
+}
+
+
+bool check(int group[],int gc,int i)
+{
+    for(int j=0;j<gc;++j)
+        if(gcd(p[group[j]],p[i])>1) //最大公约数大于1
+            return false;//不是互质
+            
+    return true;//
+}
+
+
+void dfs(int g,int gc,int tc,int start)//第几组，当前组内下标，当前一共有多少元素，当前可以从哪个元素开始搜
+{
+    if(g>=res) return;
+    if(tc==n) res=g;
+    
+    bool flag=true;//true表示组不可以添加元素
+    
+    for(int i=start;i<n;++i)
+    {
+        if(!st[i] && check(group[g],gc,i))//没有用过i，并且当前组内所有元素和i互质
+        {
+            st[i]=true;
+            group[g][gc]=i;
+            
+            dfs(g,gc+1,tc+1,i+1);
+            
+            st[i]=false;
+            
+            flag=false;
+        }
+    }
+    
+    if(flag) dfs(g+1,0,tc,0);//新开一个组
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>p[i];
+    
+    dfs(1,0,0,0);
+    
+    cout<<res<<endl;
+}
+
+
+
+//分组使得每组内没有边连接，有边连接相当于有因数关系
+//组合问题不考虑顺序,按照组合枚举
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+int p[N];
+int group[N][N];
+int res=N;
+bool st[N];
+
+
+int gcd(int a,int b)//ab是否互质
+{
+    return b ? gcd(b,a%b) :a ;
+}
+
+
+bool check(int group[],int gc,int i)
+{
+    for(int j=0;j<gc;++j)
+        if(gcd(p[group[j]],p[i])>1) //最大公约数大于1
+            return false;//不是互质
+            
+    return true;//
+}
+
+
+void dfs(int g,int gc,int tc,int start)//第几组，当前枚举到组内下标的元素，当前一共处理多少元素，当前可以从哪个元素开始搜
+{
+    if(g>=res) return;
+    if(tc==n) res=g;
+    
+    bool flag=true;//true表示组不可以添加元素
+    
+    for(int i=start;i<n;++i)
+    {
+        if(!st[i] && check(group[g],gc,i))//没有用过i，并且当前组内所有元素和i互质
+        {
+            st[i]=true;
+            group[g][gc]=i;
+            
+            dfs(g,gc+1,tc+1,i+1);
+            
+            st[i]=false;
+            
+            flag=false;
+        }
+    }
+    
+    if(flag) dfs(g+1,0,tc,0);//新开一个组
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>p[i];
+    
+    dfs(1,0,0,0);
+    
+    cout<<res<<endl;
+}
+
+--------------------- 0414 / 2021/ 
+
+// 组内搜索，组合问题不考虑里面的数字顺序
+// 搜索顺序按照一组一组的搜索，先看第一组可以放哪些，然后继续向下搜索，属于爆搜问题
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=12;
+
+int s[N];
+int group[N][N];
+int res=N;
+
+bool st[N];
+int n;
+
+int gcd(int a, int b){
+    return b ? gcd(b, a%b) : a;
+}
+
+bool check(int g[], int gc, int i){
+    for(int j=0;j<gc;++j){ // 当前组内一共有gc个元素
+        if(gcd(s[g[j]] , s[i]) > 1) 
+            return false;
+    }
+    
+    return true;
+}
+
+void dfs(int g ,int gc, int tc, int start){ // 当前搜第几组，当前组内第几个元素，已经搜了多少个元素，从哪个开始
+    if(g >= res) return ;
+    
+    if(tc == n) res=g;
+    
+    bool f=true;
+    for(int i=start;i<n;++i){
+        if(!st[i] && check(group[g] , gc , i)){
+            st[i]=true;
+            group[g][gc]=i;
+            
+            dfs(g, gc+1, tc+1, i+1);
+            
+            st[i]=false;
+            f=false;
+            
+        }
+    }
+    
+    if(f) dfs(g+1, 0, tc, 0);
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>s[i];
+    
+    memset(st, 0 ,sizeof(st));
+    
+    dfs(1 , 0, 0, 0);
+    
+    cout<<res<<endl;
+    
+    return 0;
+}
+
+

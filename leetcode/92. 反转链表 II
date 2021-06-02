@@ -1,0 +1,194 @@
+92. 反转链表 II
+
+反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+说明:
+1 ≤ m ≤ n ≤ 链表长度。
+
+示例:
+
+输入: 1->2->3->4->5->NULL, m = 2, n = 4
+输出: 1->4->3->2->5->NULL
+
+##################################
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+//0822
+
+class Solution 
+{
+    ListNode* success=NULL;
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) 
+    {
+        if(m==1) //相当于反转从head开始的n个节点
+        {
+            return reverseN(head,n);
+        }
+
+        //head->next连接 后面反转好的链表头，【从head-next开始，位置从m-1到n-1，】，因为少了head所以减1
+
+        head->next=reverseBetween(head->next,m-1,n-1);
+        return head;
+
+    }
+
+    //反转前n个节点
+    ListNode* reverseN(ListNode* head,int n)
+    {
+        if(n==1)
+        {
+            success=head->next;
+            return head;
+        }
+
+        ListNode* last=reverseN(head->next,n-1); //反转后的头
+        head->next->next=head;   //把head加到反转后的链表结尾
+        head->next=success;   //反转后的尾，要链接null
+        return last;  //返回头
+    }
+};
+
+
+
+------------------------------------------------------ 0120 / 2021/  self
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        auto d=new ListNode(-1);
+        d->next= head;
+        if(!head) return head;
+
+        auto p=d;
+        for(int i=0;i<m;++i) p=p->next; // p前进m到位置m ，从虚拟头要前进m步，从head开始要前进m-1步
+
+        auto q=d;
+        for(int i=0;i<n;++i) q=q->next;// q到n
+
+        ListNode* a=p;
+        ListNode* b=a->next;
+
+        // 反转m到n之间
+        for(int i=0;i<n-m;++i) // 结束后a指向位置n， b指向n的下一个位置
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;
+            b=c;
+        }
+        
+        auto t=d;
+        for(int i=0;i<m-1;++i) t=t->next; // 要先找到m的前一个位置，
+
+        t->next=a;
+        p->next=b; // 
+
+        return d->next;
+    }
+};
+
+
+
+------------------------------------------ 0130  简化版
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+ 
+
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+    
+        auto d=new ListNode(-1);
+        d->next=head;
+
+        auto p=d;
+        for(int i=0;i<m-1;++i) p=p->next; // p指向m前一个位置
+
+        auto a=p->next;
+        auto b=a->next;
+
+        for(int i=0;i< n-m ;++i)
+        {
+            auto c=b->next;
+            b->next =a ;
+            a=b;
+            b=c;
+        }
+
+        p->next->next=b;
+        p->next =a;
+        return d->next;
+    }
+};
+
+
+------------------------------ 0322 / 2021/  
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(!head || !head->next) return head;
+
+        auto d=new ListNode(-1);
+        d->next=head;
+        
+        auto p=d;
+        for(int i=0;i<left-1;++i) p=p->next; //p 现在指向1 ,for结束后p指向left的前一个节点
+
+        auto a=p->next;
+        auto b=a->next;
+        for(int i=0;i<right-left;++i) 
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;
+            b=c;
+        }
+
+        p->next->next=b;
+        p->next=a;
+        return d->next;
+    }
+};
+
+
+

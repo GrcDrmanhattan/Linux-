@@ -1,0 +1,327 @@
+1097. 池塘计数
+农夫约翰有一片 N∗M 的矩形土地。
+
+最近，由于降雨的原因，部分土地被水淹没了。
+
+现在用一个字符矩阵来表示他的土地。
+
+每个单元格内，如果包含雨水，则用”W”表示，如果不含雨水，则用”.”表示。
+
+现在，约翰想知道他的土地中形成了多少片池塘。
+
+每组相连的积水单元格集合可以看作是一片池塘。
+
+每个单元格视为与其上、下、左、右、左上、右上、左下、右下八个邻近单元格相连。
+
+请你输出共有多少片池塘，即矩阵中共有多少片相连的”W”块。
+
+样例
+输入样例：
+
+10 12
+W........WW.
+.WWW.....WWW
+....WW...WW.
+.........WW.
+.........W..
+..W......W..
+.W.W.....WW.
+W.W.W.....W.
+.W.W......W.
+..W.......W.
+
+输出样例:
+
+3
+
+#################################################################################   FloodFill 模型
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+#define x first 
+#define y second
+
+typedef pair<int,int> PII;
+
+const int N=1010,M=N*N;
+
+PII q[M];
+int n,m;
+char g[N][N];
+bool st[N][N];
+
+void bfs(int sx,int sy)//输入起点
+{
+    int hh=0;
+    int tt=0;
+    q[0]={sx,sy};//放入队列
+    st[sx][sy]=true;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        
+        for(int i=t.x-1;i<=t.x+1;++i)
+            for(int j=t.y-1;j<=t.y+1;++j)
+            {
+                if(i==t.x && j==t.y) continue;
+                if(i>=0 && i<n && j>=0 && j<m && g[i][j]=='W' && !st[i][j])
+                {
+                    st[i][j]=true;
+                    q[++tt]={i,j};
+                }
+            }
+    }
+}
+
+
+int main()
+{
+    scanf("%d%d",&n,&m);
+    
+    for(int i=0;i<n;++i) scanf("%s",g[i]);
+    
+    int cnt=0;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]=='W' && !st[i][j])
+            {
+                bfs(i,j);
+                cnt++;//当不能扩散说明找到一个连通块，就跳出bfs，cnt++
+            }
+    
+    
+    printf("%d\n",cnt);
+    
+    return 0;
+}
+
+
+
+---------------------- 0321/  2021/  
+
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+const int N=1010;
+
+char g[N][N];
+int n,m;
+
+bool st[N][N];
+queue<pair<int ,int>> q;
+
+void bfs(int x, int y)
+{
+    
+    st[x][y]=true;
+    q.push({x, y});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        int a=t.first;
+        int b=t.second;
+        
+        for(int i=a-1;i<=a+1;++i)
+            for(int j=b-1;j<=b+1;++j)
+            {
+                if(i==a && j==b) continue;
+                if(i>=0 && i<n && j>=0 && j<m && g[i][j] =='W' &&!st[i][j]  )
+                {
+                    q.push({i, j});
+                    st[i][j]=true;   // 两种都可以ac？？？？
+                    // bfs(i, j);
+                }
+            }
+    }
+    
+}
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+    
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]=='W' && !st[i][j])
+            {
+                bfs(i ,j);
+                res++;
+            }
+        }
+        
+        
+    cout<<res<<endl;
+    return 0;
+}
+
+
+
+
+
+-------------------- 0321  
+
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+const int N=1010;
+
+char g[N][N];
+int n,m;
+
+bool st[N][N];
+queue<pair<int ,int>> q;
+
+void bfs(int x, int y)
+{
+    
+    st[x][y]=true;
+    q.push({x, y});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        int a=t.first;
+        int b=t.second;
+        
+        for(int i=a-1;i<=a+1;++i)
+            for(int j=b-1;j<=b+1;++j)
+            {
+                if(i==a && j==b) continue;
+                if(i>=0 && i<n && j>=0 && j<m && g[i][j] =='W' &&!st[i][j]  )
+                {
+                    q.push({i, j});
+                    // st[i][j]=true;
+                    bfs(i, j);
+                }
+            }
+    }
+    
+}
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+    
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]=='W' && !st[i][j])
+            {
+                bfs(i ,j);
+                res++;
+            }
+        }
+        
+        
+    cout<<res<<endl;
+    return 0;
+}
+
+
+
+------------- 0321 / 2021 / yxc 依据
+
+
+#include<iostream>
+#include<queue>
+
+using namespace std;
+
+const int N=1010;
+
+char g[N][N];
+int n,m;
+
+bool st[N][N];
+queue<pair<int ,int>> q;
+
+void bfs(int x, int y)
+{
+    
+    st[x][y]=true; // 标记起点
+    q.push({x, y}); // 将起点放入
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        int a=t.first;
+        int b=t.second;
+        
+        for(int i=a-1;i<=a+1;++i)
+            for(int j=b-1;j<=b+1;++j)
+            {
+                if(i==a && j==b) continue;
+                if(i>=0 && i<n && j>=0 && j<m && g[i][j] =='W' &&!st[i][j]  )
+                {
+                    q.push({i, j});
+                    st[i][j]=true;
+
+                }
+            }
+    }
+    
+}
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+    
+    int res=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]=='W' && !st[i][j]) // 每次找到一个起点就加入队列，bfs开始
+            {
+                bfs(i ,j);
+                res++;
+            }
+        }
+        
+    cout<<res<<endl;
+    return 0;
+}
+
+
+
+
+
+

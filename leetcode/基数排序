@@ -1,0 +1,121 @@
+基数排序， 按每一位排序
+
+-------------------------- 0213 / 2021/ yxc
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=2e5+10;
+
+
+vector<int> q;
+int n;
+
+void bubble(vector<int>& q)
+{
+    for(int i=q.size()-1 ;i > 0;--i)
+    {
+        bool f=false; // 没有交换过    
+    
+        for(int j=0;j + 1 <=i ;++j)
+            if(q[j]>q[j+1]) {
+                swap(q[j] , q[j+1]);
+                f=true;
+            }
+            
+        if(!f) break;//如果一次循环没有交换过，既说明已经排序完
+    }
+}
+
+void select(vector<int>&q)
+{
+    for(int i=0;i<q.size();++i) // 从i开始排序，i之前已经排好序
+        for(int j=i+1; j< q.size();++j)
+        {
+            if(q[j] < q[i]) swap(q[i], q[j]); //每次将小的交换到最开始
+        }
+}
+
+
+void insert(vector<int>&q) // 插入排序
+{
+    for(int i=1;i<q.size();++i)// 从1开始，假设第0个已经排好序了
+    {
+        int t=q[i];
+        int j;
+        for(j=i-1; j>=0;--j)
+        {
+            if(q[j] > t) q[j+1]=q[j];
+            else break;
+        }
+        q[j+1]=t;
+        
+    }
+}
+
+
+void count_sort() //计数排序
+{
+    vector<int> cnt(101, 0);// 假设有100个数
+    for(int i=1;i<=n;++i) cnt[q[i]]++;
+    
+    // int k=1;
+    for(int i=1 ,k=1;i<=100;++i)
+    {
+        while(cnt[i])
+        {
+            q[k++]=i; // 将第i个数放在q数组中
+            cnt[i]--; // 将出现的次数减少
+        }
+    }
+}
+
+
+// 基数排序--------------------------------
+
+
+int get(int x,int i) // 取出x的某一位 ，假设三位数， 0个位 ，1 十位， 2 百位
+{
+    while(i--) x/=10; // 除法 取模 的运算常数很大 ，几十个时钟周期， 实际基数排序效果不好
+    return x%10;
+}
+
+void radix_sort()  // 基数排序 ，最多0-9循环10次，排序每一位，假设三位数循环三次
+{
+    vector<vector<int>> cnt(10); // 最多10位
+    for(int i=0;i<3;++i)
+    {
+        for(int j=0; j<10 ;++j) cnt[j].clear();
+        
+        for(int j=1;j<=n;++j)
+        {
+            cnt[get(q[j] , i)].push_back(q[j]);
+        }
+        
+        for(int j=0, k=1;j<10;++j)
+            for(int x:cnt[j]) q[k++]=x;
+    }
+}
+
+int main()
+{
+    
+    cin>>n;
+    
+    q.resize(n+1);
+    
+    for(int i=1;i<=n;++i) cin>>q[i];
+    
+    
+    radix_sort();
+    
+    for(int i=1;i<=n;++i) cout<<q[i]<<' ';
+    cout<<endl;
+    
+    return 0;
+}
+
+
+

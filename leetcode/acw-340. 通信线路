@@ -1,0 +1,143 @@
+340. 通信线路
+
+在郊区有 N 座通信基站，P 条 双向 电缆，第 i 条电缆连接基站 Ai 和 Bi。
+
+特别地，1 号基站是通信公司的总站，N 号基站位于一座农场中。
+
+现在，农场主希望对通信线路进行升级，其中升级第 i 条电缆需要花费 Li。
+
+电话公司正在举行优惠活动。
+
+农产主可以指定一条从 1 号基站到 N 号基站的路径，并指定路径上不超过 K 条电缆，由电话公司免费提供升级服务。
+
+农场主只需要支付在该路径上剩余的电缆中，升级价格最贵的那条电缆的花费即可。
+
+求至少用多少钱可以完成升级。
+
+输入格式
+第 1 行：三个整数 N，P，K。
+
+第 2..P+1 行：第 i+1 行包含三个整数 Ai,Bi,Li。
+
+输出格式
+包含一个整数表示最少花费。
+
+若 1 号基站与 N 号基站之间不存在路径，则输出 −1。
+
+数据范围
+0≤K<N≤1000,
+1≤P≤10000,
+1≤Li≤1000000
+输入样例：
+5 7 1
+1 2 5
+3 1 4
+2 4 8
+3 2 3
+5 2 9
+3 4 7
+4 5 6
+输出样例：
+4
+
+------------------------- 0527  /2021/  yxc
+
+
+
+// 路径的权重被定义是第k+1大的值
+// 1相当于求最大的最小，第k+1大的最小，所以可以二分
+
+// 图中边权只有0和1，可以双端bfs
+// 时间O（n+p）logl  大约20万
+// 求出从1到n最少经过几条长度大于x的边，这就是最短路问题，可以将图中大于x的权重为1，小于x的为0，求最短距离
+// 距离就是所求的条数
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include<deque>
+
+using namespace std;
+const int N = 1010;
+const int M=20010;
+
+int n,m,k;
+int h[N];
+int w[M];
+int ne[M];
+int e[M];
+int idx;
+
+int dis[N];
+bool st[N];
+deque<int> q;
+
+void add(int a, int b ,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+}
+
+bool check(int mid)
+{
+    memset(st, 0, sizeof(st));
+    memset(dis, 0x3f ,sizeof(dis));
+    dis[1]=0;
+    
+    q.push_back(1);
+    
+    while(q.size())
+    {
+        int t=q.front();
+        q.pop_front();
+        
+        if(st[t]) continue;
+        st[t]=true;
+        
+        for(int i=h[t];i!=-1;i=ne[i]){
+            int j=e[i];
+            int v=w[i] > mid;
+            
+            if(dis[j] > dis[t] + v){
+                dis[j] = dis[t] + v;
+                
+                if(v==0) q.push_front(j); // 权重0放入队列头
+                else q.push_back(j); // 权重1放入队列尾部
+            } 
+        }
+    }
+    
+    return dis[n] <= k;
+}
+
+int main()
+{
+    cin>>n>>m>>k;
+    memset(h, -1, sizeof h);
+    
+    while (m -- ){
+        int a, b, c;
+        cin>>a>>b>>c;
+        add(a, b ,c);
+        add(b, a, c);
+    }
+    
+    
+    int l=0;
+    int r=1e6+1;
+    while(l<r){
+        int mid=l+r>>1;
+        if(check(mid)) r=mid;
+        else l=mid+1;
+    }
+    
+    if(r==1e6+1) r=-1;
+    cout<<r<<endl;
+    
+    return 0;
+}
+
+

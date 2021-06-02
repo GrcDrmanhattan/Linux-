@@ -1,0 +1,161 @@
+剑指 Offer 13. 机器人的运动范围
+
+地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），
+也不能进入行坐标和列坐标的数位之和大于k的格子。例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。
+请问该机器人能够到达多少个格子？
+
+ 
+
+示例 1：
+
+输入：m = 2, n = 3, k = 1
+输出：3
+示例 2：
+
+输入：m = 3, n = 1, k = 0
+输出：1
+提示：
+
+1 <= n,m <= 100
+0 <= k <= 20
+
+
+
+
+-------------------   类内初始化 leetcode   DFS self
+
+bool st[110][110];
+
+class Solution {
+public:
+    int res=0;
+    int dx[4]={0,1,0,-1};
+    int dy[4]={1,0,-1,0};
+    
+    int movingCount(int m, int n, int k) {
+        if(!m || !n) return 0;
+        memset(st,0,sizeof(st));
+        dfs(0,0,m,n, k);
+        return res;
+    }
+
+    int get(int a,int b)
+    {
+        return a%10 +a/10 + b%10 + b/10;
+    }
+
+    void dfs(int x,int y,int m,int n, int k)
+    {   
+        res++;
+        st[x][y]=true;
+    
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<m && b>=0 && b<n && !st[a][b] && get(a,b) <=k)
+            {
+                st[a][b]=true;
+                dfs(a,b,m,n,k);
+            }
+        }
+    }
+};
+
+
+------------------------------------- 0213 / 2021/  yxc  BFS
+
+
+
+class Solution {
+public:
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    
+    bool st[110][110];
+    int res=0;
+    int get(int x ,int y)
+    {
+        return x%10 + x/10 + y%10 + y/10;
+    }
+
+    int movingCount(int m, int n, int k) {
+        if(!m || !n) return 0;
+        
+        memset(st ,false, sizeof(st));
+        queue<pair<int, int >> q;
+        q.push({0 , 0});
+
+        while(q.size())
+        {
+            auto t=q.front();
+            q.pop();
+
+            if(get(t.first, t.second)> k || st[t.first][t.second]) continue;
+            res++;
+            st[t.first][t.second]=true;
+
+            for(int i=0;i<4;++i)
+            {
+                int a=t.first+dx[i];
+                int b=t.second+dy[i];
+
+                if(a>=0 && a< m && b>=0 && b<n )
+                {
+                    q.push({a, b});
+
+                }
+            }
+        }
+
+        return res;
+    }
+
+};
+
+
+----------------------------- 0223; 2021   典型的bfs
+
+
+class Solution {
+public:
+    int get(int x, int y ){
+        return x%10 + x/10 + y%10 + y/10; 
+    }
+
+
+    int movingCount(int m, int n, int k) {
+        int res=0;
+        bool st[110][110];
+        memset(st, 0 ,sizeof(st));
+        int dx[]={0, 1, 0, -1};
+        int dy[]={1, 0, -1, 0};
+        queue<pair<int, int>> q;
+
+        q.push({0,0});
+
+        while(q.size())
+        {
+            auto t=q.front();
+            q.pop();
+            int x=t.first;
+            int y=t.second;
+
+            if(st[x][y] || get(x, y)>k) continue;
+            st[x][y]=true;
+            res++;
+
+            for(int i=0;i<4;++i){
+                int a=x+dx[i];
+                int b=y+dy[i];
+                if(a>=0 && a<n && b>=0 && b<m) q.push({a, b});
+            }
+        }
+
+        return res;
+    }
+};
+
+
+

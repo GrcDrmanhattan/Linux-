@@ -1,0 +1,283 @@
+
+
+给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。
+
+如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+
+ 
+
+示例：
+
+给你这个链表：1->2->3->4->5
+
+当 k = 2 时，应当返回: 2->1->4->3->5
+
+当 k = 3 时，应当返回: 3->2->1->4->5
+
+
+
+
+
+###############################################
+/**
+ * Definition for singly-linked list.
+ * struct ListNode 
+ {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+// class Solution 
+// {
+// public:
+//     ListNode* reverseKGroup(ListNode* head, int k) 
+//     {
+//         if(!head) return head;
+//         ListNode* p=head;
+//         int cnt=0;
+        
+//         while(p)
+//         {
+//             cnt++;
+//             p=p->next;
+//             if(cnt==k) break;
+            
+//         }
+
+//         if(cnt==k)
+//         {
+//             ListNode* before=head;
+//             ListNode* tail=head;
+//             ListNode* tmp=head->next;
+//             while(--cnt)//只能--cnt，不能cnt--
+//             {
+                
+//                 head=tmp;
+//                 tmp=tmp->next;
+//                 head->next=before;
+//                 before=head;
+//             }
+
+//             tail->next=reverseKGroup(p,k);
+//             return head;
+//         }
+
+//         return head;
+//     }
+// };
+
+
+//0813 题解lbldong，通俗易懂
+
+
+class Solution
+{
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) 
+    {
+        if(head==NULL) return head;
+        ListNode* a=head;
+        ListNode* b=head;
+        
+
+        for(int i=0;i<k;++i)
+        {
+            if(b==NULL) return head;
+            b=b->next;
+        }
+
+        ListNode* newhead=helper(a,b);//反转后，a在尾部
+
+        a->next=reverseKGroup(b,k);//
+
+        return newhead;
+    }
+
+    //反转[a,b)之间的链表
+    ListNode* helper(ListNode* a,ListNode* b)
+    {
+        //pre->cur->nxt
+        ListNode* pre=NULL;
+        ListNode* cur=a;
+        ListNode* nxt=a;
+
+        while(cur!=b)
+        {
+            nxt=cur->next;
+            cur->next=pre;//指针反转，指向前一个
+            pre=cur;
+            cur=nxt;
+        }
+
+        return pre;
+    }
+
+};
+
+
+
+
+----------------------------------- 0126 / 2021/  yxc
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+
+
+// p指向要翻转的前一个节点
+// k个节点要修改k-1个边， 所以要循环k-1次
+
+
+// d->1 -> 2 - >3 -> 4 -> 5 -> #
+
+
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        auto d=new ListNode(-1);
+        d->next=head;
+   
+        for(auto p=d;;)
+        {
+            auto q=p;//先看后面是否足够k个节点，不够就break
+            for(int i=0;i<k && q;++i) q=q->next; // 正好移动3次，q从d开始，移动三次到节点3
+
+            if(!q) break;
+
+            //循环k-1次，改变边的指向
+            auto a=p->next;
+            auto b=a->next;
+        
+            for(int i=0;i<k-1;++i)
+            {
+                auto c=b->next;//暂时存存储
+                b->next=a;
+                a=b;
+                b=c;
+            }
+
+            auto tmp=p->next;
+            p->next=a;
+            tmp->next=b;
+            
+            p=tmp; // p 指向下一组k个节点的前一个节点， 画图就看明白
+        }
+
+        return d->next;
+    }
+};
+
+
+
+
+-------------------------------------------- 0130 / 2021  self 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        auto d=new ListNode(-1);
+        d->next=head;
+
+        for(auto p=d;p;) // 每次循环开始p始终指向k个节点的前一个节点
+        {
+            auto q=p;
+            for(int i=0;i<k && q ;++i) q=q->next; // 先看看是否够k个元素，看看第k个元素是否存在
+            if(!q) break;
+
+            auto a=p->next;
+            auto b=a->next;
+
+            for(int i=0;i<k-1;++i) // 反转k-1个边
+            {
+                auto c=b->next;
+                b->next=a;
+                a=b;
+                b=c;
+            }
+
+            auto t=p->next;
+
+            p->next->next=b;
+            p->next=a;
+            p=t; //最后要将p指向下一次反转的前一个节点，就像刚开始p指向虚拟头节点一样
+
+        }
+
+        return d->next;
+    }
+};
+
+
+-------------------------------- 0312/ 2021  // 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+
+        auto d=new ListNode(-1);
+        d->next=head;
+
+        for(auto p=d;p;)
+        {
+            auto q=p;
+            for(int i=0;i<k && q;++i) q=q->next;
+            if(!q) break;
+
+            auto a=p->next;
+            auto b=a->next;
+
+            for(int i=0;i<k-1;++i)
+            {
+                auto c=b->next;
+                b->next=a;
+                a=b;
+                b=c;
+            }
+
+            auto tmp=p->next;
+
+            p->next->next=b;
+            p->next=a;
+
+            p=tmp;
+        }
+        return d->next;
+    }
+};
+
+
+

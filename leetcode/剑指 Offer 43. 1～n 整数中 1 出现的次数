@@ -1,0 +1,61 @@
+剑指 Offer 43. 1～n 整数中 1 出现的次数
+
+输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。
+
+例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。
+
+ 
+
+示例 1：
+
+输入：n = 12
+输出：5
+示例 2：
+
+输入：n = 13
+输出：6
+ 
+
+限制：
+
+1 <= n < 2^31
+
+----------------------------- 0219 / 2021/ 
+
+
+class Solution {
+public:
+    int countDigitOne(int n) {
+        if(!n) return 0;
+        int res=0;
+
+        vector<int> num; // n 123456, num 654321
+        while(n){
+            num.push_back(n % 10);
+            n/=10;
+        }
+
+        for(int i=num.size()-1; i>=0; --i){
+            int ll=0;
+            int rr=0;
+            int t=1;
+
+            for(int j=num.size() -1 ;j>i; --j) ll= ll * 10 + num[j];
+            for(int j=i-1; j>=0; --j) rr=rr*10 + num[j], t *=10;
+
+            res += ll * t;
+
+            if(num[i]==1){
+                res += rr + 1;
+            }else if (num[i] > 1){
+                res += t;
+            }
+
+        }
+
+        return res;
+
+    }
+};
+
+

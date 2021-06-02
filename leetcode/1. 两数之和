@@ -1,0 +1,111 @@
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
+
+ 
+
+示例:
+
+给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+
+======================================
+
+// class Solution 
+// {
+// public:
+//     vector<int> twoSum(vector<int>& nums, int target) 
+//     {
+//         // vector<int> tmp;
+//         vector<int> res;
+//         for(int i=0;i<nums.size();++i)
+//         {
+//             for(int j=1+i;j<nums.size();++j) //j从i+1开始
+//             {
+//                 if(nums[i]+nums[j]==target)
+//                 {
+//                     res.push_back(i);
+//                     res.push_back(j);
+//                     // break;
+//                 }
+//             }
+//         }
+   
+//         return res;
+//     }
+// };
+
+// 解法2
+// class Solution
+// {
+// public:           //哈希map
+//     vector<int> twoSum(vector<int>& nums,int target)
+//     {
+//         unordered_map<int,int> map;
+//         for(int i=0;i<nums.size();++i)
+//         {
+//             if(map.count(target-nums[i]))
+//             {
+//                 //找到目标
+//                 return {map[target-nums[i]],i};
+//             }
+
+//             map[nums[i]]=i;  //没找到·，把元素和对应index放入map
+//         }
+
+//         return {};
+//     }
+
+// };
+
+class Solution
+{
+public:
+    vector<int> twoSum(vector<int>& nums,int target)
+    {
+        unordered_map<int,int> mp;//存储元素和对应的坐标
+        int n=nums.size();
+        for(int i=0;i<n;++i)
+        {
+            if(mp.count(target-nums[i]))//找到满足要求的，返回
+            {
+                return {mp[target-nums[i]],i};
+            }
+            mp[nums[i]]=i;
+        }
+
+        return {};
+    }
+
+};
+
+
+
+
+
+-------------------------------- 0202 /2021 / 
+
+// 时间On，每个数O1查询，总计n个数
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> res;
+        unordered_map<int, int> cnt;
+
+        for(int i=0;i<nums.size();++i)
+        {
+            if(cnt.count(target-nums[i]))
+            {
+                res.push_back(i);
+                res.push_back(cnt[target-nums[i]]);
+            }
+
+            cnt[nums[i]]=i;
+        }
+        return res;
+    }
+};
+

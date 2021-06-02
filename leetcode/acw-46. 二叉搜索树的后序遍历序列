@@ -1,0 +1,45 @@
+46. 二叉搜索树的后序遍历序列
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。
+
+如果是则返回true，否则返回false。
+
+假设输入的数组的任意两个数字都互不相同。
+
+样例
+输入：[4, 8, 6, 12, 16, 14, 10]
+
+输出：true
+
+
+---------------------------------------
+
+class Solution {
+public:
+    vector<int> s;
+    bool verifySequenceOfBST(vector<int> sequence) {
+        if(sequence.empty()) return true;
+        
+        s=sequence;
+        return dfs(0, sequence.size()-1);
+    }
+    
+    
+    bool dfs(int l ,int r) // 左右边界
+    {
+        if(l>=r) return true;
+        
+        int rt=s[r];
+        
+        int k=l;
+        while(k<r && s[k] < rt) k++; //结束后k是右子树第一课节点
+        
+        for(int i=k;i<r;i++) //遍历右边，如果右子树小于根节点，则false
+            if(s[i]<rt)
+                return false;
+                
+        return dfs(l,k-1) && dfs(k, r-1); //递归判断左右
+    }
+};
+
+

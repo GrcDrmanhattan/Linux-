@@ -1,0 +1,104 @@
+149. 直线上最多的点数
+
+给定一个二维平面，平面上有 n 个点，求最多有多少个点在同一条直线上。
+
+示例 1:
+
+输入: [[1,1],[2,2],[3,3]]
+输出: 3
+解释:
+^
+|
+|        o
+|     o
+|  o  
++------------->
+0  1  2  3  4
+示例 2:
+
+输入: [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]
+输出: 4
+解释:
+^
+|
+|  o
+|     o        o
+|        o
+|  o        o
++------------------->
+0  1  2  3  4  5  6
+
+------------------------------ 0312 / 2021/  yxc 
+
+
+时间On^2
+
+总共枚举 n个定点，对于每个定点再枚举 n−1个其余点，枚举后哈希表操作的时间复杂度是 O(1)，所以总时间复杂度是 O(n2)
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        typedef long double ld;
+        int res=0;
+        for(auto &x :points) // 先枚举中心点
+        {
+            int vs=0;     // 记录竖直方向的点数
+            int same=0;    //  记录和中心点相同位置的数，相当于经过所有的直线
+            unordered_map<ld, int> cnt;
+            for(auto &y :points)  // 依次枚举记录斜率
+            {
+                if(y==x) same++;
+                else if(x[0]==y[0]) vs++;
+                else{
+                    ld k = (ld) (y[1]-x[1])/(y[0]-x[0]);
+                    cnt[k]++;
+                }
+            }
+
+            int tmp=vs;
+            for(auto [k, v]:cnt) tmp=max(tmp, v);
+            res=max(res, tmp + same); // 每次更新res，当所有中心点枚举完后，返回res
+        }
+        return res;
+    }
+};
+
+
+---------------------- 0320 / /2021  
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        typedef long double ld;
+        
+
+        int res=0;
+        for(auto x:points){
+            int same=0;
+            int vs=0;
+            unordered_map<ld, int> mp;
+            
+            for(auto y:points)
+            {
+                if(x==y) same++;
+                else if(x[0]==y[0]) vs++;
+                else{
+                    ld k = (ld) (y[1]-x[1])/(y[0]-x[0]);
+                    mp[k]++;
+                }
+            }
+
+            int tmp=vs;
+            for(auto [k, v]:mp) tmp=max(tmp, v);
+            res=max(res, tmp+same);
+        }
+
+        return res;
+    }
+};
+
+
+
+

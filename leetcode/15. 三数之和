@@ -1,0 +1,170 @@
+给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+ 
+
+示例：
+
+给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+=================
+
+
+
+####################################################3
+
+//0822 不重复打印三数之和为定值 代码面试指南
+
+class Solution
+{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+        int n=nums.size();
+        if(n<3) return {};
+        sort(nums.begin(),nums.end());
+
+        //。。。n-3，n-2，n-1
+        for(int i=0;i<=n-3;++i)//小于等于
+        {
+            int l=i+1;
+            if(nums[i]>0) break;
+            if(i>0 && nums[i-1]==nums[i])
+            {
+                continue;
+            }
+
+            int r=n-1;
+
+            while(l<r)
+            {
+                int tmp=nums[i]+nums[l]+nums[r];
+                if(tmp>0)
+                {
+                    r--;
+                }
+                else if(tmp<0)
+                {
+                    l++;
+                }
+                else if(tmp==0)
+                {
+                    if(l==i+1 || nums[l]!=nums[l-1])//在打印的时候检查是否相等
+                    {
+                        // res.push_back(vector<int>{nums[i],nums[ll],nums[rr]});
+                        res.push_back(vector<int>{nums[i],nums[l],nums[r]});                
+                    }
+
+                    l++;
+                    r--;
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+------------------------------------------------------  1225 /2020/ yxc
+
+
+// 双指针优化为On2
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<nums.size();++i)
+        {
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            for(int j=i+1 , k=nums.size()-1; j<k;++j) // j要小于k，两个指针不能超过
+            {
+                if(j>i+1 && nums[j]==nums[j-1]) continue;
+
+                while( j <k-1 && nums[i] + nums[j]+nums[k-1] >=0) k--; // 找到最小的大于等于0的k
+
+                if(nums[i] + nums[j] +nums[k]==0)
+                {
+                    res.push_back({nums[i], nums[j], nums[k]});
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+------------------------------------ 0128 / 2021 
+
+// 双指针 要先枚举第一个数的位置， 两个指针两个数
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        int n=nums.size();
+
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<n;++i)
+        {
+            if(i>0 && nums[i-1]==nums[i]) continue; // 和上一个相同，说明已经在上一个枚举完了，就跳过
+            for(int j=i+1 , k=n-1;j<k;++j)
+            {
+                if(j>i+1 && nums[j-1]==nums[j]) continue;
+
+                while(j<k-1 && nums[i] + nums[j] + nums[k-1]>=0) k--; // 下一个和j无重叠，并且还满足，则k--
+
+                if(nums[i]+ nums[j] + nums[k]==0) res.push_back({nums[i], nums[j], nums[k]});
+            }
+        }
+
+        return res;
+    }
+};
+
+
+----------------------- 0303  / 2021/  
+
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<nums.size();++i)
+        {
+            if(i && nums[i-1]==nums[i] ) continue;
+            for(int l=i+1, r=nums.size()-1;l<r;++l)
+            {
+                if(l>i+1 && nums[l-1]==nums[l]) continue;
+
+                while( l<r-1 && nums[i] + nums[l] +nums[r-1]>=0) r--;
+                if(nums[l]+nums[r]+nums[i]==0)
+                    res.push_back({nums[i], nums[l], nums[r]});
+            }
+        }
+
+        return res;
+    }
+};
+
+

@@ -1,0 +1,43 @@
+
+
+###################################################################
+//大整数加法
+
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+ vector<int> add(vector<int> &aa,vector<int> &bb)//大整数加法
+ {
+     vector<int> c;
+     int t=0;//上一位进位
+     for(int i=0;i<aa.size() || i<bb.size();++i)//从0开始，0下标是个位，从个位开始相加
+     {
+         if(i<aa.size()) t+=aa[i];
+         if(i<bb.size()) t+=bb[i];//两行结束后，t是ai+bi+进位
+         
+         c.push_back(t%10);
+         t/=10;
+     }
+     
+     if(t) c.push_back(1);
+     return c;
+ }
+
+
+int main()
+{
+    string a,b;
+    vector<int> A,B;
+    
+    cin>>a>>b;
+    for(int i=a.size()-1;i>=0;--i) A.push_back(a[i]-'0');
+    for(int i=b.size()-1;i>=0;--i) B.push_back(b[i]-'0');
+    
+    auto c=add(A,B);
+    
+    for(int i=c.size()-1;i>=0;--i) printf("%d",c[i]);
+}
+

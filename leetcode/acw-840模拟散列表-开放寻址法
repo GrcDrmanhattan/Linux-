@@ -1,0 +1,124 @@
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+// const int N=1e5+10;
+const int N=2e5+3;//200003 质数。冲突概率小，          一般两倍到三倍，开放寻址法
+const int null=0x3f3f3f3f;
+
+
+int h[N];//映射后的位置在h数组，每一个槽位
+
+// ************************ 开放寻址法 *********************哈希表
+
+int find(int x)//返回x的位置，或者应该存储的位置
+{
+    int k= (x % N + N) % N;
+    
+   while(h[k]!=null && h[k]!=x)
+   {
+       k++;
+       if(k==N) k=0;//走到头，从新开始
+   }
+   
+   return k;
+}
+
+
+int main()
+{
+
+    int n;
+    scanf("%d",&n);
+    
+    memset(h,0x3f,sizeof(h));
+    
+    
+    while(n--)
+    {
+        char op[2];
+        int x;
+        scanf("%s%d",op,&x);
+        
+        int k=find(x);
+        
+        if(op[0]=='I') h[k]=x;
+        else
+        {
+            if(h[k]!=null)
+            {
+                puts("yes");
+                
+            }
+            else
+            {
+                puts("no");
+            }
+        }
+        
+    }
+    
+    return 0;
+}
+
+
+-------------------- 0108 /2021 
+
+#include<iostream>
+#include<cstring>
+
+using namespace std;
+
+const int N=2e5+3 ; // 质数
+const int nul=0x3f3f3f3f;
+
+
+int h[N];
+
+
+int n;
+
+
+int find(int x)
+{
+    int k=((x%N)+N)%N;
+    
+    while(h[k] != nul && h[k] != x)
+    {
+        k++;
+        
+        if(k==N) k=0;
+    }
+    
+    return k; // 返回while结束的两种情况之一
+}
+
+
+
+int main()
+{
+    cin>>n;
+    
+    memset(h, 0x3f,sizeof(h));
+    
+    while(n--)
+    {
+        char op[2];
+        int x;
+        scanf("%s%d", &op, &x); // 尽量用%s 读入字符
+        
+        int k=find(x);
+        
+        if(op[0]=='I') h[k]=x;
+        else 
+        {
+            if(h[k] != nul) puts("Yes");
+            else puts("No");
+        }
+    }
+    
+    
+    return 0;
+}
+

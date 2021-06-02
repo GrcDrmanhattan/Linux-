@@ -1,0 +1,205 @@
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+
+你可以假设数组中不存在重复的元素。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+示例 1:
+
+输入: nums = [4,5,6,7,0,1,2], target = 0
+输出: 4
+示例 2:
+
+输入: nums = [4,5,6,7,0,1,2], target = 3
+输出: -1
+
+==========================================
+
+// 1 2 3 4 5 6 7 可以大致分为两类，
+// 第一类 2 3 4 5 6 7 1 这种，也就是 nums[start] <= nums[mid]。此例子中就是 2 <= 5。
+// 这种情况下，前半部分有序。因此如果 nums[start] <=target<nums[mid]，则在前半部分找，否则去后半部分找。
+// 第二类 6 7 1 2 3 4 5 这种，也就是 nums[start] > nums[mid]。此例子中就是 6 > 2。
+// 这种情况下，后半部分有序。因此如果 nums[mid] <target<=nums[end]，则在后半部分找，否则去前半部分找。
+
+
+class Solution 
+{
+public:
+    int search(vector<int>& nums, int target) 
+    {
+        int n=nums.size();
+        int left= 0;
+        int right = n-1;
+        while(left<=right)//注意是小于等于
+        {
+            int mid=(left+right)>>1;
+            if(nums[mid] == target) return mid;
+            //前部分升序
+            else if(nums[left]<= nums[mid])// l  mid   r
+            {
+                //如果在有序区间，好判断
+                if(target<nums[mid] && target>= nums[left])//tar 在左区间[l,mid]就移动r
+                {
+                    right=mid-1;
+                }
+                else
+                {
+                    left=mid+1;
+                }
+            }
+            //，后部分有序
+            else//，降序区间   mid     r     l
+            {
+                if(target>nums[mid] && target<= nums[right])//在右区间[mid,r]就移动l
+                {
+                    left=mid+1;
+                }
+                else{
+                    right=mid-1;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+
+
+--------------------------------------- 0210 / 2021/ yxc
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.empty()) return -1;
+        int l=0;
+        int r=nums.size()-1;
+
+        while(l<r) // 先二分出两部分的边界 左区间>=nums[0], 右半区间<nums[0]
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid] >= nums[0]) l=mid; 
+            else r=mid-1;
+        }
+
+        //然后区分tar在哪一个区间
+        if(target>=nums[0]) l=0;//在左区间
+        else l=r+1, r=nums.size()-1; // 在右
+
+        while(l<r) //二分第一个满足>=tar的边界，或最后一个小于等于tar的数
+        {
+            int mid=l+r>>1;
+            if(nums[mid]>=target) r=mid;
+            else l=mid+1;
+        }
+
+        if(nums[r]==target) return r; // 返回l就爆栈？？
+        else return -1;
+    }
+};
+
+
+-------------------------------------- 
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.empty()) return -1;
+        int l=0;
+        int r=nums.size()-1;
+
+        while(l<r) // 先二分出两部分的边界 左区间>=nums[0], 右半区间<nums[0]
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid] >= nums[0]) l=mid; 
+            else r=mid-1;
+        }
+
+        //然后区分tar在哪一个区间
+        if(target>=nums[0]) l=0;//在左区间
+        else l=r+1, r=nums.size()-1; // 在右
+
+        while(l<r) //二分第一个满足>=tar的边界，或最后一个小于等于tar的数
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid]<=target) l=mid;
+            else r=mid-1;
+        }
+
+        if(nums[r]==target) return r; // 返回l就爆栈？？ 只能返回r
+        else return -1;
+    }
+};
+
+
+--------------------- 0302/ 2021/  
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int l=0;
+        int r=nums.size()-1;
+        while(l<r)
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid] >= nums[0]) l=mid;
+            else r=mid-1;
+        }
+
+        if(target >= nums[0]) l=0;
+        else l=r+1, r=nums.size()-1;
+
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid] >= target) r=mid;
+            else l=mid+1;
+        }
+// 这里写成nums[r], 当数组只有一个元素时, 两个二分查找代码都没有走, 而l在上面被+1, 这时会越界, 而r是length-1还是0, 不会产生越界
+        if(nums[r] != target) return -1;
+        return r;
+    }
+};
+
+
+
+---------------------------- 0304 / 2021/ 
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int l=0;
+        int r=nums.size()-1;
+        while(l<r)
+        {
+            int mid=l+r+1>>1;
+            if(nums[mid] >= nums[0]) l=mid;
+            else r=mid-1;
+
+        }
+
+        if(target>=nums[0]) l=0;
+        else l=r+1, r=nums.size()-1;
+
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid] >= target) r=mid;
+            else l=mid+1;
+        }
+
+        if(nums[r] != target) return -1;
+        return r;
+    }
+};
+
+
+

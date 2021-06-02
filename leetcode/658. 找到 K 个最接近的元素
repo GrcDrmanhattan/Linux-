@@ -1,0 +1,115 @@
+658. 找到 K 个最接近的元素
+
+给定一个排序好的数组 arr ，两个整数 k 和 x ，从数组中找到最靠近 x（两数之差最小）的 k 个数。返回的结果必须要是按升序排好的。
+
+整数 a 比整数 b 更接近 x 需要满足：
+
+|a - x| < |b - x| 或者
+|a - x| == |b - x| 且 a < b
+ 
+
+示例 1：
+
+输入：arr = [1,2,3,4,5], k = 4, x = 3
+输出：[1,2,3,4]
+示例 2：
+
+输入：arr = [1,2,3,4,5], k = 4, x = -1
+输出：[1,2,3,4]
+ 
+
+提示：
+
+1 <= k <= arr.length
+1 <= arr.length <= 104
+数组里的每个元素与 x 的绝对值不超过 104
+
+----------------------- 0227 / 2021/  yxc
+
+// 最小的k个数 ， 考虑堆
+
+双关键字排序
+
+
+
+时间Onlogk
+
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        vector<int> res;
+        priority_queue<pair<int ,int >> q; // 大根堆 
+        for(auto v:arr){
+            q.push({abs(x-v) , v});
+            while(q.size() > k) q.pop();
+        }        
+
+        while(q.size())
+        {
+            res.push_back(q.top().second);
+            q.pop();
+        }
+
+        sort(res.begin(), res.end());
+        return res;
+    }
+};
+
+
+
+-------------------------  二分  yxc
+
+
+
+logn +  k
+
+
+
+
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int tar) {
+        vector<int> res;
+        int l=0;
+        int r=arr.size()-1;
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(arr[mid] >= tar) r=mid;
+            else l=mid+1;
+        }
+
+        if(r)
+        {
+            int x=arr[r-1];
+            int y=arr[r];
+            if(make_pair(abs(x - tar) , x) < make_pair(abs(y- tar), y)) r--;
+        }
+        
+        int i=r;
+        int j=r;
+
+        for(int u=0;u<k-1;++u)
+        {
+            if(i-1 <0) j++;
+            else if(j+1 >= arr.size()) i--;
+            else
+            {
+                int x=arr[i-1];
+                int y=arr[j+1];
+                pair<int, int > a={abs(x - tar), x}, b={abs(y-tar), y};
+                if(a<b) i--;
+                else j++;
+            }
+        }
+
+        for(int u=i;u<=j;++u) res.push_back(arr[u]);
+        return res;
+    }
+};
+
+
+
+
+
+

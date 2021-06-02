@@ -1,0 +1,235 @@
+473. 火柴拼正方形
+
+还记得童话《卖火柴的小女孩》吗？现在，你知道小女孩有多少根火柴，请找出一种能使用所有火柴拼成一个正方形的方法。不能折断火柴，可以把火柴连接起来，并且每根火柴都要用到。
+
+输入为小女孩拥有火柴的数目，每根火柴用其长度表示。输出即为是否能用所有的火柴拼成正方形。
+
+示例 1:
+
+输入: [1,1,2,2,2]
+输出: true
+
+解释: 能拼成一个边长为2的正方形，每边两根火柴。
+示例 2:
+
+输入: [3,3,3,3,4]
+输出: false
+
+解释: 不能用所有火柴拼成一个正方形。
+注意:
+
+给定的火柴长度和在 0 到 10^9之间。
+火柴数组的长度不超过15。
+
+
+
+
+----------------------------------- 0116  /2021 / yxc  很顺畅的dfs
+
+
+
+class Solution {
+public:
+
+    vector<int> g;
+    vector<bool> st;
+
+
+    bool makesquare(vector<int>& nums) {
+        int n=nums.size();
+        st.resize(n,false);
+
+        if(n==0) return false;
+        g=nums;
+        int sum=0;
+        for(auto x:g) sum+=x;
+
+        if(sum % 4) return false;
+        sum/=4;
+
+        sort(g.begin(),g.end(), greater<int>());
+
+        return dfs(0, 0, sum, 0);
+    }
+
+
+    bool dfs(int start, int cur ,int length, int cnt)
+    {
+        if(cnt==3) return true;
+        if(cur==length) return dfs(0, 0, length, cnt+1);
+
+        for(int i=start;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= length)
+            {
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], length, cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i]==length) return false;
+
+            while(i+1<g.size() && g[i+1]==g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+
+
+------------------------------------ 
+
+//  拼4根长度相等木棍
+
+class Solution {
+public:
+
+    vector<int> g;
+    vector<bool> st;
+
+    bool makesquare(vector<int>& nums) {
+        if(nums.empty()) return false;
+        g=nums;
+        st.resize(nums.size(), false);
+
+        int sum=0;
+        for(auto x: g) sum+=x;
+
+        if(sum % 4) return false;
+        sum/=4;
+
+        sort(g.begin(),g.end(), greater<int>()); // 从大到小排序， 先枚举长度大的， 剪枝
+
+        return dfs(0, 0, sum, 0);
+    }
+
+
+
+    bool dfs(int start , int cur ,int len, int cnt) // cur当前拼成的长度， len每一根的目标长度 ， cnt 已经拼了几根木棍， start 当前选择nums里元素的编号，因为要编号枚举
+    {
+        if(cnt==3) return true;
+        if(cur == len) return dfs(0, 0, len , cnt+1);
+
+        for(int i=start;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len)
+            {
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], len, cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i]==len) return false; // 如果是第一根（拼的当前长度为0）或者 最后一根 ，直接剪枝，返回false
+            
+            while(i+1<g.size() && g[i+1]==g[i]) i++; // 如果当前长度不可以，那么其余长度相同的也不可以 ， 剪枝
+        }
+
+        return false;
+    }
+    
+};
+
+
+
+
+---------------------------  0118  dfs最重要的是搜索顺序，按照边去搜索，去搜索每一个边是否可以，如果凑够了一个边就将使用的木棍做标记， 再搜索组成下一个边的木棍
+
+cnt 当前拼的是第cnt根/
+
+
+class Solution {
+public:
+    vector<int> g;
+    vector<bool> st;
+
+    bool makesquare(vector<int>& nums) {
+        if(nums.empty()) return false;
+        g=nums;
+        st.resize(nums.size(), false);
+
+        int sum=0;
+        for(auto x:nums) sum+=x;
+        if(sum%4) return false;
+
+        sum/=4;
+        sort(nums.begin(), nums.end(), greater<int>());
+        return dfs(0, 0, sum ,0);
+    }
+
+    bool dfs(int start, int cur, int len, int cnt)
+    {
+        if(cnt==3) return true;
+        if(cur ==len) return dfs(0, 0, len, cnt+1);
+
+        for(int i=start; i< g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len) // 当前放某根成功
+            {
+                st[i]=true;
+                if(dfs(i+1, cur +g[i], len ,cnt)) return true;
+                st[i]=false;
+            }
+            
+            // 当前放某根失败
+            if(!cur || cur + g[i]==len) return false;
+            while(i+1<g.size() && g[i+1]==g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+
+
+
+
+
+-------------------- 0407  /2021/  
+
+
+class Solution {
+public:
+    vector<int> g;
+    vector<bool> st;
+    bool makesquare(vector<int>& nums) {
+        if(nums.empty()) return false;
+        int n=nums.size();
+        st.resize(n);
+        g=nums;
+        int sum=0;
+        for(auto x:nums) sum += x;
+        if(sum %4) return false;
+        sum /= 4;
+
+        sort(g.begin(), g.end(), greater<int>());
+        return dfs(0, 0, sum ,0); // 从第0根开始，是因为看看是否可以搜索到满足拼成第一根的条件
+        
+    }
+
+    bool dfs(int u, int cur, int len ,int cnt)
+    {
+        if(cnt==3) return true;
+        if(cur == len) return dfs(0, 0 , len, cnt+1);
+
+        for(int i=u;i<g.size();++i)
+        {
+            if(st[i]) continue;
+            if(cur + g[i] <= len){
+                st[i]=true;
+                if(dfs(i+1, cur + g[i], len ,cnt)) return true;
+                st[i]=false;
+            }
+
+            if(!cur || cur + g[i] == len) return false;
+            while(i + 1<g.size() && g[i+1] == g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+

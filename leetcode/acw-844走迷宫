@@ -1,0 +1,256 @@
+给定一个n*m的二维整数数组，用来表示一个迷宫，数组中只包含0或1，其中0表示可以走的路，1表示不可通过的墙壁。
+
+最初，有一个人位于左上角(1, 1)处，已知该人每次可以向上、下、左、右任意一个方向移动一个位置。
+
+请问，该人从左上角移动至右下角(n, m)处，至少需要移动多少次。
+
+数据保证(1, 1)处和(n, m)处的数字为0，且一定至少存在一条通路。
+
+输入格式
+
+第一行包含两个整数n和m。
+
+接下来n行，每行包含m个整数（0或1），表示完整的二维数组迷宫。
+
+输出格式
+
+输出一个整数，表示从左上角移动至右下角的最少移动次数。
+
+数据范围
+
+1≤n,m≤100
+
+样例
+输入样例：
+5 5
+0 1 0 0 0
+0 1 0 1 0
+0 0 0 0 0
+0 1 1 1 0
+0 0 0 1 0
+输出样例：
+8
+
+#################################################################3  BFS，从每个点向四周搜索 
+
+#include <iostream>
+#include<algorithm>
+#include<queue>
+#include<cstring>
+
+using namespace std;
+
+typedef pair<int,int> PII;
+
+const int N=110;
+
+int n;
+int m;
+int g[N][N];
+int d[N][N];//每个点到起点到距离
+PII q[N*N];
+PII par[N][N];//记录每个点前面的点
+
+int bfs()
+{
+    int hh=0;//模拟队列
+    int tt=0;
+    q[0]={0,0};
+    
+    memset(d,-1,sizeof(d));
+    
+    d[0][0]=0;
+    
+    int dx[4]={0,1,0,-1};
+    int dy[4]={1,0,-1,0};
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];// 取出队头
+        
+        for(int i=0;i<4;++i)//每次遍历队头的四个周围的点
+        {
+            int x=t.first+dx[i];
+            int y=t.second+dy[i];
+            
+            if(x>=0 && x<n && y>=0 && y<m && g[x][y]==0 && d[x][y]==-1)//没有走过点，必须要第一次走过才是最短距离
+            {
+                d[x][y]=d[t.first][t.second]+1;//第一次搜到更新距离
+                par[x][y]=t;
+                q[++tt]={x,y};//插入队尾
+                
+            }
+        }
+    }
+    
+    //输出路径
+    int x=n-1;
+    int y=m-1;
+    
+    while(x||y)
+    {
+        cout<<x<<' '<<y<<endl;
+        auto t=par[x][y];
+        x=t.first;
+        y=t.second;
+    }
+    
+    return d[n-1][m-1];
+    
+}
+
+int main()
+{
+    
+    cin>>n>>m;
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+    }
+    
+    cout<<bfs()<<endl;
+    
+    return 0;
+}
+
+
+#############################################3  1107
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+#define x first
+#define y second
+
+const int N=110,M=N*N;
+
+typedef pair<int,int> PII;
+
+int n,m;
+int g[N][N];
+int dis[N][N];
+
+PII q[M];
+
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+void bfs()
+{
+    int hh=0;
+    int tt=0;
+    q[0]={0,0};
+    memset(dis,-1,sizeof(dis));
+    dis[0][0]=0;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m &&dis[a][b]==-1 && g[a][b]==0)
+            {
+                dis[a][b]=dis[t.x][t.y]+1;
+                q[++tt]={a,b};
+            }
+        }
+    }
+}
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+        }
+    }
+    
+    bfs();
+    
+    cout<<dis[n-1][m-1]<<endl;
+    return 0;
+    
+}
+
+
+--------------------- 0111 / 2021  经典的BFS
+
+
+#include<iostream>
+#include<cstring>
+#include<queue>
+
+using namespace std;
+
+
+typedef pair<int,int> pii;
+
+queue<pii> q;
+
+const int N=110;
+
+int g[N][N];
+int d[N][N];
+
+int n,m;
+
+int bfs()
+{
+    q.push({0, 0});
+    d[0][0]=0;
+    
+    int dx[]={0,1,0,-1};
+    int dy[]={1,0,-1,0};
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        int x=t.first;
+        int y=t.second;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            
+            if(a>=0 && a<n && b>=0 && b<m && d[a][b]==-1 && g[a][b]==0)
+            {
+                d[a][b]=d[x][y]+1;
+                q.push({a, b});
+            }
+        }
+    }
+    
+    return d[n-1][m-1];
+    
+}
+
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i)    
+        for(int j=0;j<m;++j)
+            cin>>g[i][j];
+            
+            
+    memset(d, -1,sizeof(d));
+    
+    cout<<bfs()<<endl;
+    return  0;
+}
+
+

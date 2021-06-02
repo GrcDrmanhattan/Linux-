@@ -1,0 +1,77 @@
+34. 链表中环的入口结点
+
+给定一个链表，若其中包含环，则输出环的入口节点。
+
+若其中不包含环，则输出null。
+
+样例
+QQ截图20181202023846.png
+
+给定如上所示的链表：
+[1, 2, 3, 4, 5, 6]
+2
+注意，这里的2表示编号是2的节点，节点编号从0开始。所以编号是2的节点就是val等于3的节点。
+
+则输出环的入口节点3.
+
+--------------------------------------------- 两种做法，map和快慢指针
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+ 
+// class Solution {
+// public:
+//     ListNode *entryNodeOfLoop(ListNode *head) {
+//         map<ListNode* ,int> mp;
+//         while(head)
+//         {
+//             if(mp[head]) return head;
+//             mp[head]=1;
+//             head=head->next;
+//         }
+        
+//         return nullptr;
+//     }
+// };
+
+
+// 快慢指针第一次相遇时，慢指针回到head，然后两个每次走一步，若再次相遇，相遇点就是入口
+
+
+class Solution {
+public:
+    ListNode *entryNodeOfLoop(ListNode *head) {
+        auto i=head;//慢
+        auto j=head;// 快
+        
+        while(i && j)
+        {
+            i=i->next;
+            j=j->next;
+            if(j) j=j->next;
+            
+            if(i == j)// 第一次相遇
+            {
+                i=head;
+                while(i != j)//当没有再次相遇时，慢指针回到head，然后快慢同时每个走一步
+                {
+                    i=i->next;
+                    j=j->next;
+                }
+                
+                return j;
+            }
+        }
+        
+     
+        return 0;
+    }
+};
+

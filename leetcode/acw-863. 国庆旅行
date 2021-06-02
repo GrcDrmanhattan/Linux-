@@ -1,0 +1,56 @@
+863. 国庆旅行
+小明国庆节来北京玩，北京有N个景点，第 i 个景点的评分用a[i]表示，两个景点i, j之间的距离为j - i(j > i)。
+
+小明一天只能游玩两个景点，我们认为总评分是两个景点的评分之和减去两个景点之间的距离，即为a[i]+a[j]+i-j。
+
+那么小明选择哪两个景点才会总评分最大呢？
+
+输入格式
+第一行包含整数N。
+
+第二行分别输入N个景点的评分。
+
+输出格式
+输出最大评分
+
+数据范围
+2≤N≤105,
+1≤a[i]≤1000
+输入样例：
+5
+11 6 5 18 12
+输出样例：
+29
+#############################################################
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int n;
+int a[N];
+int res=0;
+
+int  t=0;
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>a[i];
+    t=a[0]+0;
+    
+    for(int i=1;i<n;++i)
+    {
+        res=max(res,t+a[i]-i);//先计算res，然后更新t
+        t=max(t,a[i]+i);
+    }
+    
+    cout<<res<<endl;
+    
+    return 0;
+}
+

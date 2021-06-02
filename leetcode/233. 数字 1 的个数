@@ -1,0 +1,59 @@
+233. 数字 1 的个数
+
+给定一个整数 n，计算所有小于等于 n 的非负整数中数字 1 出现的个数。
+
+ 
+
+示例 1：
+
+输入：n = 13
+输出：6
+示例 2：
+
+输入：n = 0
+输出：0
+ 
+
+提示：
+
+0 <= n <= 2 * 109
+
+--------------------------------- 0219 / 2021/   yxc
+
+计数
+
+class Solution {
+public:
+    int countDigitOne(int n) {
+        if(!n) return 0;
+        vector<int> num;
+        int res=0;
+
+        while(n){
+            num.push_back(n % 10);
+            n/=10;
+        }
+
+        reverse(num.begin(), num.end());
+
+        for(int i=0;i<num.size() ;++i) // 枚举每一位，将每一位贡献1的个数累加
+        {
+            int ll=0;
+            int rr=0;
+            int t=1;
+            int d=num[i];
+
+            for(int j=0;j<i;++j) ll=ll*10 +num[j];
+            for(int j=i+1; j<num.size() ; ++j) rr=rr*10 + num[j], t*=10;
+
+            if(d==0) res += ll * t;
+            else if(d==1) res += ll * t + rr + 1;
+            else if(d > 1) res += (ll + 1) * t;
+        }
+
+        return res;
+    }
+};
+
+
+

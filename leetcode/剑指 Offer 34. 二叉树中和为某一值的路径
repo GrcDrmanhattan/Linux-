@@ -1,0 +1,160 @@
+剑指 Offer 34. 二叉树中和为某一值的路径
+
+输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+
+ 
+
+示例:
+给定如下二叉树，以及目标和 sum = 22，
+
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+返回:
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+
+#######################################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// class Solution 
+// {
+// public:
+//     vector<vector<int>> res;
+//     // vector<int> ans;
+//     vector<vector<int>> pathSum(TreeNode* root, int sum) {    
+//         if(!root) return {};
+//         helper(root,sum,{});
+//         return res;
+//     }
+
+//     void helper(TreeNode* root,int sum,vector<int> ans)
+//     {
+//         int s=0;
+//         ans.push_back(root->val);
+//         if(!root->left && !root->right) 
+//         {
+//             for(auto n:ans) s+=n;
+//             if(s==sum) res.push_back(ans);
+//         }
+//         if(root->left) helper(root->left,sum,ans);
+//         if(root->right) helper(root->right,sum,ans);
+//     }
+// };
+
+
+class Solution
+{
+public:
+    vector<vector<int>> res;
+    vector<vector<int>> pathSum(TreeNode* root, int sum)
+    {
+        if(!root) return {};
+        
+        helper(root,sum,{});
+        return res;
+    }
+
+    void helper(TreeNode* root,int sum,vector<int> tmp)
+    {
+        int n=0;
+        tmp.push_back(root->val);
+        
+        if(root->left==NULL&& root->right==NULL)
+        {
+            for(auto x:tmp)
+            {
+                n+=x;
+            }
+
+            if(n==sum)
+            {
+                res.push_back(tmp);
+            }
+        }
+        
+
+        if(root->left) helper(root->left,sum,tmp);
+        if(root->right) helper(root->right,sum,tmp);
+
+    }
+};
+
+
+
+------------------------------- 0216 /  2021/ 
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    int t;
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        
+        if(!root) return res;
+        t=sum;
+        dfs(root, {});
+        return res;
+    }
+
+    void dfs(TreeNode* u, vector<int> tmp)
+    {
+        if(!u) return ;
+        tmp.push_back(u->val);
+        if(!u->left && !u->right) {
+            int s=0;
+            for(auto x:tmp) s+=x;
+            if(s==t) res.push_back(tmp);
+        }
+
+        dfs(u->left, tmp);
+        dfs(u->right, tmp);
+    }
+};
+
+
+------------------------------- 0223 / 2021/ 
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    int t;
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        t=sum;
+        dfs(root, {});
+        return res;
+    }
+
+    void dfs(TreeNode* u, vector<int> tmp){
+        if(!u) return ;
+
+        tmp.push_back(u->val);
+
+        if(!u->left && !u->right){
+            int s=0;
+            for(auto x:tmp) s+=x;
+            if(s==t) res.push_back(tmp);
+        }
+
+        dfs(u->left , tmp);
+        dfs(u->right, tmp);
+    }
+};
+
+

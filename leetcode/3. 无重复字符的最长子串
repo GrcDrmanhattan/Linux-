@@ -1,0 +1,171 @@
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+
+示例 1:
+
+输入: "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+示例 2:
+
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+示例 3:
+
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+
+
+##########################
+
+// class Solution 
+// {
+// public:
+//     int newest[300],last[100005];
+//     int lengthOfLongestSubstring(string s) 
+//     {
+//         int len=s.size();
+//         if(len==0) return 0;
+
+//         memset(newest,-1,sizeof(newest));
+
+//         int l=0;
+//         int r=0;
+//         int ans=0;
+//         while(r<len)
+//         {
+//             last[r]=newest[s[r]]+1;
+//             newest[s[r]]=r;
+
+//             if(last[r]>l) l= last[r];//
+//             if(r-l+1 > ans) ans=r-l+1;
+//             r++;
+//         }
+
+//         return ans;
+//     }
+
+// };
+
+//#######写法2  子串是连续的，子序列不连续
+
+// class Solution
+// {
+// public:
+//     int lengthOfLongestSubstring(string s)
+//     {
+//         int start=0;
+//         int end=0;
+//         int len=s.size();
+//         int res=0;
+//         int ll=0;
+
+//         while(end<len)
+//         {
+//             char tem=s[end];
+//             for(int i=start;i<end;++i)
+//             {
+//                 if(tem==s[i])
+//                 {
+//                     start=i+1;
+//                     ll=end-start;
+//                     break;   
+//                 }
+//             }
+//             end++;
+//             ll++;
+//             res=max(res,ll);
+//         }
+
+//         return res;
+//     }
+// };
+
+//0812 
+
+class Solution
+{
+public:
+    int lengthOfLongestSubstring(string s)
+    {
+        int res=0;
+        unordered_set<int> mp;
+        int rk=-1;//右边界设置-1
+        int n=s.size();
+
+        for(int i=0;i<n;++i)//滑动窗口枚举左端点，
+        {
+            if(i!=0)
+            {
+                mp.erase(s[i-1]);//删除左边的
+            }
+            //
+            while(rk+1<n && !mp.count(s[rk+1]))//每次枚举尽可能远的右边界
+            {
+                mp.insert(s[rk+1]);
+                ++rk;
+            }
+
+            res=max(res,rk-i+1);
+        }
+
+        return res;
+    }
+};
+
+剑指 Offer 48. 最长不含重复字符的子字符串
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+ 
+
+示例 1:
+
+输入: "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+示例 2:
+
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+示例 3:
+
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+
+######################################################################
+
+//0826
+
+const int N=40000+6;
+
+class Solution 
+{
+public:
+
+    int lengthOfLongestSubstring(string s) 
+    {
+        int res=0;
+        int n=s.size();
+        vector<int> tmp(N);
+
+        for(int i=0,j=0;i<n;++i)//枚举i作为最右边界
+        {
+            tmp[s[i]]++;
+            while(tmp[s[i]]>1)
+            {
+                tmp[s[j]]--;
+                ++j;//每次j移动一个，计数器就--
+            }
+
+            res=max(res,i-j+1);
+        }
+
+        return res;
+    }
+};
+

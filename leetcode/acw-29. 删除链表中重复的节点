@@ -1,0 +1,81 @@
+29. 删除链表中重复的节点
+在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留。
+
+样例1
+输入：1->2->3->3->4->4->5
+
+输出：1->2->5
+样例2
+输入：1->1->1->2->3
+
+输出：2->3
+
+
+----------------------------------------------
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* head) {
+        
+        // int l=1;
+        // while(p->next)
+        // {
+        //     l++;
+        //     p=p->next;
+        // }
+        
+        ListNode * d=new ListNode(-1);
+        d->next=head;
+        
+        auto p=d;
+        while(p->next)
+        {
+            auto p_ne=p->next;
+            while(p_ne && p->next->val == p_ne->val) p_ne=p_ne->next;//刚开始p和pne相邻，肯定成立，pne后移动，
+            // 如果有重复元素，while还是成立，当while结束 pne指向的是重复后面的元素
+            
+            if(p->next->next==p_ne) p = p->next;//如果p和pne相邻，p就向后移动一位
+            else p->next = p_ne;
+        }
+        
+        
+        return d->next;
+    }
+};
+
+
+1216 ------------------------------------  理解         // 几个相同的节点是一段
+
+
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* head) {
+        auto d=new ListNode(-1);
+        d->next = head;
+        // 几个相同的节点是一段
+        auto p=d;// p指针保存的是上一段的最后一个节点
+        
+        while(p->next)
+        {
+            auto pn = p->next;
+            while(pn && p->next->val == pn->val) pn=pn->next; // 在这一段里面，如果有相同节点，pn就一直向后走
+            
+            if(p->next->next == pn) p=p->next;// 如果这段长度为1，说明只有一个节点，p后移一个节点就可以
+            else p->next=pn;
+        }
+        
+        return d->next;
+    }
+};
+
+

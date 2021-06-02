@@ -1,0 +1,543 @@
+运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制。它应该支持以下操作： 获取数据 get 和 写入数据 put 。
+
+获取数据 get(key) - 如果关键字 (key) 存在于缓存中，则获取关键字的值（总是正数），否则返回 -1。
+写入数据 put(key, value) - 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字/值」。
+当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
+
+ 
+
+进阶:
+
+你是否可以在 O(1) 时间复杂度内完成这两种操作？
+
+ 
+
+示例:
+
+LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // 返回  1
+cache.put(3, 3);    // 该操作会使得关键字 2 作废
+cache.get(2);       // 返回 -1 (未找到)
+cache.put(4, 4);    // 该操作会使得关键字 1 作废
+cache.get(1);       // 返回 -1 (未找到)
+cache.get(3);       // 返回  3
+cache.get(4);       // 返回  4
+
+###############################3
+
+// class LRUCache 
+// {
+
+// public:
+//     LRUCache(int capacity) 
+//     {
+//         this->cp=capacity;
+//     }
+    
+//     int get(int key) 
+//     {
+//         //取出元素
+//         auto it=mp.find(key);
+//         if(it==mp.end()) return -1;//不存在返回-1
+        
+//         //存在，就把元素提前位置
+//         pair<int ,int > tmp=*mp[key];//链表的样子
+
+//         ls.erase(mp[key]);//删除原来的位置，重新插入到头部
+//         ls.push_front(tmp);
+
+//         mp[key]=ls.begin();//更新哈希的映射
+//         return tmp.second;
+
+//     }
+    
+//     void put(int key, int value) //放入元素
+//     {
+//         auto it=mp.find(key);
+//         if(it==mp.end())//插入的不存在
+//         {           
+//             if(ls.size()==cp)//满了
+//             {
+//                 auto lastpair=ls.back();
+//                 auto lastkey=lastpair.first;
+//                 mp.erase(lastkey);
+//                 ls.pop_back();
+//                 // ls.push_front(make_pair(key,value));//下面已经添加了，这里就不用添加了
+//                 // mp[key]=ls.begin();
+//             }
+//             ls.push_front(make_pair(key,value));
+//             mp[key]=ls.begin();
+//         }
+//         else//存在就更新
+//         {
+//             ls.erase(mp[key]);
+//             ls.push_front(make_pair(key,value));
+//             mp[key]=ls.begin();
+//         }
+
+//     }
+
+// private:
+//     int cp;
+//     list<pair<int ,int >> ls;//双向链表,存缓存数据
+//     unordered_map<int ,list<pair<int ,int>>::iterator> mp;//哈希表，映射
+
+// };
+
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+
+//0812 
+
+
+// class LRUCache
+// {
+// private:
+//     int cp;
+//     list<pair<int,int>> ls;//双向链表 stl
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;//迭代器
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         this->cp=capacity;//箭头
+//     }
+
+//     int get(int key)//访问元素
+//     {
+//         if(mp.find(key)!=mp.end())//找到元素
+//         {
+//             auto tmp=*mp[key];
+
+//             ls.erase(mp[key]);//删除原来的
+//             ls.push_front(tmp);//放入第一个，提前到队首
+
+//             mp[key]=ls.begin();//更新map的位置
+//             return tmp.second;
+//         }
+//         else
+//         {
+//             return -1;
+//         }
+
+//     }
+
+//     void put(int key, int value)
+//     {
+//         if(mp.find(key)!=mp.end())//插入的元素，已经有了，需要更新
+//         {
+//             auto tmp=*mp[key];
+//             tmp.second=value;
+
+//             ls.erase(mp[key]);//mp[key]表示 key对应的节点，ls删除节点
+//             ls.push_front(tmp);
+//             // ls.push_front(make_pair(key,value));这个更简洁
+//             mp[key]=ls.begin();
+
+//         }
+//         else//插入的原来不存在，就插入
+//         {
+//             if(ls.size()==cp)
+//             {
+//                 //删除最后一个节点
+//                 auto lastpair=ls.back();
+//                 auto lastkey=lastpair.first;
+//                 ls.pop_back();
+//                 mp.erase(lastkey);
+
+//                 //插入新的节点到链表头
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+//             else
+//             {
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+            
+//         }
+
+//     }
+// };
+
+// class LRUCache
+// {
+// private:
+
+//     list<pair<int,int>> cache;
+//     int cp;
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         this->cp=capacity;
+//     }
+
+//     int get(int key)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             auto tmp=*mp[key];
+//             //删除原来的，重新插入到开始
+//             cache.erase(mp[key]);
+//             cache.push_front(tmp);//tmp加*
+
+//             mp[key]=cache.begin();
+//             return tmp.second;
+//         }
+//         else
+//         {
+//             return -1;
+//         }
+//     }
+
+//     void put(int key,int value)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             cache.erase(mp[key]);//链表要删除节点，通过key对应的迭代器删除
+
+//             cache.push_front(make_pair(key,value));
+//             mp[key]=cache.begin();
+//         }
+//         else
+//         {
+//             if(cache.size()==cp)
+//             {
+//                 auto tmp=cache.back();
+
+//                 cache.pop_back();
+//                 cache.push_front(make_pair(key,value));
+
+//                 mp.erase(tmp.first);
+//                 mp[key]=cache.begin();
+//             }
+//             else
+//             {
+//                 cache.push_front(make_pair(key,value));
+//                 mp[key]=cache.begin();
+//             }
+
+//         }
+//     }
+// };
+
+
+// 0824 
+// class LRUCache
+// {
+// private:
+//     int cp;
+//     list<pair<int,int>> ls;//key val
+//     unordered_map<int,list<pair<int,int>>::iterator> mp;
+
+// public:
+//     LRUCache(int capacity)
+//     {
+//         cp=capacity;
+//     }
+
+//     int get(int key)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             auto tmp=*mp[key];//存储的是迭代器，所以要取地址
+
+//             ls.erase(mp[key]);//list 通过迭代器删除元素
+//             ls.push_front(tmp);
+            
+//             mp[key]=ls.begin();
+
+//             return tmp.second;
+//         }
+//         else 
+//         {
+//             return -1;
+//         }
+//     }
+
+//     void put(int key,int value)
+//     {
+//         if(mp.find(key)!=mp.end())
+//         {
+//             //关键字 存在，更新元素
+//             ls.erase(mp[key]);//list 通过迭代器删除元素
+//             ls.push_front(make_pair(key,value));
+
+//             mp[key]=ls.begin();
+//         }
+//         else
+//         {
+//             if(ls.size()==cp)
+//             {
+//                 auto tmp=ls.back();
+
+//                 ls.pop_back();
+//                 ls.push_front(make_pair(key,value));
+//                 //mp删除原来的，更新新插入的元素的映射
+//                 mp.erase(tmp.first);//map通过key删除元素
+//                 mp[key]=ls.begin();    
+//             }
+//             else
+//             {
+//                 ls.push_front(make_pair(key,value));
+//                 mp[key]=ls.begin();
+//             }
+//         }
+//     }
+// };
+
+
+//list，map关联容器的erasr操作有两种参数，一个是删除给定关键字的元素，一个是删除迭代器指向的元素
+
+class LRUCache
+{
+private:
+    int cp;
+    list<pair<int,int>> ls;//存储的是缓存数据，以键值对的形式
+    //mp存储缓存数据的key以及在ls中的位置，用迭代器表示
+    unordered_map<int,list<pair<int,int>>::iterator> mp;//存储key 和对应的缓存的迭代器
+
+public:
+    LRUCache(int capacity)
+    {
+        cp=capacity;
+    }
+
+    int get(int key)
+    {
+        if(mp.find(key)!=mp.end())
+        {
+            auto tmp=*mp[key];
+
+            ls.erase(mp[key]);//删除迭代器位置指向的元素
+            ls.push_front(tmp);
+
+            mp[key]=ls.begin();
+
+            return tmp.second;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    void put(int key,int value)
+    {
+        if(mp.find(key)!=mp.end())
+        {
+            ls.erase(mp[key]);
+            ls.push_front(make_pair(key,value));
+            mp[key]=ls.begin();
+
+        }
+        else
+        {
+            if(ls.size()==cp)
+            {
+                auto tmp=ls.back();
+                
+                ls.pop_back();
+                //mp删除掉被删除元素的映射
+                mp.erase(tmp.first);
+
+                ls.push_front(make_pair(key,value));
+                mp[key]=ls.begin();
+            }
+            else
+            {
+                ls.push_front(make_pair(key,value));
+                mp[key]=ls.begin();
+            }
+        }
+    }
+};
+
+
+
+
+
+
+
+----------------------------------------- 0126 / 2021 / yxc
+ 
+
+
+// 维护一个双链表，头是最近访问的，尾部是最久没有访问的
+class LRUCache {
+public:
+    struct Node{ // 双向链表的节点定义
+        int key,val;
+
+        Node* left;
+        Node* right;
+        Node(int k, int v): key(k), val(v), left(nullptr), right(nullptr){}
+
+    }*L, *R;
+
+    int n;
+    unordered_map<int ,Node*> hash;
+
+    void remove(Node* p) // remove和insert是对双链表进行操作
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+
+    void insert(Node* p) // 插入到队头，也就是L的右边,第一个元素的左边
+    {
+        p->right=L->right;
+        p->left=L;
+
+        L->right->left=p;
+        L->right=p;
+    }
+
+    LRUCache(int capacity) {
+        n=capacity;
+        L=new Node(-1, -1);
+        R=new Node(-1, -1);
+
+        L->right = R;
+        R->left = L;
+    }
+    
+    int get(int key) {
+        if(hash.count(key)==0) return -1;
+        auto p=hash[key];
+
+        remove(p);
+        insert(p);
+        return p->val;
+    }
+    
+    void put(int key, int value) { // 插入元素
+        if(hash.count(key)==0)
+        {
+            if(n==hash.size()) // 没找到元素， 并且已经满了，就lru要删除元素
+            {
+                auto p=R->left;
+                remove(p);
+                hash.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+            hash[key]=p;
+            insert(p);
+        }
+        else{
+            auto p=hash[key];
+            p->val=value;
+            remove(p);
+            insert(p); // 插入到队头
+        }
+    }
+};
+
+
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+
+
+----------------------- 0302/ 2021/  
+
+
+class LRUCache {
+public:
+    struct Node{
+        int key;
+        int val;
+        Node* left;
+        Node* right;
+
+        Node(int k ,int v)
+        {
+            key=k;
+            val=v;
+            left=nullptr;
+            right=nullptr;
+        }
+
+    }*head, *tail;
+
+    void remove(Node* p)
+    {
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+    void insert(Node* p)
+    {
+        p->right=head->right;
+        p->left=head;
+
+        head->right->left=p;
+        head->right=p;
+    }
+
+    int n;
+    unordered_map<int, Node*> hn;
+
+    LRUCache(int capacity) {
+        n=capacity;
+        head=new Node(-1, -1);
+        tail=new Node(-1, -1);
+        head->right=tail;
+        tail->left=head;
+    }
+
+
+    
+    int get(int key) {
+        if(hn.count(key)==0) return -1;
+        auto p=hn[key];
+
+        remove(p);
+        insert(p);
+
+        return p->val;
+    }
+    
+    void put(int key, int value) {
+        if(hn.count(key)==0)
+        {
+            if(n==hn.size())
+            {
+                auto p=tail->left;
+                remove(p);
+                hn.erase(p->key);
+            }
+
+            auto p=new Node(key, value);
+            insert(p);
+            hn[key]=p;
+        }else
+        {
+            auto p=hn[key];
+            p->val=value;
+            remove(p);
+            insert(p);
+        }
+    }
+};
+
+
+

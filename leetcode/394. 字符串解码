@@ -1,0 +1,216 @@
+给定一个经过编码的字符串，返回它解码后的字符串。
+
+编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+
+你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+
+此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+
+ 
+
+示例 1：
+
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+示例 2：
+
+输入：s = "3[a2[c]]"
+输出："accaccacc"
+示例 3：
+
+输入：s = "2[abc]3[cd]ef"
+输出："abcabccdcdcdef"
+
+
+============================================== 从前到后统计一下
+
+
+class Solution 
+{
+public:
+    string decodeString(string s) 
+    {
+        string res="";
+        int times=0;//重复的次数
+        int n=s.size();
+        // pair<int,string> pp;
+        vector<pair<int,string>> v;
+
+        for(auto c:s)
+        {
+            if(c>='0' && c<='9')
+            {
+                times=times*10+(c-'0');
+            }
+            else if(c=='[')//遇到左括号，vector存储这次重复的次数和前一个的结果
+            {
+                v.push_back({times,res});//这次重复的次数，上一次的res
+                res="";//因为vector存了，所以清空不影响下一个
+                times=0;//同理
+            }
+            else if(c==']')//遇到右括号，计算，
+            {
+                auto tmp=v[v.size()-1];//取出本次的次数，和上一次res
+                v.pop_back();
+                //res=上一次的res+这次重复的字符串
+                res=tmp.second+(tmp.first==0 ? "":helper(res,tmp.first));
+            }
+            else //左括号后必然遇到字母，是这次需要重复的
+            {
+                res+=c;//这次需要重复的字母
+            }
+        }
+
+        return res;
+    }
+
+    string helper(const string &s,int n)
+    {
+        string res="";
+        for(int i=0;i<n;++i)
+        {
+            res+=s;
+        }
+
+        return res;
+    }
+};
+
+
+
+------------------------------------- 0122 / 2021 /yxc
+
+
+
+// 递归去做
+
+
+class Solution {
+public:
+
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s, u);
+    }
+
+    
+    string dfs(string& s, int &u)
+    {
+        string res;
+
+        while(u<s.size() && s[u] != ']')
+        {
+            if(s[u]>='a' && s[u]<='z' || s[u]>='A' && s[u]<='Z') res += s[u++];
+            else if(s[u]>='0' && s[u]<='9')
+            {
+                int k=u;
+                while(k<s.size() && s[k]>='0' && s[k]<='9') k++;
+                int x=stoi(s.substr(u, k-u)); // 先计算x
+                
+                
+                u=k+1;//跳过左括号
+
+                string y=dfs(s, u);
+                u++;// 跳过右括号
+                
+                while(x--) res+=y;
+
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+
+----------------------- 0407 / 2021/  
+
+
+// 就是递归
+
+
+
+class Solution {
+public:
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s, u);
+    }
+
+    string dfs(string& s, int &u)
+    {
+        string res;
+
+        while(u<s.size() && s[u] != ']'){
+            if(s[u]>='a' && s[u]<='z' || s[u]>='A' && s[u]<='Z') res+=s[u++]; // 如果是字母直接
+            else if(isdigit(s[u])){ // 如果是数字
+                int j=u;
+                while(j<s.size() && isdigit(s[j])) j++; // j停下的位置是左括号
+                int k=stoi(s.substr(u, j-u)); // 取出数字
+                
+                u=j+1; // 数字之后是左括号
+
+                string y=dfs(s, u);
+                u++;
+                while(k--) res += y;
+            }
+        }
+
+        return res;
+    }
+};
+
+
+--------------------- 0410  /2021/ 
+
+
+class Solution {
+public:
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s,  u);
+    }
+
+    string dfs(string& s, int &u)
+    {
+        string res="";
+        while(u<s.size() && s[u] != ']')
+        {
+            if(isalpha(s[u])) res += s[u++];
+            else if(isdigit(s[u])){
+                int j=u;
+                while(u<s.size() && isdigit(s[u])) u++;
+                int k=stoi(s.substr(j, u-j));
+                u++;// 跳过左括号
+
+                string y=dfs(s, u);//从字母开始下一次递归
+                cout<<y<<"--y: ";
+                while(k--) res += y;
+
+                u++;
+            }
+        }
+        cout<<res<<"-- res: ";
+        return res;
+    }
+};
+
+
+3[a2[c]]
+模拟过程
+
+
+/*
+3 ，res"", 
+    res=a, k=2,
+    res=c,遇到]跳出本次递归
+            res=acc, 又是],接着跳出
+                y=acc ,循环三次， res为空， accaccacc
+
+*/
+
+
+
+

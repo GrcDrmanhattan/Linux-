@@ -1,0 +1,486 @@
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+
+岛屿总是被水包围，并且每座岛屿只能由水平方向或竖直方向上相邻的陆地连接形成。
+
+此外，你可以假设该网格的四条边均被水包围。
+
+ 
+
+示例 1:
+
+输入:
+[
+['1','1','1','1','0'],
+['1','1','0','1','0'],
+['1','1','0','0','0'],
+['0','0','0','0','0']
+]
+输出: 1
+
+
+================================ dfs 
+
+// class Solution 
+// {
+// public:
+//     int numIslands(vector<vector<char>>& grid) 
+//     {
+//         int n=grid.size();
+//         if(n==0) return 0;
+//         int m=grid[0].size();
+//         if(m==0) return 0;
+ 
+//         int res=0;
+//         for(int i=0;i<n;++i)                   
+//         {
+//             for(int j=0;j<m;++j)
+//             {
+//                 res+=f(i,j,n,m,grid);
+//             }
+//         }
+
+//         return res;
+
+//     }
+
+//     int f(int x,int y,int n,int m,vector<vector<char>>& grid)
+//     {
+//         if(x<0 || x>=n || y<0 || y>=m || grid[x][y]!='1') return 0;
+
+//         int ret=1;
+//         grid[x][y]='2'; //标记访问过的不等于0，1
+//         vector<vector<int>> step={{0,1},{0,-1},{1,0},{-1,0}};
+//         for(int i=0;i<4;++i)
+//         {
+//             ret+=f(x+step[i][0],y+step[i][1],n,m,grid);  //递归dfs
+//         }
+
+//         return 1; //岛屿的个数
+//     }
+
+// };
+
+==========================算法笔记 bfs
+
+// class Solution
+// {
+// public:
+//     //使用vector<vector<int>> 时如果声明时不初始化，
+//     //会报空指针引用错误：reference binding to null pointer of type 'value_type'
+//     vector<vector<bool>> vis{1000,vector<bool>(1000,false)};
+//     int X[4]={0,1,-1,0};
+//     int Y[4]={1,0,0,-1};
+
+//     int numIslands(vector<vector<char>>& grid)
+//     {
+//         if(grid.size()==0) return 0;
+//         int res=0;
+//         int n=grid.size();
+//         int m=grid[0].size();
+//         // vector<vector<bool>> vis(n,vector<bool>(m,false));
+//         vis.resize(n);
+//         for(int i=0;i<n;++i)
+//         {
+//             vis[i].resize(m);
+//         }
+
+//         for(int i=0;i<n;++i)
+//         {
+//             for(int j=0;j<m;++j)
+//             {
+//                 if(grid[i][j]=='1' && vis[i][j]==false)
+//                 {
+//                     res++;//块数加一
+//                     bfs(i,j,grid);//访问整个快，将陆地标记为true
+//                 }
+//             }
+//         }
+
+//         return res;
+//     }
+
+//     bool helper(int i,int j,vector<vector<char>>& grid, vector<vector<bool>>& vis)
+//     {
+//         if(i<0 ||i>=grid.size() || j<0 || j>=grid[0].size()) return false;
+//         if(grid[i][j]=='0' || vis[i][j]==true) return false;
+//         return true;
+
+//     }
+
+//     void bfs(int i,int j,vector<vector<char>>& grid)
+//     {
+//         queue<pair<int , int >> q;
+//         q.push({i, j});
+//         vis[i][j]=true;
+//         while(!q.empty())
+//         {
+//             auto tmp=q.front();
+//             q.pop();
+//             for(int i=0;i<4;++i)
+//             {
+//                 int nx=tmp.first+X[i];
+//                 int ny=tmp.second+Y[i];
+//                 if(helper(nx,ny,grid,vis))
+//                 {
+//                     q.push({nx, ny});
+//                     vis[nx][ny]=true;
+//                 }
+//             }
+
+//         }
+//     }
+// };
+
+============================ 题解  bfs
+
+// class Solution 
+// {
+// private:
+//     queue<int> que;
+//     int count=0;
+//     int x=0;
+//     int y=0;
+//     int xx=0;
+//     int yy=0;
+// public:
+//     int numIslands(vector<vector<char>>& grid) 
+//     {
+//         int rows=grid.size();
+//         int cols=rows>0?grid[0].size():0;
+//         int dx[]={-1,0,1,0};
+//         int dy[]={0,1,0,-1};
+//         if(rows==0 || cols==0){
+//             return 0;
+//         }
+//         for(int i=0;i<rows;i++)
+//         {
+//             for(int j=0;j<cols;j++)
+//             {
+//                 if(grid[i][j]=='1')
+//                 {
+//                     que.push(i);
+//                     que.push(j);
+//                     grid[i][j]='0';
+//                     while(!que.empty())
+//                     {
+//                         x=que.front();
+//                         que.pop();
+//                         y=que.front();
+//                         que.pop();
+//                         for(int k=0;k<4;k++)
+//                         {
+//                             xx=x+dx[k];
+//                             yy=y+dy[k];
+//                             if(xx<0||xx>=rows||yy<0||yy>=cols)
+//                             {
+//                                 continue;
+//                             }
+//                             if(grid[xx][yy]=='1')
+//                             {
+//                                 grid[xx][yy]='0';
+//                                 que.push(xx);
+//                                 que.push(yy);
+//                             }
+//                         }
+//                     }
+//                     count++;
+//                 }
+//             }
+//         }
+//         return count;
+//     }
+// };
+
+
+======================题解bfs
+
+// class Solution 
+// {
+// public:
+//     int numIslands(vector<vector<char>>& grid) 
+//     {
+//         if(grid.empty() || grid[0].empty() ) return 0;
+//         vector<pair<int,int>> direct = {{0,1},{0,-1},{1,0},{-1,0}};
+//         queue<pair<int,int>> que;
+//         int M = grid.size();
+//         int N = grid[0].size();
+//         int count = 0;
+
+//         for(int i = 0;i<M;i++)
+//         {
+//             for(int j = 0;j<N;j++)
+//             {
+//                 if(grid[i][j] == '1')
+//                 {
+//                     que.push({i,j});
+//                     while(!que.empty())
+//                     {
+//                         grid[i][j] = '0';
+                        
+//                         for(auto a : direct)
+//                         {
+//                             int newx = que.front().first + a.first;
+//                             int newy = que.front().second + a.second;
+//                             if(newx>=0 && newx<M && newy>=0 && newy<N && grid[newx][newy] == '1')
+//                             {
+//                                 que.push({newx,newy});
+//                                 grid[newx][newy] = '0';
+//                             }
+//                         }
+//                         que.pop();
+//                     }
+//                     count++;
+//                 }
+//             }
+//         }
+//         return count;
+//     }
+// };
+
+
+=================================终于写对了自己练习
+class Solution
+{
+public:
+    int res=0;
+    int numIslands(vector<vector<char>>& grid)
+    {
+        if(grid.size()==0) return 0;
+        int n=grid.size();
+        int m=grid[0].size();
+
+        int X[]={-1,0,1,0};
+        int Y[]={0,1,0,-1};
+
+        queue<pair<int,int>> q;
+
+        for(int i=0;i<n;++i)
+        {
+            for(int j=0;j<m;++j)
+            {
+                if(grid[i][j]=='1')
+                {
+                    res++;
+                    q.push({i,j});
+                    grid[i][j]='2';
+                    while(!q.empty())
+                    {
+                        auto tmp=q.front();
+                        q.pop();
+                        for(int k=0;k<4;++k)
+                        {
+                            int xx=tmp.first+X[k];
+                            int yy=tmp.second+Y[k];
+                            if(xx>=0 && xx<n && yy>=0 && yy<m && grid[xx][yy] == '1')
+                            {
+                                q.push({xx,yy});
+                                grid[xx][yy] = '2';
+                            }
+                        }
+                        
+                    }
+                    // res++;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+
+--------------------------------- 0115 / 2021 /yxc and self
+
+
+// 每个格子遍历只一次
+
+class Solution {
+public:
+    vector<vector<char>> g;
+    int n,m;
+    bool st[310][310];
+
+    int numIslands(vector<vector<char>>& grid) {
+        g=grid;
+        n=grid.size();
+        m=grid[0].size();
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(grid[i][j]=='1' && !st[i][j])
+                {
+                    dfs(i, j);
+                    res++;// 每次从ij出来，代表找到一个连通块
+                }
+        return res;
+    }
+
+
+    void dfs(int x, int y)
+    {
+        st[x][y]=true;
+
+        int dx[4]={0,1,0,-1};
+        int dy[4]={1,0,-1,0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]=='1' && !st[a][b])
+            {
+                st[a][b]=true;
+                dfs(a, b);
+            }
+               
+        }  
+    }
+};
+
+
+
+----------------------------------------------- 0123 / 2021 
+
+
+
+class Solution {
+public:
+    vector<vector<char>> g;
+    int n,m;
+    bool st[310][310];
+
+    int numIslands(vector<vector<char>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+
+        int res=0;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(!st[i][j] && g[i][j]=='1')
+                {
+                    dfs(i, j);
+                    res++;
+                }
+
+        return res;
+    }
+
+    void dfs(int x,int y)
+    {
+        st[x][y]=true;
+        int dx[4]={0,1,0,-1};
+        int dy[4]={1,0,-1,0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && g[a][b]=='1') dfs(a, b);
+        }
+    }
+};
+
+
+
+--------------------------------------- 0301/ 2021/ 
+
+
+class Solution {
+public:
+    vector<vector<char>> g;
+    int n;
+    int m;
+    bool st[310][310];
+
+    int numIslands(vector<vector<char>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(!st[i][j] && g[i][j]=='1') // 依次枚举每个位置如果可以遍历就dfs
+                {
+                    dfs(i, j);
+                    res++;
+                } 
+            }
+
+        return res;
+    }
+
+    void dfs(int x ,int y)
+    {
+        st[x][y]=true;
+        int dx[]={0, 1, 0 ,-1};
+        int dy[]={1, 0, -1, 0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && g[a][b] == '1') 
+            {
+                
+                dfs(a, b);
+                
+            }
+
+        }
+
+    }
+};
+
+
+-------------- 0301  yxc 
+
+
+class Solution {
+public:
+    vector<vector<char>> g;
+    int n,m;
+
+    int numIslands(vector<vector<char>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(g[i][j]=='1'){
+                    
+                    dfs(i, j);
+                    res++;
+                }
+                
+            }
+
+        return res;
+    }
+
+    void dfs(int x,int y)
+    {
+        g[x][y]=0;
+        int dx[]={0, 1, 0, -1};
+        int dy[]={1 ,0, -1, 0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a< n && b>=0 && b<m && g[a][b]=='1') dfs(a, b);
+        }
+    }
+};
+
+

@@ -1,0 +1,165 @@
+根据一棵树的中序遍历与后序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+中序遍历 inorder = [9,3,15,20,7]
+后序遍历 postorder = [9,15,7,20,3]
+返回如下的二叉树：
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+#############
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution 
+{
+public:
+    unordered_map<int,int> m;   // 存放中序每个元素及其对应的位置，因为要在中序找根的位置
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) 
+    {
+        if(postorder.empty()) return NULL; 
+
+        for(int i=0;i<inorder.size();++i)
+        {
+            m[inorder[i]]=i;   // 元素对应位置
+        }
+        return helper(inorder,0,inorder.size()-1,postorder,0,postorder.size()-1);
+    }
+
+    TreeNode* helper(vector<int>& inorder,int is,int ie,vector<int>& postorder,int ps,int pe)
+    {
+        if(ps>pe) return NULL;
+        TreeNode* root=new TreeNode(postorder[pe]);
+        root->left=NULL;
+        root->right=NULL;  
+        // int k=0;
+        // for(k;k<inorder.size();++k)
+        // {
+        //     if(inorder[k]==postorder[pe]) break;
+        // }
+
+        int mid=m[postorder[pe]];  //根在中序遍历的位置
+        int length=mid-is;   
+
+        // int length=k-is;
+        
+        root->left=helper(inorder,is,mid-1,postorder,ps,ps+length-1);    // 中序的开始结束位置在左右子树不变，和前序构造二叉树的一样，只有后序，前序位置才发生变化，除去根的位置
+        root->right=helper(inorder,mid+1,ie,postorder,ps+length,pe-1);  // 结尾要到pe-1，否则栈溢出，因为pe是根啊！！，
+
+        return root;
+    }
+
+};
+
+------------------------------------------------------  1224
+
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if(postorder.empty() || inorder.empty()) return nullptr;
+ 
+        for(int i=0;i<inorder.size();++i)
+        {
+            mp[inorder[i]]=i;
+        }
+        return help(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
+
+    }
+
+    TreeNode* help(vector<int>& ino, int is ,int ie, vector<int>& pos, int ps, int pe)
+    {
+        if(is>ie || ps>pe) return nullptr;
+
+        int r=mp[pos[pe]];
+        auto rt=new TreeNode(pos[pe]);
+
+        int ll=r-is;
+
+        rt->left=help( ino, is, r-1, pos, ps, ps+ll-1); // 看数据想一下接可以
+        rt->right=help(ino, r+1, ie, pos, ps+ll, pe-1);
+
+        return rt;
+    }
+};
+
+
+
+---------------------------- 0206 /2021/  self
+
+
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        for(int i=0;i<inorder.size();++i) mp[inorder[i]] = i;
+
+        return dfs(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
+    }
+
+    TreeNode* dfs(vector<int>& ino, int is,int  ie, vector<int>& po, int ps, int pe)
+    {
+        if(is>ie || ps > pe) return nullptr;
+        auto res= new TreeNode(po[pe]);
+        int k=mp[po[pe]];
+
+        int ll=k-is;// 根据右子树的后续序列长度和右子树的中序序列长度相同，可以求出后序的起始坐标
+
+        // is        k-1 , k ,k+1         ie
+        // ps         ?  ,   ,  ?             pe
+        // k-1 - is = ? - ps, ?=ps+k-1-is
+        
+        res->left =dfs(ino, is, k-1, po, ps , ps+ll-1);
+        res->right=dfs(ino, k+1, ie, po, ps+ll, pe-1);
+
+        return res;
+    }
+};
+
+
+
+
+-------------------------- 0210 /2021 
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        for(int i=0;i<inorder.size();++i) mp[inorder[i]]=i;
+        return dfs(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1);
+    }
+
+    TreeNode* dfs(vector<int>& inorder, int is, int ie, vector<int>&postorder, int ps, int pe)
+    {
+        if(is>ie || ps>pe) return nullptr;
+        auto rt=new TreeNode(postorder[pe]);
+        int k=mp[postorder[pe]];
+        // is ,k-1, k+1 , ie, 
+        // ps, x           pe
+        rt->left=dfs(inorder, is, k-1, postorder, ps, ps+k-1-is);
+        rt->right=dfs(inorder, k+1, ie, postorder, ps+k-is, pe-1);
+        return rt;
+    }
+};
+
+

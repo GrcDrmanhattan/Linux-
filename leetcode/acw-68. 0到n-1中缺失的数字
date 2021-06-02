@@ -1,0 +1,66 @@
+68. 0到n-1中缺失的数字
+一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0到n-1之内。
+
+在范围0到n-1的n个数字中有且只有一个数字不在该数组中，请找出这个数字。
+
+样例
+输入：[0,1,2,4]
+
+输出：3
+
+########################################################################################  二分边界，在右边的部分坐标不等于值
+
+
+// 0 1 3 4 5 
+// 0 1 2 3 4 
+
+class Solution 
+{
+public:
+    int getMissingNumber(vector<int>& nums) 
+    {
+        int n = nums.size();
+        if(n == 0) return 0;
+        
+        //数的取值0-数组长度，总共数组长度个数
+        
+        //长度是n，却有n+1个数字:0,1,2...n,(n+1个)，肯定要少一个数
+        
+        int l=0;    //                                          二分的是左闭右开区间 ，如果失败返回尾后的元素， 可以不用特判最后的结果
+        int r=n;
+        while(l<r)
+        {
+            int mid=l+r>>1;
+            if(nums[mid]!=mid) r=mid;
+            else l=mid+1;
+        }
+        
+        return l;
+        
+    }
+};
+
+
+--------------------------------  1217
+
+class Solution {
+public:
+    int getMissingNumber(vector<int>& nums) {
+        if(nums.empty()) return 0;
+        
+        int l=0;
+        int r=nums.size()-1; // lr 是下标的范围 ，二分的是闭区间
+        
+        while(l<r)
+        {
+            int mid = l+r>>1;
+            if(nums[mid] != mid) r=mid;
+            else l=mid+1;
+        }
+        
+        if(nums[l] == l) l++; // 如果二分出的下标代表的数和下标相等 表示缺少的是nums.size这个数，也就是数n
+        return l;
+    }
+};
+
+

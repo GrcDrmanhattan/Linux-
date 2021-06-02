@@ -1,0 +1,49 @@
+49. 字母异位词分组
+
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+示例:
+
+输入: ["eat", "tea", "tan", "ate", "nat", "bat"]
+输出:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+说明：
+
+所有输入均为小写字母。
+不考虑答案输出的顺序。
+
+--------------------- 0308 /2021 / yxc 
+
+
+时间复杂度分析：N 是字符串个数，L 是字符串平均长度。对于每个字符串，哈希表和vector的插入操作复杂度都是 O(1)，
+排序复杂度是 O(LlogL)所以总时间复杂度是 O(NLlogL)
+
+
+// 排序后，每组的单词就是相同的了
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> res;
+        unordered_map<string, vector<string>> hash;
+
+        for(auto &x: strs)
+        {
+            auto nx=x;
+            sort(nx.begin(), nx.end());
+            hash[nx].push_back(x);
+        }
+
+        for(auto x:hash) 
+            res.push_back(x.second);
+
+        return res;
+        
+    }
+};
+
+

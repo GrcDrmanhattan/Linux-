@@ -1,0 +1,165 @@
+211. 添加与搜索单词 - 数据结构设计
+
+请你设计一个数据结构，支持 添加新单词 和 查找字符串是否与任何先前添加的字符串匹配 。
+
+实现词典类 WordDictionary ：
+
+WordDictionary() 初始化词典对象
+void addWord(word) 将 word 添加到数据结构中，之后可以对它进行匹配
+bool search(word) 如果数据结构中存在字符串与 word 匹配，则返回 true ；否则，返回  false 。word 中可能包含一些 '.' ，每个 . 都可以表示任何一个字母。
+ 
+
+示例：
+
+输入：
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+输出：
+[null,null,null,null,false,true,true,true]
+
+解释：
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True
+ 
+
+提示：
+
+1 <= word.length <= 500
+addWord 中的 word 由小写英文字母组成
+search 中的 word 由 '.' 或小写英文字母组成
+最调用多 50000 次 addWord 和 search
+
+
+
+
+----------------------------------------- 0123 / 2021 / yxc
+
+
+
+class WordDictionary {
+public:
+    struct Node{
+        bool is_end;
+        Node* son[26];
+        Node()
+        {
+            is_end=false;
+            for(int i=0;i<26;++i) son[i]=nullptr;
+        }
+    }*rt;
+    
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        rt=new Node();
+    }
+    
+    void addWord(string word) {
+        auto p=rt;
+        for(auto x:word)
+        {
+            int u=x-'a';
+            if(!p->son[u]) p->son[u]=new Node();
+            p=p->son[u];
+        }
+
+        p->is_end=true;
+    }
+    
+    bool search(string word) {
+        return dfs(word, rt, 0);
+
+    }
+
+    bool dfs(string& word, Node* rt, int u)
+    {
+        if(u==word.size()) return rt->is_end;
+
+        if(word[u]!='.')
+        {
+            int x=word[u]-'a';
+            if(!rt->son[x]) return false;
+            return dfs(word, rt->son[x], u+1);
+        }
+        else
+        {
+            for(int j=0;j<26;++j)
+                if(rt->son[j] && dfs(word, rt->son[j], u+1)) return true;
+            
+            return false;
+        }
+        
+    }
+
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
+ 
+ 
+ 
+
+--------------------------------- 0123/ 2021 / 
+
+class WordDictionary {
+public:
+    struct Node{
+        bool is_end;
+        Node* son[26];
+        Node(){
+            is_end=false;
+            for(int i=0;i<26;++i) son[i]=nullptr;
+        }
+    }*rt;
+
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        rt=new Node();
+    }
+    
+    void addWord(string word) {
+        auto p=rt;
+        for(auto x:word)
+        {
+            int u=x-'a';
+            if(!p->son[u]) p->son[u]=new Node();
+            p=p->son[u];
+        }
+
+        p->is_end=true;
+    }
+    
+    bool search(string word) {
+        return dfs(word,  rt, 0);
+    }
+
+    bool dfs(string& word , Node* rt, int u)
+    {
+        if(u==word.size()) return rt->is_end;
+        if(word[u]!='.') // 是字母
+        {
+            int x=word[u]-'a';
+            if(!rt->son[x]) return false;
+            return dfs(word, rt->son[x], u+1);
+        }
+        else
+        {
+            for(int j=0;j<26;++j)
+            {
+                if(rt->son[j] && dfs(word, rt->son[j], u+1)) return true; // 有下一个孩子并且可以从下一个搜到，返回true
+            }
+            return false;
+        }
+    }
+};
+
+

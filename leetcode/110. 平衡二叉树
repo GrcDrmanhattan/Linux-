@@ -1,0 +1,124 @@
+110. 平衡二叉树
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。
+
+示例 1:
+
+给定二叉树 [3,9,20,null,null,15,7]
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回 true 。
+
+示例 2:
+
+给定二叉树 [1,2,2,3,3,null,null,4,4]
+
+       1
+      / \
+     2   2
+    / \
+   3   3
+  / \
+ 4   4
+返回 false 。
+
+
+
+############################################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// class Solution {
+// public:
+//     bool flag=true;
+//     bool isBalanced(TreeNode* root) {
+//         if(root==NULL)
+//             return true;
+//         int tem=get_len(root);
+        
+//         return flag;
+//     }
+//     int get_len(TreeNode* root)
+//     {
+//         if(root==NULL)
+//             return 0;
+//         int l=get_len(root->left);
+//         int r=get_len(root->right);
+//         if(!flag)   //为假返回0。 为假
+//             return 0;  // 
+//         int res=(l>r?l:r)+1;
+//         if(abs(l-r)>1)
+//             flag=false;
+//         return res;
+//     }
+
+// };
+
+//0825 
+
+class Solution
+{
+public:
+    bool flag=true;//初始为true
+    bool isBalanced(TreeNode* root)
+    {
+        if(!root) return true;
+        helper(root);
+        return flag;
+    }
+
+    int helper(TreeNode* root)
+    {
+        if(!root) return 0;
+
+        int ll=helper(root->left);
+        int rr=helper(root->right);
+
+        if(abs(ll-rr)>1) flag=false;
+
+        return max(ll,rr)+1;
+    }
+};
+
+
+
+--------------------------------------------- 0125 / 2021 
+
+
+class Solution {
+public:
+    int get(TreeNode* u)
+    {
+        if(!u) return 0;
+        int l=get(u->left);
+        int r=get(u->right);
+
+        return max(l, r)+1;
+    }
+
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+
+        int l=get(root->left);
+        int r=get(root->right);
+
+        if(abs(l-r)>1) return false;
+
+        return isBalanced(root->left) && isBalanced(root->right);
+    }
+};
+

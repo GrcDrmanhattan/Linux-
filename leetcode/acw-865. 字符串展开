@@ -1,0 +1,175 @@
+865. 字符串展开
+小赵和小钱在练字，小钱对小赵说：你知道吗，我练习的字是有蕴含的。
+
+小赵不服气了，凭什么你的就有蕴含呢？
+
+小钱说，你所看到的并不是我真正练习的字，你需要将我现在写下的字符串里面“%”和“#”之间的字重复符号前的那么多倍，才能看到我真正写的是什么。
+
+你能帮帮小赵吗？
+
+说明：可能存在嵌套的情况，如“3%g2%n##”，返回“gnngnngnn”，输入输出的字符串长度都不超过10000。
+
+输入字符串保证合法，且输出的字符串中只包含大小写英文字母。
+
+输入格式
+一行带数字和嵌套括号的字符串。
+
+输出格式
+展开的字符串。
+
+输入样例：
+3%acm#2%acm#
+输出样例：
+acmacmacmacmacm
+
+
+#####################################################3 
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=1e5;
+
+string s;
+int u=0;
+
+string dfs()
+{
+    string tmp;
+    
+    while(u<s.size())
+    {
+        char c=s[u];
+        if(c=='#') return tmp;
+        if(c>='0' && c<='9')//递归找到重复的字符串
+        {
+            int k=0;
+            while(s[u]!='%')
+            {
+                k=k*10 + s[u]-'0';//k是重复的次数
+                u++;
+            }
+            
+            u++;//while结束 u指向%，u要向下移动一个
+            string single=dfs();
+            while(k--) tmp+=single;
+        }
+        else tmp+=c;
+        u++;
+        
+    }
+    
+    return tmp;
+}
+
+int main()//括号匹配
+{
+    cin>>s;
+    
+    cout<<dfs()<<endl;
+    
+    return 0;
+}
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+string str;
+int u;
+
+string dfs()
+{
+    string res;
+    
+    while(u<str.size())
+    {
+        char c=str[u];
+        if(c=='#') return res;
+        if(c>='0' && c<='9') 
+        {
+            int k=0;
+            while(str[u]!='%')
+            {
+                k=k*10 +str[u]-'0';
+                u++;
+            }
+            u++;
+            string tmp=dfs();
+            while(k--) res+=tmp;
+        }
+        else 
+        {
+            //z字母
+            res+=c;
+        }
+        
+        u++;
+    }
+    
+    return res;
+}
+
+int main()
+{
+    cin>>str;
+    cout<<dfs()<<endl;
+    return 0;
+}
+
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+string str;
+int u;
+
+string dfs()
+{
+    string res;
+    
+    while(u<str.size())
+    {
+        char c=str[u];//当前字符
+        
+        if(c=='#') return res;
+        if(c>='0' && c<='9')
+        {
+            int k=0;
+            while(str[u]!='%')
+            {
+                k = k*10 +str[u]-'0';
+                u++;
+            }
+            
+            u++;
+            string tmp=dfs();//此时u在变化，接着上层的
+            while(k--) res+=tmp;
+        }
+        else
+        {
+            res+=c;
+        }
+        
+        u++;
+    }
+    
+    return res;
+}
+
+
+int main()
+{
+    cin>>str;
+    cout<<dfs()<<endl;
+    return 0;
+}
+
+

@@ -1,0 +1,102 @@
+22. 括号生成
+
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+ 
+
+示例 1：
+
+输入：n = 3
+输出：["((()))","(()())","(())()","()(())","()()()"]
+示例 2：
+
+输入：n = 1
+输出：["()"]
+ 
+
+提示：
+
+1 <= n <= 8
+
+
+------------------------------- 0302/ 2021/  yxc
+
+
+// 左括号数小于n时，可以加左括号
+// 右括号小于n，并且 左括号数严格大于右括号 可以加右括号
+
+//时间 合法方案的数目 Cn，2n / (n+1)  然后乘复制到数组的2n， 约等于 Cn，2n
+
+
+class Solution {
+public:
+    vector<string> res;
+
+    vector<string> generateParenthesis(int n) {
+        dfs(n, 0, 0 ,"");
+        return res;
+    }
+
+    void dfs(int n, int lc, int rc, string tmp)
+    {
+        if(lc ==n && rc ==n) res.push_back(tmp);
+        else{
+            if(lc < n) dfs(n, lc+1, rc, tmp + '(');
+            if(rc <n && lc > rc) dfs(n ,lc, rc + 1, tmp + ')');
+        }
+    }
+};
+
+
+------------------------ 0303 / 2021/ 
+
+
+// n个左括号n个右括号生成的序列有多少个合法的括号序列， 卡特兰数个
+
+class Solution {
+public:
+    vector<string> res;
+
+    vector<string> generateParenthesis(int n) {
+        dfs(n, 0, 0, "");
+        return res;
+    }
+
+    void dfs(int n, int lc ,int rc, string tmp)
+    {
+        if(lc==n && rc==n) res.push_back(tmp);
+        else{
+            if(lc < n) dfs(n, lc+1, rc, tmp+'(');
+            if(rc < n && lc > rc) dfs(n , lc, rc+1, tmp+')');
+        }
+    }
+};
+
+
+
+-------------------------- 0306 / 2021 
+
+
+class Solution {
+public:
+    vector<string> res;
+
+    vector<string> generateParenthesis(int n) {
+        dfs(n, 0, 0, "");
+        return res;
+    }
+
+    void dfs(int n ,int lc, int rc, string tmp)
+    {
+        if(lc == n && rc == n)
+        {
+            res.push_back(tmp);
+            return;
+        }
+
+        if(lc < n) dfs(n ,lc +1, rc, tmp+'(');
+        if(rc < n && lc > rc) dfs(n, lc, rc + 1, tmp+')');
+    }
+};
+
+

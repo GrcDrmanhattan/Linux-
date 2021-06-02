@@ -1,0 +1,91 @@
+#inlcude<iostream>
+#include<vector>
+
+using namespace std;
+
+//C=A/b,高精度的整数/低精度的数,商c，余数r
+vector<int> div(vector<int>&A,int b,int &r)
+{
+    vector<int> C;//商
+    r=0;
+    //但除法要从高位做起
+    //从最高位开始，也就是万千百十个，这样
+    for(int i=A.size()-1;i>=0;--i)
+    {
+        r=r*10+A[i];
+        C.push_back(r/b);//结果放的是对10取整
+        r %=b;
+    }
+
+    reverse(C.begin(),C.end());//因为main输出是倒着输出，所以这里要反转一下为了统一大整数的借口
+    
+    while(C.size()>1 && C.back()==0) C.pop_back();
+    return C;
+}
+
+
+
+int main()
+{
+    string a;
+    int b;
+
+    cin>>a>>b;
+
+    vector<int>A;
+    for(int i=a.size()-1;i>=0;--i) A.push_back(a[i]-'0');//a存储的低位在前，个十百千万这样的
+
+    int r;//余数
+    auto C=div(A,b,r);
+
+    for(int i=C.size()-1;i>=0;--i) printf("%d",C[i]);
+    cout<<endl<<r<<end;
+
+    return 0;
+}
+
+
+//  1011
+#include<iostream>
+#include<algorithm>
+#include<vector>
+
+using namespace std;
+
+vector<int> div(vector<int> &aa,int b,int &r)//r是引用
+{
+    vector<int> c;
+    r=0;
+    
+    for(int i=aa.size()-1;i>=0;--i)
+    {
+        r = r*10 +aa[i];
+        c.push_back(r/b);
+        r%=b;
+    }
+    
+    reverse(c.begin(),c.end());
+    
+    while(c.size()>1 && c.back()==0) c.pop_back();
+    return c;
+}
+
+int main()
+{
+    string a;
+    int b;
+    cin>>a>>b;
+    vector<int> aa;
+    
+    for(int i=a.size()-1;i>=0;--i) aa.push_back(a[i]-'0');
+    
+    int r;
+    auto c=div(aa,b,r);
+    
+    for(int i=c.size()-1;i>=0;--i) printf("%d",c[i]);
+    cout<<endl<<r<<endl;
+    
+    return 0;
+}
+ 
+

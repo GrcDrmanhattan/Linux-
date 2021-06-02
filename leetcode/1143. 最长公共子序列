@@ -1,0 +1,107 @@
+输入：text1 = "abcde", text2 = "ace" 
+输出：3  
+解释：最长公共子序列是 "ace"，它的长度为 3。
+示例 2:
+
+输入：text1 = "abc", text2 = "abc"
+输出：3
+解释：最长公共子序列是 "abc"，它的长度为 3。
+
+--------------------------------------------------
+---------------------------------------------------------------------
+//dp[i][j] 表示text1[0~i-1]和text2[0~j-1]的最长公共子序列长度
+//或者text[1->i]和text2[1->j]的lcs，假设索引从1开始索引字符串
+//dp行长度是0,1,2...len1总计len1+1个
+//dp列0,1,2,...len2,总计len2+1个
+
+class Solution 
+{
+public:
+    int longestCommonSubsequence(string text1, string text2) 
+    {
+        int len1=text1.size();
+        int len2=text2.size();
+        vector<vector<int>> dp(len1+1,vector<int>(len2+1,-1));//dp长度，因为补充边界0行0列
+
+        for(int i=0;i<=len1;++i)//初始化应该是到0...字符串长度，因为dp表行的范围是0到len共计len+1个
+        {
+            dp[i][0]=0;//第0列
+        }
+
+        for(int i=0;i<=len2;++i)//列总计有len2+1 个
+        {
+            dp[0][i]=0;
+        }       //初始化错误导致爆栈？？？
+
+        int res=0;
+        for(int i=1;i<=len1;++i)//从第1到行长度为止
+        { 
+            for(int j=1;j<=len2;++j)//从1到列的长度为止
+            {
+                if(text1[i-1] != text2[j-1]) //注意下标从1开始 
+                {
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j-1]+1;//找到一个，lcs长度加一
+                }
+            }
+        }
+
+        return dp[len1][len2];//返回长度位置的dp
+    }
+};
+
+//参考代码以下
+
+// class Solution {
+// public:
+//     int longestCommonSubsequence(string text1, string text2) {
+//         int len1=text1.length();
+//         int len2=text2.length();
+//         vector<vector<int>> dp(len1+1,vector<int>(len2+1,0));
+//         for(int i=1;i<len1+1;i++){
+//             for(int j=1;j<len2+1;j++){
+//                 if(text1[i-1] == text2[j-1])
+//                     dp[i][j]=dp[i-1][j-1]+1;
+//                 else
+//                     dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+//             }
+//         }
+//         return dp[len1][len2];
+//     }
+// };
+
+//算法笔记 0811 
+
+class Solution
+{
+public:
+    int longestCommonSubsequence(string text1, string text2)
+    {
+        int len1=text1.size();
+        int len2=text2.size();
+        vector<vector<int>> dp(len1+1,vector<int>(len2+1,0));
+
+        for(int i=1;i<=len1;++i)//从1开始，相当于边界0行0列，不动了
+        {
+            for(int j=1;j<=len2;++j)
+            {
+                if(text1[i-1]==text2[j-1])//字符串坐标从0开始的，要从第一个字母开始遍历，所以相对于test[0],
+                {
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }
+                else
+                {
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+
+
+        return dp[len1][len2];
+    }
+};
+
+

@@ -1,0 +1,46 @@
+#include<iostream>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int m;
+int idx;
+int e[N];
+int l[N];
+int r[N];
+
+void init()
+{
+    //0表示左端点，1表示右端点
+    r[0]=1;
+    l[1]=0;
+    idx=2;
+    
+}
+
+//在k的右边插入节点x
+void add(int k,int x)
+{
+    e[idx]=x;
+    
+    r[idx]=r[k];
+    l[idx]=k;
+    //顺序
+    l[r[k]]=idx;
+    r[k]=idx;
+    
+}
+
+//删除第k个点
+void remove(int k)
+{
+    r[l[k]]=r[k];//k的左边的右边指向 右边
+    l[r[k]]=l[k];//k的右边的左边指向 k的左边
+    
+}
+
+在k的左边插入节点x
+相当于在右边 add(l[k],x)
+
+

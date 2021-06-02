@@ -1,0 +1,317 @@
+188. 武士风度的牛
+农民John有很多牛，他想交易其中一头被Don称为The Knight的牛。
+
+这头牛有一个独一无二的超能力，在农场里像Knight一样地跳（就是我们熟悉的象棋中马的走法）。
+
+虽然这头神奇的牛不能跳到树上和石头上，但是它可以在牧场上随意跳，我们把牧场用一个x，y的坐标图来表示。
+
+这头神奇的牛像其它牛一样喜欢吃草，给你一张地图，上面标注了The Knight的开始位置，树、灌木、石头以及其它障碍的位置，除此之外还有一捆草。
+
+现在你的任务是，确定The Knight要想吃到草，至少需要跳多少次。
+
+The Knight的位置用’K’来标记，障碍的位置用’*’来标记，草的位置用’H’来标记。
+
+这里有一个地图的例子：
+
+             11 | . . . . . . . . . .
+             10 | . . . . * . . . . . 
+              9 | . . . . . . . . . . 
+              8 | . . . * . * . . . . 
+              7 | . . . . . . . * . . 
+              6 | . . * . . * . . . H 
+              5 | * . . . . . . . . . 
+              4 | . . . * . . . * . . 
+              3 | . K . . . . . . . . 
+              2 | . . . * . . . . . * 
+              1 | . . * . . . . * . . 
+              0 ----------------------
+                                    1 
+                0 1 2 3 4 5 6 7 8 9 0 
+
+
+The Knight 可以按照下图中的A,B,C,D…这条路径用5次跳到草的地方（有可能其它路线的长度也是5）：
+
+
+             11 | . . . . . . . . . .
+             10 | . . . . * . . . . .
+              9 | . . . . . . . . . .
+              8 | . . . * . * . . . .
+              7 | . . . . . . . * . .
+              6 | . . * . . * . . . F<
+              5 | * . B . . . . . . .
+              4 | . . . * C . . * E .
+              3 | .>A . . . . D . . .
+              2 | . . . * . . . . . *
+              1 | . . * . . . . * . .
+              0 ----------------------
+                                    1
+                0 1 2 3 4 5 6 7 8 9 0
+输入格式
+第1行： 两个数，表示农场的列数C(C<=150)和行数R(R<=150)。
+
+第2..R+1行: 每行一个由C个字符组成的字符串，共同描绘出牧场地图。
+
+输出格式
+一个整数，表示跳跃的最小次数。
+
+样例
+输入样例：
+10 11
+..........
+....*.....
+..........
+...*.*....
+.......*..
+..*..*...H
+*.........
+...*...*..
+.K........
+...*.....*
+..*....*..
+输出样例
+5
+
+########################################################33    和普通的bfs一样，只是每次扩展的坐标发生变化，每次向四周扩散都是走对角线
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+#define x first 
+#define y second 
+typedef pair<int,int> PII;
+
+const int N=155,M=N*N;
+
+int n,m;
+char g[N][N];
+int dis[N][N];
+// bool st[N][N];
+
+PII q[M];
+int dx[]={1,2, 2, 1,-1,-2,-2,-1};
+int dy[]={2,1,-1,-1,-2,-1, 1, 2};
+int cnt=0;
+
+void bfs(int x,int y)
+{
+    int hh=0;
+    int tt=0;
+    q[0]={x,y};
+    
+  
+    memset(dis,-1,sizeof(dis));
+    dis[x][y]=0;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=0;i<8;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m &&g[a][b]!='*'&& dis[a][b] ==-1)
+            {
+                if(g[a][b]=='H') cnt=dis[t.x][t.y]+1;
+                
+                //如果不是终点就加入队列
+                dis[a][b]=dis[t.x][t.y]+1;
+                q[++tt]={a,b};
+            }
+        }
+    }
+}
+
+
+int main()
+{
+    cin>>m>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            cin>>g[i][j];
+            
+    int sx,sy;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]=='K')
+            {
+                sx=i;
+                sy=j;
+            }
+    
+    bfs(sx,sy);
+    
+    cout<<cnt<<endl;
+    return 0;
+}
+
+
+####################################################3  1107
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=155,M=N*N;
+
+typedef pair<int,int> PII;
+#define x first
+#define y second
+
+int n,m;
+char g[N][N];
+
+int dis[N][N];
+
+PII q[M];
+
+int dx[]={1,2,2,1,-1,-2,-2,-1};
+int dy[]={-2,-1,1,2,2,1,-1,-2};
+
+int cnt=0;
+
+void bfs(int x,int y)
+{
+    int hh=0;
+    int tt=0;
+    q[0]={x,y};
+    
+    memset(dis,-1,sizeof(dis));
+    dis[x][y]=0;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=0;i<8;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            if(a>=0 && a< n && b>=0 && b<m && g[a][b]!='*' && dis[a][b]==-1)
+            {
+                if(g[a][b]=='H') cnt+=dis[t.x][t.y]+1;
+                
+                q[++tt]={a,b};
+                dis[a][b]=dis[t.x][t.y]+1;
+            }
+        }
+    }
+}
+
+int main()
+{
+    cin>>m>>n;
+    
+    int x,y;
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+        {
+            cin>>g[i][j];
+            if(g[i][j]=='K')
+            {
+                x=i;
+                y=j;
+            }
+        }
+    }
+    
+    bfs(x,y);
+    
+    cout<<cnt<<endl;
+    
+    return 0;
+}
+
+--------------------------------- 0323/  2021/ 
+
+
+#include<iostream>
+#include<queue>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int dx[]={1,2,2,1,-1,-2,-2,-1};
+int dy[]={2,1,-1,-2,-2,-1,1,2};
+
+const int N=155;
+char g[N][N];
+queue<pair<int, int>> q;
+int cnt=0;
+
+int dis[N][N];
+
+int n;
+int m;
+
+
+void bfs(int x, int y)
+{
+    
+    q.push({x , y});
+    memset(dis, -1, sizeof(dis));
+    
+    dis[x][y]=0;
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        
+        for(int i=0;i<8;++i)
+        {
+            int a=t.first + dx[i];
+            int b=t.second + dy[i];
+            
+            if(a>=0 && a<n && b>=0 && b<m  && g[a][b] != '*' && dis[a][b]==-1)
+            {
+                if(g[a][b]=='H') cnt = dis[t.first][t.second] + 1;
+                
+                
+                q.push({a ,b});
+                
+                dis[a][b]=dis[t.first][t.second]+1;
+            }
+        }
+        
+    }
+    
+    
+}
+
+
+int main()
+{
+    
+    cin>>m>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            cin>>g[i][j];
+            
+            
+    int sx;
+    int sy;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]=='K')
+            {
+                sx=i;
+                sy=j;
+            }
+    
+    
+    bfs(sx, sy);
+    cout<<cnt<<endl;
+    
+    return 0;
+}
+
+
+
+

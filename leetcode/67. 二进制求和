@@ -1,0 +1,64 @@
+给你两个二进制字符串，返回它们的和（用二进制表示）。
+
+输入为 非空 字符串且只包含数字 1 和 0。
+
+ 
+
+示例 1:
+
+输入: a = "11", b = "1"
+输出: "100"
+示例 2:
+
+输入: a = "1010", b = "1011"
+输出: "10101"
+
+==============================================================================
+
+class Solution 
+{
+public:
+    string addBinary(string a, string b) 
+    {
+        string res;
+        int jinwei=0;
+        int lena=a.size();
+        int lenb=b.size();
+        while(lena<lenb) //先补齐ab的位数，前面加字符0
+        {
+            a = '0'+a;
+            lena++;
+        }
+        while(lenb<lena)
+        {
+            b= '0' +b;
+            ++lenb;
+        }
+        for(int i=a.size()-1;i>=0;--i)
+        {
+            int tmp=a[i]-'0'+jinwei+b[i]-'0'; 
+            // cout<< "jinwei " <<jinwei<<endl;
+            int cur=tmp%2;
+            // cout<<"cur "<<cur<<endl;
+            res+= to_string(cur);
+            jinwei=tmp/2;//进位 
+        
+        }   
+        if(jinwei ==1)
+        {
+            res+= "1";
+        }
+        else
+        {
+            res += "";
+        }
+        // string ans;    
+        // for(int i=res.size()-1;i>=0;--i)
+        // {
+        //     ans+=res[i];
+        // }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
+

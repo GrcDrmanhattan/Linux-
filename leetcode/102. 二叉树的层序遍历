@@ -1,0 +1,169 @@
+给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+
+ 
+
+示例：
+二叉树：[3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回其层次遍历结果：
+
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+################################## bfs 队列
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) 
+    {
+        vector<vector<int>> res;        
+        if(!root) return {};
+        // temp.push_back(root->val);
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty())
+        {
+            vector<int> temp;//每次新建vector，不用后面clear
+            int n=q.size();
+            while(n--)
+            {
+                TreeNode* t=q.front();
+                temp.push_back(t->val);
+                q.pop();
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+                // res.push_back(temp);
+                // temp.clear();
+            }
+            res.push_back(temp);
+        }
+        return res;
+    }
+};
+
+class Solution
+{
+public:
+    vector<vector<int>> levelOrder(TreeNode* root)
+    {
+        if(root==NULL) return {};
+        vector<vector<int>> res;
+        queue<TreeNode*> qq;
+        qq.push(root);
+        vector<int> tmp;
+
+        while(!qq.empty())
+        {
+            
+            int nn=qq.size();
+            while(nn--)
+            {
+                TreeNode* node=qq.front();
+                qq.pop();
+                tmp.push_back(node->val);
+
+                if(node->left) qq.push(node->left);
+                if(node->right) qq.push(node->right);
+
+            }
+
+            res.push_back(tmp);
+            tmp.clear();
+        }
+
+        return res;
+    }
+};
+
+
+
+-----------------------------------------------------  1224
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root) return res;
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+            
+            while(n--)
+            {
+                auto t=q.front();
+               
+                tmp.push_back(t->val);
+                q.pop();
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            res.push_back(tmp);
+        }
+
+
+        return res;
+    }
+};
+
+
+
+
+------------------------------- 0125  / 2021/ 
+
+
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if(!root) return {};
+        vector<vector<int>> res;
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+
+            while(n--)
+            {
+                auto t=q.front();
+                q.pop();
+                tmp.push_back(t->val);
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            res.push_back(tmp);
+        }
+
+        return res;
+    }
+};
+
+

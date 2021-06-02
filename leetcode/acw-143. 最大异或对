@@ -1,0 +1,108 @@
+143. 最大异或对
+
+在给定的N个整数A1，A2……AN中选出两个进行xor（异或）运算，得到的结果最大是多少？
+
+输入格式
+第一行输入一个整数N。
+
+第二行输入N个整数A1～AN。
+
+输出格式
+输出一个整数表示答案。
+
+数据范围
+1≤N≤105,
+0≤Ai<2^31
+输入样例：
+3
+1 2 3
+输出样例：
+3
+
+
+-------------------------------- 0106 /2021 / yxc  trie树去存储数字的01串
+
+
+// 每个数最多31位，0到30结束
+
+
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10, M=31 * N;
+
+int n;
+
+int a[N];
+int idx;
+int son[M][2];
+
+
+void insert(int x)
+{
+    int p=0;
+    for(int i=30;i>=0;--i)
+    {
+        int u=x>>i&1;
+        
+        if(!son[p][u]) son[p][u]=++idx;
+        p=son[p][u];
+    }
+}
+
+
+int query(int x) // 查询和当前数异或最大的数是多少
+{
+    int p=0;
+    int res=0; // h和x配对的数
+    
+    for(int i=30;i>=0;--i)// 从最高位开始看
+    {
+        int u=x>>i&1;
+        
+        if(son[p][!u]) // 和当前数相反的存在
+        {
+            p=son[p][!u];
+            res = res * 2 + !u;
+        }
+        else
+        {
+            p=son[p][u];
+            res = res *2 + u;
+        }
+    }
+    
+    return res;
+}
+
+int main()
+{
+    cin>>n;
+    // for(int i=0;i<n;++i) 
+    // {
+        
+       
+    // }
+    
+    int res=0;
+    
+    for(int i=0;i<n;++i) 
+    {
+        
+        cin>>a[i];
+        insert(a[i]);
+        int t=query(a[i]);
+        
+        res=max(res, t^a[i]);
+    }
+    
+    cout<<res<<endl;
+
+    return 0;
+}
+
+
+

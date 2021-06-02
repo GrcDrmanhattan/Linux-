@@ -1,0 +1,102 @@
+283. 移动零
+
+给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+示例:
+
+输入: [0,1,0,3,12]
+输出: [1,3,12,0,0]
+
+###################################
+
+//0819 
+
+class Solution 
+{
+public:
+    void moveZeroes(vector<int>& nums) 
+    {
+        int n=nums.size();
+        if(n==0) return ;
+        int j=0;
+        for(int i=0;i<n;++i)
+        {
+            if(nums[i]!=0)//当前元素不为0，移动到开头，然后j++
+            {
+                nums[j]=nums[i];
+                ++j;
+            }
+        }
+
+        for(int i=j;i<n;++i)
+        {
+            nums[i]=0;
+        }
+
+    }
+};
+
+
+class Solution
+{
+public:
+    void moveZeroes(vector<int>& nums)
+    {
+        int n=nums.size();
+        if(n==0) return ;
+        //j位置是重新排列后不是0的元素的位置
+        int j=0;//刚开始j在第一个位置，从前到后，让元素被复制为0
+        for(int i=0;i<n;++i)
+        {
+            if(nums[i]!=0)
+            {
+                if(i>j)
+                {
+                    nums[j]=nums[i];//复制到开头
+                    nums[i]=0;//本身设置为0
+                    
+                }
+
+                ++j;//然后j移动到下一个位置，准备下一个
+            }
+        }
+    }
+};
+
+--------------  0102 /2021 /yxc
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+
+        int j=0;
+        for(int i=0;i<nums.size();++i)
+        {
+            if(nums[i] != 0) nums[j++]=nums[i];
+
+        }
+        while(j<nums.size()) nums[j++]=0;
+    }
+};
+
+
+
+----------------------------------------- 0127 / 2021 / 
+
+时间On
+空间O1
+
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int j=0;
+        for(int i=0;i<nums.size();++i)
+        {
+            if( nums[i]!=0) nums[j++]=nums[i];
+        }
+
+        while(j<nums.size()) nums[j++]=0;
+    }
+};
+

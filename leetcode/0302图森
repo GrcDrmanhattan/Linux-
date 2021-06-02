@@ -1,0 +1,184 @@
+有一片海域，中间有一些小岛，找出一共有多少个「实心矩形小岛」。
+
+海域以二维数组给出，数组中包含 0 和 1 两种元素，0 代表海，1 代表地面。被一片海包围的地面成为小岛，小岛通过水平和竖直方向与相邻的陆地连接而成。可以假设数组边缘之外都是海。
+
+「实心矩形小岛」的定义为: 四条边与二维数组边界平行、内部均为 1 的小岛
+
+int numRectangleIslands(vector<vector<char>>& grid){
+
+    // Your code here...
+
+}
+
+
+Input:
+
+{{1, 1, 0, 1, 1},
+
+{1, 0, 0, 0, 0},
+
+{0, 0, 0, 0, 1},
+
+{1, 1, 0, 1, 1}}
+
+
+Output:
+
+2
+
+
+--------------------------
+
+
+边界的面积等于连通块的面积 就是矩形，注意参数是引用
+
+
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+vector<vector<int>> g;
+bool st[110][110];
+int res=0;
+int dx[4]={0, 1 , 0, -1};
+int dy[4]={1, 0, -1, 0};
+
+int dfs(int x, int y, int &minx, int &miny, int &maxx, int &maxy){
+    int cnt=1;
+    st[x][y]=true;
+    
+    for(int i=0;i<4;++i)
+    {
+        int a=x+dx[i];
+        int b=y+dy[i];
+        
+        if(a>=0 && a<g.size() && b>=0 && b<g[0].size() && g[a][b]==1 && !st[a][b])
+        {
+            
+            minx=min(minx, a);
+            miny=min(miny, b);
+            
+            maxx=max(maxx, a);
+            maxy=max(maxy, b);
+            
+            cnt+=dfs(a, b, minx, miny ,maxx, maxy);
+        }
+    }
+    
+    
+    //这个地方dfs还没有结束，不能先计算，否则可能会出现多加的情况，我们到这里的时候，刚好是一个矩形，
+    //但是整个连通快其实不是矩形 ,所以可能会出现多增加的情况，最好是dfs结束之后判断
+    //    if((maxy- miny) * (maxx - minx) == cnt) res++;
+    
+    return cnt;
+}
+
+
+
+int main() {
+    res=0;
+    
+    memset(st, 0, sizeof st);
+    g={
+        {1, 1, 0, 1, 1},
+        
+        {1, 0, 0, 0, 0},
+        
+        {0, 0, 0, 0, 1},
+        
+        {1, 1, 0, 1, 1},
+    };
+    int tmp;
+    
+    for(int i=0;i<g.size();++i)
+    for(int j=0;j<g[0].size();++j){
+        if(!st[i][j] && g[i][j] == 1){
+            //创建四个变量，要传引用，等下dfs之后把四个值传出来
+            int minx,miny,maxx,maxy;
+            minx=i,maxx=i;
+            miny=j,maxy=j;
+            tmp = dfs(i ,j, minx, miny, maxx, maxy);
+            //判断是否是一个矩形,注意要加1
+            if((maxx-minx+1)*(maxy-miny+1)==tmp){
+                res++;
+            }
+        }
+    }
+    
+    cout<<res<<endl;
+}
+
+
+
+----------------------------------------- 
+
+2.给k个长度不定的升序数列合并成一个降序的数列
+
+vector<int> merge(vector<vector<int>> nums);
+
+ 
+
+输入3个数列
+
+{{1, 4, 5, 7, 12},
+
+{1, 2, 6, 7, 11, 20},
+
+{2, 3, 3, 3}}
+
+输出为
+
+D：20 12 11 7 7 6 5 4 3 3 3 2 2 1 1
+
+
+-------------------------------------- 
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+vector<int> merge(vector<vector<int>> &nums)
+{
+    priority_queue<pair<int, int > > q;
+    
+    for(int i=0;i<nums.size();++i){
+        q.push({nums[i].back(), i});
+        nums[i].pop_back();
+    }
+    
+    vector<int> res;
+    
+    while(q.size()){
+        auto t=q.top();
+        q.pop();
+        res.push_back(t.first);
+        
+        if(nums[t.second].size()) {
+            q.push({nums[t.second].back(), t.second});
+            nums[t.second].pop_back();
+        }
+    }
+    
+    return res;
+    
+}
+
+int main() {
+    //int a;
+    //cin >> a;
+    vector<vector<int>> nums={
+        {1, 4, 5, 7, 12},
+        
+        {1, 2, 6, 7, 11, 20},
+        
+        {2, 3, 3, 3},
+    };
+    
+    vector<int> res=merge(nums);
+    
+    for(auto x:res) cout<<x<<' ';
+    
+}
+

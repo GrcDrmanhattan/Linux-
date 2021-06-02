@@ -1,0 +1,133 @@
+329. 矩阵中的最长递增路径
+给定一个整数矩阵，找出最长递增路径的长度。
+
+对于每个单元格，你可以往上，下，左，右四个方向移动。 你不能在对角线方向上移动或移动到边界外（即不允许环绕）。
+
+示例 1:
+
+输入: nums = 
+[
+  [9,9,4],
+  [6,6,8],
+  [2,1,1]
+] 
+输出: 4 
+解释: 最长递增路径为 [1, 2, 6, 9]。
+示例 2:
+
+输入: nums = 
+[
+  [3,4,5],
+  [3,2,6],
+  [2,2,1]
+] 
+输出: 4 
+解释: 最长递增路径是 [3, 4, 5, 6]。注意不允许在对角线方向上移动。
+
+-------------------- 0112 //2021 / yxc
+
+// 如果成环，就只能用最短路算法，不能用dp记忆化
+// f[i][j] 从ij开始的上升路径的最大长度
+
+
+class Solution {
+public:
+    
+    vector<vector<int>> g;
+    vector<vector<int>> f;
+    int n,m;
+
+    int dfs(int x,int y)
+    {
+        auto &t=f[x][y];
+        if(t!=-1) return t;
+        
+        t=1;
+
+        int dx[4]={0,1,0,-1};
+        int dy[4]={1,0,-1,0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]>g[x][y])
+            {
+               t=max(t ,dfs(a, b)+1);
+            }
+        }
+        return t;
+    }
+
+
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.empty()||matrix[0].empty()) return 0;
+        g=matrix;
+
+        n=g.size();
+        m=g[0].size();
+        f=vector<vector<int>>(n, vector<int>(m, -1));
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                res=max(res, dfs(i, j));
+
+        return res;
+    }
+};
+
+
+
+
+------------------------------- 0122 
+
+class Solution {
+public:
+    vector<vector<int>> g;
+    int n,m;
+    vector<vector<int>> f;
+
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return 0;
+        g=matrix;
+        n=g.size();
+        m=g[0].size();
+
+        f=vector<vector<int>>(n,vector<int>(m, -1));
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                res=max(res, dfs(i, j));
+
+        return res;
+    }
+
+
+    int dfs(int x ,int y)
+    {
+        auto &t=f[x][y];
+        if(t!=-1) return t;
+        t=1;
+
+        int dx[4]={0,1,0,-1};
+        int dy[4]={1,0,-1,0};
+
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]>g[x][y])
+                t=max(t, dfs(a, b)+1);
+        }
+
+        return t;
+    }
+};
+
+
+
+

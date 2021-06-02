@@ -1,0 +1,182 @@
+173. 矩阵距离
+题目描述
+给定一个N行M列的01矩阵A，A[i][j] 与 A[k][l] 之间的曼哈顿距离定义为：
+
+dist(A[i][j],A[k][l])=|i−k|+|j−l|
+输出一个N行M列的整数矩阵B，其中：
+
+B[i][j]=min1≤x≤N,1≤y≤M,A[x][y]=1dist(A[i][j],A[x][y])
+输入格式
+第一行两个整数n,m。
+
+接下来一个N行M列的01矩阵，数字之间没有空格。
+
+输出格式
+一个N行M列的矩阵B，相邻两个整数之间用一个空格隔开。
+
+数据范围
+1≤N,M≤1000
+难度：简单
+时/空限制：1s / 64MB
+总通过数：1425
+总尝试数：2420
+来源：《算法竞赛进阶指南》, 小马智行面试题
+算法标签
+
+样例
+输入样例：
+3 4
+0001
+0011
+0110
+输出样例：
+3 2 1 0
+2 1 0 0
+1 0 0 1
+
+*******************************************************88   多源bfs
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+typedef pair<int,int> PII;
+
+const int N=1010;
+const int M=N*N;
+
+#define x first
+#define y second
+
+int n,m;
+char g[N][N];
+PII q[M];
+int dis[N][N];
+
+// 求每个点到1的最近曼哈顿距离，将最近距离写在矩阵上对应位置输出
+
+void bfs()
+{
+    int hh=0;int tt=-1;//              tt= -1 
+    memset(dis,-1,sizeof(dis));
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+            if(g[i][j]=='1')//将所有的起点放入队列，用终点去更新别的点
+            {
+                q[++tt]={i,j};
+                dis[i][j]=0;
+            }
+    
+    int dx[]={0,1,0,-1};
+    int dy[]={1,0,-1,0};
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=0;i<4;++i)
+        {
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            if(a>=0 && a<n && b>=0 &&b<m && dis[a][b]==-1)
+            {
+                q[++tt]={a,b};
+                dis[a][b]=dis[t.x][t.y]+1;
+            }
+        }
+    }
+}
+
+int main()
+{
+    scanf("%d%d",&n,&m); 
+    for(int i=0;i<n;++i) scanf("%s",g[i]);
+    
+    bfs();
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+            printf("%d ",dis[i][j]);
+        puts("");
+    }
+
+    return 0;
+}
+
+
+---------------------- 0325 / 2021/  
+
+
+//  求每个点到最近的1的距离
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+const int N=1010;
+queue<pair<int ,int >> q;
+
+int n,m;
+int dx[4]={0,1 ,0,-1};
+int dy[4]={1, 0, -1, 0};
+
+char g[N][N];
+int dis[N][N];
+
+void bfs()
+{
+    memset(dis, -1, sizeof(dis));
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<m;++j)
+        {
+            if(g[i][j]=='1')
+            {
+                dis[i][j]=0;
+                q.push({i, j});
+            }
+        }
+        
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=t.first+dx[i];
+            int b=t.second+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && dis[a][b]==-1 )
+            {
+                dis[a][b]=dis[t.first][t.second]+1;
+                q.push({a, b});
+            }
+        }
+    }
+}
+
+
+
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;++i) scanf("%s", g[i]);
+    
+    bfs();
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<m;++j)
+        {
+            cout<<dis[i][j]<<' ';
+        }
+        cout<<endl;
+    }
+    
+    return 0;
+}
+
+

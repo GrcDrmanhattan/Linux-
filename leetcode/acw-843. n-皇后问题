@@ -1,0 +1,272 @@
+n-皇后问题是指将 n 个皇后放在 n∗n 的国际象棋棋盘上，使得皇后不能相互攻击到，即任意两个皇后都不能处于同一行、同一列或同一斜线上。
+
+1_597ec77c49-8-queens.png
+
+现在给定整数n，请你输出所有的满足条件的棋子摆法。
+
+输入格式
+共一行，包含整数n。
+
+输出格式
+每个解决方案占n行，每行输出一个长度为n的字符串，用来表示完整的棋盘状态。
+
+其中”.”表示某一个位置的方格状态为空，”Q”表示某一个位置的方格上摆着皇后。
+
+每个方案输出完成后，输出一个空行。
+
+输出方案的顺序任意，只要不重复且没有遗漏即可。
+
+数据范围
+1≤n≤9
+输入样例：
+4
+输出样例：
+.Q..
+...Q
+Q...
+..Q.
+
+..Q.
+Q...
+...Q
+.Q..
+
+
+#############################################################
+
+//********************* 和·全排列一样，先知道每一行可以放一个，所以按照行枚举
+
+// #include<iostream>
+
+// using namespace std;
+
+// const int N=20;
+// int n;
+// bool dg[N];//右到左对角线
+// bool udg[N];
+// bool col[N];
+
+// char g[N][N];
+ 
+// void dfs(int u)//枚举每一行（层），0到n-1行，0到n-1列
+// {
+//     if(u==n)//已经到n层则要输出结果，因为坐标从0开始
+//     {
+//         for(int i=0;i<n;++i) puts(g[i]);//输出每一行的情况
+//         puts("");
+//         return ;
+//     }
+       //不满足u==n
+//     for(int i=0;i<n;++i)//枚举第u行可以放在哪一列，在第u层可以放哪个位置g[u][i]的i的坐标
+//     {
+            //y=x+b,y=-x+b,求出b，i=u+b,i=-u+b,
+            // 对角线一个是和固定，一个是差固定，但作为下标要为正数，所以加n
+//         if(!col[i] && !dg[u+i] && !udg[n-u+i])
+//         {
+//             g[u][i]='Q';
+//             col[i]=dg[u+i]=udg[n-u+i]=true;
+//             dfs(u+1);
+//             col[i]=dg[u+i]=udg[n-u+i]=false;
+//             g[u][i]='.';
+//         }
+//     }
+// }
+ 
+// int main()
+// {
+//     cin>>n;
+    
+//     for(int i=0;i<n;++i)
+//         for(int j=0;j<n;++j)
+//             g[i][j]='.';
+    
+//     dfs(0);//第0行开始
+    
+//     return 0;
+// }
+ 
+ 
+ 
+
+// *****************  第二种·搜索顺序
+ 
+#include<iostream>
+
+using namespace std;
+
+const int N=20;
+char g[N][N];
+
+int n;
+bool row[N];
+bool col[N];
+bool dg[N];
+bool udg[N];
+
+void dfs(int x,int y,int s)//从左到右，每一行一个个开始遍历
+{
+    if(y==n)
+    {
+        y=0;
+        ++x;
+    }
+    
+    if(x==n)//坐标从0开始，搜到第n行结束
+    {
+        if(s==n)
+        {
+            for(int i=0;i<n;++i) puts(g[i]);
+            puts("");//输出每行后，加换行
+            
+        }
+        
+        return ;//放在if外面
+    }
+    
+    //不放
+    dfs(x,y+1,s);
+    
+    //
+    
+    if(!col[y] && !row[x] && !dg[x+y] && !udg[x-y+n] )//坐标和，坐标差相等，数组下标为整数，所以加n
+    {
+        g[x][y]='Q';
+        col[y]=row[x]=dg[x+y]=udg[x-y+n]=true;
+        dfs(x,y+1,s+1);
+        
+        col[y]=row[x]=dg[x+y]=udg[x-y+n]=false;
+        g[x][y]='.';
+    }
+}
+
+
+int main() 
+{
+    cin>>n;
+    
+    for(int i=0;i<n;++i)
+    {
+        for(int j=0;j<n;++j)
+        {
+            g[i][j]='.';
+        }
+    }
+    
+    dfs(0,0,0);
+    
+    return 0;
+}
+
+-------------------------- 0114 /2021 
+
+一共搜索 n 行，每行有 n种选择，所以时间复杂度最坏是 O(n!)
+
+#include<iostream>
+
+using namespace std;
+
+
+char g[10][10];
+
+bool col[20], d[20],ud[20];
+int n;
+
+void dfs(int u)
+{
+    if(u==n)
+    {
+        for(int i=0;i<n;++i) puts(g[i]);
+        puts("");
+        return ;
+    }
+    
+    for(int i=0;i<n;++i)
+    {
+        if(!col[i] && !d[u+i] && !ud[u-i+n])
+        {
+            g[u][i]='Q';
+            col[i]=d[u+i]=ud[u-i+n]=true;
+            dfs(u+1);
+            g[u][i]='.';
+            col[i]=d[u+i]=ud[u-i+n]=false;
+        }
+    }
+}
+
+int main()
+{
+    // int n;
+    cin>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            g[i][j]='.';
+            
+    dfs(0);
+    
+    return 0;
+}
+
+
+
+--------------------- 0413 / 2021/  
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=10;
+
+int n;
+
+char g[N][N];
+bool col[N];
+bool dg[N];
+bool udg[N];
+
+
+
+void dfs(int u)
+{
+    if(u==n) {
+        for(int i=0;i<n;++i) puts(g[i]);
+        cout<<endl;
+    }
+    
+    for(int i=0;i<n;++i){
+        if(!col[i] && !dg[u+i] && !udg[u-i+n]){
+            g[u][i]='Q';
+            col[i]=dg[u+i]=udg[u-i+n]=true;
+            dfs(u+1);
+            g[u][i]='.';
+            col[i]=dg[u+i]=udg[u-i+n]=false;
+        }
+    }
+    
+}
+
+
+int main()
+{
+    
+    cin>>n;
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            g[i][j]='.';
+            
+    dfs(0);
+    
+    // for(int i=0;i<n;++i){
+    //     for(int j=0;j<n;++j){
+    //         cout<<g[i][j]<<' ';
+    //     }
+    //     cout<<endl;
+    // }
+    
+    return 0;
+            
+}
+
+
+
+

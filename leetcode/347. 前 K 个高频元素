@@ -1,0 +1,169 @@
+347. 前 K 个高频元素
+
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+
+ 
+
+示例 1:
+
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+示例 2:
+
+输入: nums = [1], k = 1
+输出: [1]
+
+
+###########################################
+
+class Solution 
+{
+public:
+   static bool cmp(pair<int,int> &x, pair<int,int> &y) 
+    {
+        return x.second > y.second;
+    }
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        
+        unordered_map<int,int> mp;
+        int n=nums.size();
+       
+        for(int i=0;i<n;++i)
+        {
+            mp[nums[i]]++;
+        }
+
+        vector<pair<int,int>> res(mp.begin(),mp.end());//去重复？？相同的键只保留一个
+        
+        sort(res.begin(),res.end(),cmp);//加cmp保证按次数从大到小排序
+        // for(auto x:res)
+        // {
+            // cout<<x.first<<" "<<x.second<<endl;
+        // }
+        vector<int> tmp;
+        int t=0;
+        int j=0;
+        for(int i=0;i<k;++i)//循环k次，每次找到一个
+        {
+            // j++;
+            // while(j<n && res[j].second==res[j+1].second) 
+            // {
+            //     ++j;
+            // }
+            
+            tmp.push_back(res[i].first);
+            
+        }
+
+        return tmp;
+    }
+};
+
+
+// class Solution {
+// public:
+//     static bool cmp(pair<int,int> &x, pair<int,int> &y) {
+//         return x.second > y.second;
+//     }
+//     vector<int> topKFrequent(vector<int>& nums, int k) {
+//         unordered_map <int,int> map;
+//         for (int i : nums) map[i] ++;
+//         vector<pair<int,int>> res(map.begin(),map.end());
+//         sort(res.begin(), res.end(), cmp);
+//         vector<int> ans;
+//         for(int i = 0; i < k; i ++) ans.push_back(res[i].first);
+//         return ans;
+//     }
+// };
+
+
+
+
+------------------------------------------- 0127  / 2021 / yxc 
+
+时间On
+
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> res;
+        unordered_map<int, int > cnt;
+        for(auto x:nums) cnt[x]++;
+        int n=nums.size();
+
+        vector<int> s(n+1);//n个数，出现的次数在1到n之间，数组s存储出现当前次数的元素有多少个
+
+        for(auto [x, c] : cnt) s[c]++;
+
+        int i=n;//从出现n次开始枚举
+        int t=0;
+        while(t<k) t+=s[i--]; // 当满足条件的k个数满足后，所有出现次数大于i的数就是答案
+
+        for(auto [x, c]:cnt)
+        {
+            if(c>i) res.push_back(x);
+        }
+
+        return res;
+    }
+};
+
+
+
+----------------------- 0327  / 2021/ 
+
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> res;
+        unordered_map<int ,int> cnt;
+        for(auto x:nums) cnt[x]++;
+        int n=nums.size();
+
+        vector<int> s(n+1);
+        for(auto [k ,v]:cnt) s[v]++;
+
+        int i=n;
+        int t=0;
+        // 0 1 2 3 4 5 6
+        // 0 1 1 1 0 0 0
+
+        while(t<k) t+=s[i--];
+
+        for(auto [x ,c]:cnt)
+            if(c>i) res.push_back(x);
+
+        return res;
+    }
+};
+
+
+
+------------------------ 0410 / 2021/  
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> res;
+        int n=nums.size();
+        unordered_map<int ,int> cnt;
+        for(auto x:nums) cnt[x]++;
+        vector<int> s(n+1);
+        for(auto [x, c]:cnt) s[c]++;
+
+        int i=n;
+        int t=0;
+        while(t <k) t+=s[i--];   // 先加i，然后i--，当t>=k满足条件时，i已经左移了多一位，所以答案在i+1开始
+
+        for(auto [x, c]:cnt)
+            if(c > i) res.push_back(x); 
+
+        return res;
+    }
+};
+
+
+

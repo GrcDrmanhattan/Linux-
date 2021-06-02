@@ -1,0 +1,71 @@
+剑指 Offer 56 - II. 数组中数字出现的次数 II
+
+在一个数组 nums 中除一个数字只出现一次之外，其他数字都出现了三次。请找出那个只出现一次的数字。
+
+ 
+
+示例 1：
+
+输入：nums = [3,4,3,3]
+输出：4
+示例 2：
+
+输入：nums = [9,1,7,9,7,9,7]
+输出：1
+ 
+
+限制：
+
+1 <= nums.length <= 10000
+1 <= nums[i] < 2^31
+
+-------------------------------------- 0223 / 2021/  
+
+
+适合其余次数出现奇数次的
+
+
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res=0;
+
+        for(int i=0;i<32;++i){
+            int cnt=0; // 统计所有数的第i位的1个数
+            for(auto x:nums){
+                if(x & (1<<i)) cnt++;
+            }
+
+            if(cnt % 3 ==1)  res ^= (1<<i);
+
+        }
+
+        return res;
+    }
+};
+
+
+
+-------------------------  yxc 
+
+
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int one=0;
+        int two=0;
+
+        for(auto x:nums){
+            one = (one ^x) & ~two;
+            two = (two ^ x) & ~one;
+        }
+
+        return one;
+    }
+};
+
+
+
+

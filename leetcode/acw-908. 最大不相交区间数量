@@ -1,0 +1,74 @@
+908. 最大不相交区间数量
+给定N个闭区间[ai,bi]，请你在数轴上选择若干区间，使得选中的区间之间互不相交（包括端点）。
+
+输出可选取区间的最大数量。
+
+输入格式
+第一行包含整数N，表示区间数。
+
+接下来N行，每行包含两个整数ai,bi，表示一个区间的两个端点。
+
+输出格式
+输出一个整数，表示可选取区间的最大数量。
+
+数据范围
+1≤N≤105,
+−109≤ai≤bi≤109
+
+样例
+输入样例：
+3
+-1 1
+2 4
+3 5
+输出样例：
+2
+################################################################33
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int n;
+
+struct Range
+{
+    int l,r;
+    bool operator< (const Range &w)const
+    {
+        return r<w.r;
+    }
+}rr[N];
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        int l,r;
+        scanf("%d%d",&l,&r);
+        rr[i]={l,r};
+    }
+    
+    sort(rr,rr+n);
+    
+    int res=0;
+    int ed=-2e9;
+    
+    for(int i=0;i<n;++i)
+    {
+        if(rr[i].l >ed)
+        {
+            res++;
+            ed = rr[i].r;
+        }
+    }
+    
+    printf("%d\n",res);
+    
+    return 0;
+}
+

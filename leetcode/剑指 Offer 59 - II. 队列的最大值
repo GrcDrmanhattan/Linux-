@@ -1,0 +1,109 @@
+剑指 Offer 59 - II. 队列的最大值
+
+请定义一个队列并实现函数 max_value 得到队列里的最大值，要求函数max_value、push_back 和 pop_front 的均摊时间复杂度都是O(1)。
+
+若队列为空，pop_front 和 max_value 需要返回 -1
+
+示例 1：
+
+输入: 
+["MaxQueue","push_back","push_back","max_value","pop_front","max_value"]
+[[],[1],[2],[],[],[]]
+输出: [null,null,null,2,1,2]
+示例 2：
+
+输入: 
+["MaxQueue","pop_front","max_value"]
+[[],[],[]]
+输出: [null,-1,-1]
+ 
+
+限制：
+
+1 <= push_back,pop_front,max_value的总操作数 <= 10000
+1 <= value <= 10^5
+
+---------------------------  滑动窗口之所以单调队列可以保持最大值，是因为每次插入元素前都要将不在窗口内的元素删除，然后只在窗口内插入大的元素，
+--------------------------久而久之，单调队列的队首就是最大值；
+
+// 1223 myself
+
+class MaxQueue {
+public:
+    deque<int> q; // 单调队列维护队列q的最大值
+    queue<int> t; 
+
+    MaxQueue() {
+
+    }
+    
+    int max_value() {
+        if(t.empty()) return -1;
+        return q.front();
+    }
+    
+    void push_back(int value) {
+        while(q.size() && q.back() <= value) q.pop_back(); // 每次插入新元素时都要删除小的
+        q.push_back(value); // 然后插入大的元素， 
+
+        t.push(value);
+    }
+    
+    int pop_front() {
+        if(t.empty()) return -1;
+
+        int res=t.front();
+        if(res == q.front()) q.pop_front(); 
+        // 弹出元素要考虑是否和单调队列的最大值相等 ，两个队列要保持 同步，
+        // 单调队列队首是对应的队列里的最大值
+
+        t.pop();
+        return res;
+    }
+};
+
+
+/**
+ * Your MaxQueue object will be instantiated and called as such:
+ * MaxQueue* obj = new MaxQueue();
+ * int param_1 = obj->max_value();
+ * obj->push_back(value);
+ * int param_3 = obj->pop_front();
+ */
+
+
+
+---------------------------------- 0228 /  2021/  
+
+
+class MaxQueue {
+public:
+    deque<int> m;
+    queue<int> q;
+
+    MaxQueue() {
+
+    }
+    
+    int max_value() {
+        if(q.empty()) return -1;
+        return m.front();
+    }
+    
+    void push_back(int value) {
+        while(m.size() && m.back() <= value) m.pop_back();
+        m.push_back(value);
+        q.push(value);
+    }
+    
+    int pop_front() {
+        if(q.empty()) return -1;
+        int res=q.front();
+        if(res==m.front()) m.pop_front();
+        q.pop();
+        return res;
+    }
+};
+
+
+

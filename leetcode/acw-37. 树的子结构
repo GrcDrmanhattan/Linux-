@@ -1,0 +1,59 @@
+37. 树的子结构
+输入两棵二叉树A，B，判断B是不是A的子结构。
+
+我们规定空树不是任何树的子结构。
+
+样例
+树A：
+
+     8
+    / \
+   8   7
+  / \
+ 9   2
+    / \
+   4   7
+树B：
+
+   8
+  / \
+ 9   2
+返回 true ,因为B是A的子结构。
+
+
+----------------------------
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    // 判断p1的每个节点为根是否和子树2的一样，如果可以匹配进入issame看是否成功，不成功继续递归判断p1的左子树和右子树是否匹配
+    
+    bool hasSubtree(TreeNode* p1, TreeNode* p2) {
+        if(!p2 || !p1) return false;//当前同时为空据返回false
+        if(issame(p1,p2)) return true; // 不满足同时为空，就判断以p1和p2为根的树是否一致
+        
+        return hasSubtree(p1->left, p2) || hasSubtree(p1->right, p2);//如果上一个if不满足，继续判断是否p1的左子树满足或者p1的右子树满足
+    }
+    
+    // 如果一样，进入issame继续
+    //p1为根的子树是否包含了 p2的所有点，
+    bool  issame(TreeNode* p1, TreeNode* p2) //判断p2为根的子树是否在第一棵树里有与之对应的点
+    {
+        if(!p2) return true;//p2已经被包含，
+        if(!p1 || (p1->val != p2->val)) return false;
+        
+        //当前节点已经相等匹配，然后判断左右子树
+        return issame(p1->left, p2->left) && issame(p1->right, p2->right);// 同时为真才为真
+    }
+};
+
+

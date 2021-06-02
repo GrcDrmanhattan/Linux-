@@ -1,0 +1,56 @@
+给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
+
+一般来说，删除节点可分为两个步骤：
+
+首先找到需要删除的节点；
+如果找到了，删除它。
+说明： 要求算法时间复杂度为 O(h)，h 为树的高度。
+
+=====================
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution 
+{
+public:
+    TreeNode* getmin(TreeNode* root)//右子树的最小在树的最左边
+    {
+        while(root->left)
+        {
+            root=root->left;
+        }
+        return root;
+    }
+
+    TreeNode* deleteNode(TreeNode* root, int key) 
+    {
+        if(!root) return root;
+        if(root->val == key)//等于key，删除当前节点
+        {
+            if(!root->left) return root->right;//子树为空，返回另一棵子树
+            if(!root->right) return root->left;
+            TreeNode* minnode=getmin(root->right);//都不为空，找到右子树的最左节点
+            root->val=minnode->val;
+            root->right=deleteNode(root->right,minnode->val);
+        }
+        if(root->val>key)//当前节点大于key，应该在左子树继续删除
+        {
+            root->left=deleteNode(root->left,key);
+        }
+        if(root->val < key) //当前小于key，应该在右子树继续删除，左边的都比key小
+        {
+            root->right=deleteNode(root->right,key);
+        }
+
+        return root;
+    }
+
+};
+

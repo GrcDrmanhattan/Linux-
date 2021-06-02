@@ -1,0 +1,250 @@
+124. 数的进制转换
+编写一个程序，可以实现将一个数字由一个进制转换为另一个进制。
+
+这里有62个不同数位{0-9,A-Z,a-z}。
+
+输入格式
+第一行输入一个整数，代表接下来的行数。
+
+接下来每一行都包含三个数字，首先是输入进制（十进制表示），然后是输出进制（十进制表示），最后是用输入进制表示的输入数字，数字之间用空格隔开。
+
+输入进制和输出进制都在2到62的范围之内。
+
+（在十进制下）A = 10，B = 11，…，Z = 35，a = 36，b = 37，…，z = 61 (0-9仍然表示0-9)。
+
+输出格式
+对于每一组进制转换，程序的输出都由三行构成。
+
+第一行包含两个数字，首先是输入进制（十进制表示），然后是用输入进制表示的输入数字。
+
+第二行包含两个数字，首先是输出进制（十进制表示），然后是用输出进制表示的输入数字。
+
+第三行为空白行。
+
+同一行内数字用空格隔开。
+输入样例：
+8
+62 2 abcdefghiz
+10 16 1234567890123456789012345678901234567890
+16 35 3A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+35 23 333YMHOUE8JPLT7OX6K9FYCQ8A
+23 49 946B9AA02MI37E3D3MMJ4G7BL2F05
+49 61 1VbDkSIMJL3JjRgAdlUfcaWj
+61 5 dl9MDSWqwHjDnToKcsWE1S
+5 10 42104444441001414401221302402201233340311104212022133030
+
+输出样例：
+62 abcdefghiz
+2 11011100000100010111110010010110011111001001100011010010001
+
+10 1234567890123456789012345678901234567890
+16 3A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+
+16 3A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+35 333YMHOUE8JPLT7OX6K9FYCQ8A
+
+35 333YMHOUE8JPLT7OX6K9FYCQ8A
+23 946B9AA02MI37E3D3MMJ4G7BL2F05
+
+23 946B9AA02MI37E3D3MMJ4G7BL2F05
+49 1VbDkSIMJL3JjRgAdlUfcaWj
+
+49 1VbDkSIMJL3JjRgAdlUfcaWj
+61 dl9MDSWqwHjDnToKcsWE1S
+
+61 dl9MDSWqwHjDnToKcsWE1S
+5 42104444441001414401221302402201233340311104212022133030
+
+5 42104444441001414401221302402201233340311104212022133030
+10 1234567890123456789012345678901234567890
+
+#####################################################################333333333
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+
+int t;
+
+int main()
+{
+    cin>>t;
+    while(t--)
+    {
+        int a,b;
+        string a_line,b_line;//每组数据要重新输入，否则会错误
+        
+        cin>>a>>b>>a_line;
+        
+        vector<int> nums;
+        
+        for(auto c:a_line)
+        {
+            if(c>='0' && c<= '9') nums.push_back(c-'0');
+            if(c>='A' && c<= 'Z') nums.push_back(c-'A'+10);//加上偏移量
+            if(c>='a' && c<= 'z') nums.push_back(c-'a'+36);
+        }
+        
+        reverse(nums.begin(),nums.end());//使得nums[0] 存储个位(低位开始)，nums[1]存储十位...
+        
+        vector<int> res;
+        while(nums.size())
+        {
+            int r=0;//上一位的借位以及最后的结果
+            for(int i=nums.size()-1;i>=0;--i)//从高位开始做除法
+            {
+                nums[i] += r*a;
+                r = nums[i] % b;
+                nums[i] /= b;
+            }
+            
+            res.push_back(r);//for循环结束将r放入结果
+            while(nums.size() && nums.back()==0) nums.pop_back();//将高位nums末尾的前导0去除
+        }
+        
+        reverse(res.begin(),res.end());
+        for(auto x :res)
+        {
+            if(x<=9) b_line+=(char)(x-0 + '0');
+            if(x>= 10 && x<= 35) b_line += (char)(x-10+'A');
+            if(x>=36) b_line +=(char)(x-36+'a');
+        }
+        
+        cout<<a<<' '<<a_line<<endl;
+        cout<<b<<' '<<b_line<<endl;
+        cout<<endl;
+        
+    }
+    
+    return 0;
+}
+//  未重新输入数据的错误结果
+//10 1234567890123456789012345678901234567890
+// 16 110111000001000101111100100101100111110010011000110100100013A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+
+
+// 10 1234567890123456789012345678901234567890
+// 16 3A0C92075C0DBF3B8ACBC5F96CE3F0AD2
+
+
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+int t;
+
+int main()
+{
+    cin>>t;
+    while(t--)
+    {
+        int a,b;
+        string a_line,b_line;
+        cin>>a>>b>>a_line;
+        
+        vector<int> nums;
+        for(auto c:a_line)
+        {
+            if(c>='0' && c<='9') nums.push_back(c-'0'+0);
+            if(c>='A' && c<='Z') nums.push_back(c-'A'+10);
+            if(c>='a' && c<= 'z') nums.push_back(c-'a'+36);
+        }
+        reverse(nums.begin(),nums.end());
+        
+        vector<int> res;
+        while(nums.size()) // 只要不为0
+        {
+            int r=0;
+            for(int i=nums.size()-1;i>=0;--i)
+            {
+                nums[i] += r*a;
+                r=nums[i]%b;
+                nums[i]/=b;
+            }
+            
+            res.push_back(r);//依次添加短除法计算后的个位，十位，百位
+            while(nums.size() && nums.back()==0) nums.pop_back();
+        }
+        
+        reverse(res.begin(),res.end());//然后反转，使得高位在开头
+        for(auto x : res)
+        {
+            if(x>=0 && x<=9) b_line+=(char)(x-0+'0');
+            if(x>=10 && x<=35) b_line+=(char)(x-10+'A');
+            if(x>=36 && x<=61) b_line+=(char)(x-36+'a');
+        }
+        
+        
+        cout<<a<<' '<<a_line<<endl;
+        cout<<b<<' '<<b_line<<endl;
+        cout<<endl;
+    }
+    return 0;
+}
+
+
+----------------- 0322  / 2021  
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        string a_line, b_line;
+        int a, b;
+        cin>>a>>b>>a_line;
+        
+        vector<int> num;
+        for(auto x:a_line){
+            if(x>= '0' && x<='9') num.push_back(x-'0');
+            if(x>='A' && x<= 'Z' ) num.push_back(x-'A' + 10);
+            if(x>='a' && x<= 'z') num.push_back(x-'a' + 36);
+        }
+        
+        reverse(num.begin(), num.end());
+        vector<int> res;
+
+        while(num.size()) // 
+        {
+            int r=0;
+            for(int i=num.size()-1;i>=0;--i)
+            {
+                num[i] += r *a;
+                r = num[i] % b;
+                num[i] /=b;
+            }
+            
+            res.push_back(r);
+            while(num.size() && num.back()==0) num.pop_back(); // 因为是从末尾开始计算的，每次会将0添加到末尾，所以去除前导0要从末尾开始
+        }
+        
+        reverse(res.begin(), res.end());
+        
+        for(auto x:res){
+            if(x>=0 && x<=9) b_line+=(char) (x-0+'0');
+            if(x>=10 && x<=35) b_line+=(char) (x-10 + 'A');
+            if(x>=36 && x<=61) b_line += (char) (x-36 + 'a');
+        }
+        
+        cout<<a<<' '<<a_line<<endl;
+        cout<<b<<' '<<b_line<<endl;
+        cout<<endl;
+    }
+    
+    
+    return 0;
+}
+
+

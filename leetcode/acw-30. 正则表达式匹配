@@ -1,0 +1,58 @@
+30. 正则表达式匹配
+请实现一个函数用来匹配包括'.'和'*'的正则表达式。
+
+模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（含0次）。
+
+在本题中，匹配是指字符串的所有字符匹配整个模式。
+
+例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配。
+
+样例
+输入：
+
+s="aa"
+p="a*"
+
+输出:true
+
+
+--------------------------------------------
+
+string s,p;
+vector<vector<int>> f;
+int n,m;
+
+class Solution {
+public:
+    bool isMatch(string _s, string _p) {
+        s=_s;
+        p=_p;
+        n=s.size();
+        m=p.size();
+        
+        f=vector<vector<int>>(n+1, vector<int>(m+1, -1));
+        
+        return dp(0, 0 ); // 返回两个字符串从0开始是否 匹配
+    }
+    
+    bool dp(int x, int y) // 判断分别从x和y开始是否匹配
+    {
+        if(f[x][y] != -1) return f[x][y];
+        
+        if(y==m )
+            return f[x][y] = x==n;
+            
+        bool firstmatch= x<n && (s[x]==p[y] || p[y]=='.');
+        
+        if(y+1 < m && p[y+1] == '*')  // 判断*
+            f[x][y] = dp(x, y+2) || firstmatch && dp(x+1, y);
+        else 
+            f[x][y] =  firstmatch && dp(x+1,y+1); // 判断 . 的情况
+            
+        return f[x][y];
+    }
+    
+};
+
+
+

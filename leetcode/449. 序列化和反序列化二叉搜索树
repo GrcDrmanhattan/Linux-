@@ -1,0 +1,118 @@
+序列化是将数据结构或对象转换为一系列位的过程，以便它可以存储在文件或内存缓冲区中，或通过网络连接链路传输，以便稍后在同一个或另一个计算机环境中重建。
+
+设计一个算法来序列化和反序列化二叉搜索树。 对序列化/反序列化算法的工作方式没有限制。 您只需确保二叉搜索树可以序列化为字符串，并且可以将该字符串反序列化为最初的二叉搜索树。
+
+编码的字符串应尽可能紧凑。
+
+注意：不要使用类成员/全局/静态变量来存储状态。 你的序列化和反序列化算法应该是无状态的。
+
+==================================== 反序列化过程是，从前到后统计计算，遇到结束符号就计算结果
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec 
+{
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) 
+    {
+        string res="";
+        preorder(root,res);
+        // cout<<res<<endl;
+        return res;
+        
+    }
+
+    void preorder(TreeNode* root,string& res)//注意引用！！
+    {
+        if(!root) return ;
+        res+=to_string(root->val)+"#";
+        preorder(root->left,res);
+        preorder(root->right,res);
+
+    }
+
+    void helper(TreeNode* root,TreeNode* insert_node)
+    {
+        if(insert_node->val < root->val)
+        {
+            if(root->left)
+            {
+                helper(root->left,insert_node);
+            }
+            else
+            {
+                root->left=insert_node;
+            }
+        }
+        else 
+        {
+            if(root->right)
+            {
+                helper(root->right,insert_node);
+            }
+            else
+            {
+                root->right=insert_node;
+            }
+        }
+    }    
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) 
+    {
+       if(data.size()==0) return NULL;
+
+        string tmp;
+        vector<TreeNode*> vecnode;
+
+        for(int i=0;i<data.size();++i)
+        {
+            auto c=data[i];
+            if(c!='#')
+            {
+                tmp+=c;
+            }
+            else //遇到#，处理计算，把#之前的插入树
+            {
+               TreeNode* node=new TreeNode(stoi(tmp));
+               vecnode.push_back(node);
+               tmp.clear();//清空，不影响下一次
+            }
+        }
+        
+        for(int i=1;i<vecnode.size();++i)
+        {
+            helper(vecnode[0],vecnode[i]);
+        }
+
+        return vecnode[0];
+    }
+};
+
+//                  =======================mdzz ================================
+// class Codec 
+// {
+//     TreeNode* Root;
+// public:
+
+//     // Encodes a tree to a single string.
+//     string serialize(TreeNode* root) {
+//         Root=root;
+//         return "";
+//     }
+
+//     // Decodes your encoded data to tree.
+//     TreeNode* deserialize(string data) {
+//         return Root;
+//     }
+// };
+

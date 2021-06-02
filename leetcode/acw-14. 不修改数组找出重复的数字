@@ -1,0 +1,66 @@
+14. 不修改数组找出重复的数字
+给定一个长度为 n+1 的数组nums，数组中所有的数均在 1∼n 的范围内，其中 n≥1。
+
+请找出数组中任意一个重复的数，但不能修改输入的数组。
+
+样例
+给定 nums = [2, 3, 5, 4, 3, 2, 6, 7]。
+
+返回 2 或 3。
+思考题：如果只能使用 O(1) 的额外空间，该怎么做呢？
+############################################################   二分
+ 
+
+class Solution 
+{
+public:
+    int duplicateInArray(vector<int>& nums) 
+    {
+        int len=nums.size();
+        
+        int l=1;//将数的范围二分，取值范围是从1到nums长度-1，
+        int r=len-1;
+        
+        while(l<r)//将数据范围分为 [1,mid]和[mid+1,len-1]
+        {
+            int mid=l+r>>1;
+            
+            int s=0;//左边的个数
+            for(auto x:nums) s+= x>=l && x<=mid;
+            
+            if(s>mid-l+1) r=mid;//左边个数大于左边区间长度，说明左边有重复元素
+            else l=mid+1;
+        }
+        
+        return l;
+    }
+};
+
+****************************************8     1207
+
+class Solution {
+public:
+    int duplicateInArray(vector<int>& nums) {
+        unordered_map<int,int> mp;
+        // sort(nums.begin(),nums.end());
+        
+        for(auto x :nums) 
+        {
+            if(x<0 || x>nums.size()-1) return -1;
+            if(x>=0 && x<=nums.size()-1 )
+            {
+                mp[x]++;
+            }
+            
+        }
+        
+        for(auto x :nums) 
+        {
+            if(mp.count(x) && mp[x]>1) return x;
+        }
+        return -1;
+    }
+};
+
+
+

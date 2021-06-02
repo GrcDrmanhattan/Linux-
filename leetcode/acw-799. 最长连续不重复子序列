@@ -1,0 +1,96 @@
+799. 最长连续不重复子序列
+给定一个长度为n的整数序列，请找出最长的不包含重复数字的连续子序列，输出它的长度。
+
+输入格式
+第一行包含整数n。
+
+第二行包含n个整数（均在0~100000范围内），表示整数序列。
+
+输出格式
+共一行，包含一个整数，表示最长的不包含重复数字的连续子序列的长度。
+
+数据范围
+1≤n≤100000
+
+样例
+输入样例：
+5
+1 2 2 3 5
+输出
+3
+
+#########################################################################################   双指针
+
+#include<iostream>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int a[N];
+int s[N];//统计每个元素出现的次数
+int n;
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;++i )scanf("%d",&a[i]);
+    
+    int res=0;
+    for(int i=0,j=0;i<n;++i)//枚举i向后, 每一个i对应一个j
+    {
+        s[a[i]]++;
+        
+        while(s[a[i]]>1) // 有重复元素，就删除重复元素
+        {
+            s[a[j]]--;
+            j++;
+        }
+        
+        res=max(res,i-j+1);
+    }
+    
+    printf("%d\n",res);
+    
+    return 0;
+}
+
+----------------------------  1229 /2020 /
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int a[N];
+int n;
+int res=0;
+
+unordered_map<int ,int > mp;
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>a[i];
+    
+    for(int i=0, j=0;i<n;++i)
+    {
+        mp[a[i]]++;
+        
+        while(mp[a[i]] > 1)
+        {
+            mp[a[j]]--;
+            j++;
+        }
+        
+        res=max(res, i-j+1);
+        
+    }
+    
+    cout<<res<<endl;
+    
+    return 0;
+}
+

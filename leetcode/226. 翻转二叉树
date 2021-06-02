@@ -1,0 +1,74 @@
+翻转一棵二叉树。
+
+示例：
+
+输入：
+
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+输出：
+
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+
+=====================================================
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//     前序遍历
+class Solution 
+{
+public:
+    TreeNode* invertTree(TreeNode* root) 
+    {
+        if(root==NULL) return root;
+        //先交换当前的左右子树，再进入左右低递归
+        TreeNode* tem=root->left;   // tem指针类型？？
+        root->left=root->right;
+        root->right=tem;
+
+        root->left=invertTree(root->left);
+        root->right=invertTree(root->right);
+        return root;
+    }
+
+    TreeNode* invertTree(TreeNode* root) 
+    {//后序优先遍历
+         if(root==NULL) return root;
+
+         invertTree(root->left);
+         invertTree(root->right);
+         
+         TreeNode* temp = root->left;
+         root->left = root->right;
+         root->right = temp;
+         return root;
+    }
+    TreeNode* invertTree(TreeNode* root) 
+    {//中序优先遍历
+         if(root==NULL) return root;
+         invertTree(root->left);
+
+         TreeNode* temp = root->left;
+         root->left = root->right;
+         root->right = temp;
+
+         invertTree(root->left);//因为原来已经换过了所以还是左子树
+         return root;
+    }
+
+};

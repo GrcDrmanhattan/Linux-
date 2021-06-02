@@ -1,0 +1,184 @@
+给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+
+说明: 叶子节点是指没有子节点的节点。
+
+示例:
+给定如下二叉树，以及目标和 sum = 22，
+
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+返回:
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+
+################################################
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+//。 ————————dfs解法__-_____
+// class Solution 
+// {
+// public:
+//     vector<vector<int>> res;
+//     void dfs(TreeNode* root,int sum,vector<int> temp)
+//     {
+//         temp.push_back(root->val);
+//         if(!root->left && !root->right) // 已经到叶子节点
+//         {
+//             int s=0;
+//             for(auto n:temp) s+=n;            
+//                 // int s=0;                
+//                 // if(s==sum) res.push_back(temp);           
+//             if(s==sum) res.push_back(temp);
+//         }  
+        
+//         if(root->left) dfs(root->left,sum,temp);
+//         if(root->right) dfs(root->right,sum,temp);
+//     }
+
+//     vector<vector<int>> pathSum(TreeNode* root, int sum) 
+//     {       
+//         if(!root) return res;
+//         dfs(root,sum,{});
+//         return res;
+//     }  
+// };
+
+
+class Solution
+{
+public:
+    vector<vector<int>> res;
+    vector<vector<int>> pathSum(TreeNode* root, int sum)
+    {
+        if(root==NULL) return res;
+
+        dfs(root,sum,{});
+        return res;
+    }
+
+    void dfs(TreeNode*root,int sum,vector<int> temp)
+    {
+        // vector<int> tmp;//temp从参数穿过来的。不需要新建vector
+        temp.push_back(root->val);
+        int cnt=0;
+
+        if(root->left==NULL && root->right==NULL)
+        {
+            for(auto x:temp)
+            {
+                cnt+=x;
+            }
+
+            if(cnt==sum)
+            {
+                res.push_back(temp);
+            }
+        }
+
+        if(root->left) dfs(root->left,sum,temp);
+        if(root->right) dfs(root->right,sum,temp);
+
+        temp.pop_back();//是否加这个不影响结果
+    }
+};
+
+
+
+------------------------------------  1224/2020
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        
+        if(!root) return res;
+
+        help(root, sum, {});
+        return res;
+
+    }
+
+    void help(TreeNode* rt, int sum, vector<int> tmp )
+    {
+        if(!rt) return;
+        tmp.push_back(rt->val);
+
+        if(!rt->left && !rt->right)
+        {
+            int s=0;
+            for(auto x:tmp) s+=x;
+            if(s==sum) res.push_back(tmp);
+
+        }
+
+        help(rt->left, sum, tmp);
+        help(rt->right, sum, tmp);
+    }
+
+};
+
+
+
+
+
+--------------------------------------- 0125 / 2021 /
+
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    int tar;
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        if(!root) return {};
+        tar=targetSum;
+        dfs(root, {});
+
+        return res;
+    }
+
+    void dfs(TreeNode* rt, vector<int> tmp)
+    {
+        if(!rt) return ;
+        tmp.push_back(rt->val);
+
+        if(!rt->left && !rt->right)
+        {
+            int sum=0;
+            for(auto x:tmp) sum+=x;
+
+            if(sum==tar) res.push_back(tmp);
+        }
+
+        dfs(rt->left, tmp);
+        dfs(rt->right, tmp);
+    }
+};
+

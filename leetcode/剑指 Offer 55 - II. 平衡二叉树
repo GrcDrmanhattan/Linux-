@@ -1,0 +1,117 @@
+输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
+
+ 
+
+示例 1:
+
+给定二叉树 [3,9,20,null,null,15,7]
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回 true 。
+
+
+================利用求二叉树深度函数，判断是否平衡
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+ // 时间复杂度：O(n^2)，每个点访问两次
+// 空间复杂度：O(nlogn)
+// class Solution {
+// public:
+//     bool isBalanced(TreeNode* root) {
+//         if(!root) return true;
+//         if(abs(getheight(root->left)-getheight(root->right))>1) return false;
+//         return isBalanced(root->left) && isBalanced(root->right);
+
+//     }
+//     int getheight(TreeNode* root) //求二叉树的高度
+//     {
+//         if(root==NULL) return 0;
+//         int l=getheight(root->left);
+//         int r=getheight(root->right);
+//         return (l>r)? l+1:r+1;
+//     }
+// };
+
+// 法2 时间复杂度on
+
+class Solution
+{
+    public:
+    bool flag=true;
+    bool isBalanced(TreeNode* root)
+    {
+        if(!root) return true;
+        height(root);
+        return flag;
+    }
+
+    int height(TreeNode* root)
+    {
+        if(!root) return 0;
+        int l=height(root->left);
+        int r=height(root->right);
+        if(abs(l-r)>1) flag=false;
+        return max(r,l)+1;
+    }
+};
+
+class Solution
+{
+public:
+    bool flag=true;//初始为true
+    bool isBalanced(TreeNode* root)
+    {
+        if(!root) return true;
+        helper(root);
+        return flag;
+    }
+
+    int helper(TreeNode* root)
+    {
+        if(!root) return 0;
+
+        int ll=helper(root->left);
+        int rr=helper(root->right);
+
+        if(abs(ll-rr)>1) flag=false;
+
+        return max(ll,rr)+1;
+    }
+};
+
+
+------------------------------ 0220 / 2021/  
+
+class Solution {
+public:
+    int get(TreeNode* u)
+    {
+        if(!u) return 0;
+        return max(get(u->left), get(u->right)) + 1;
+    }
+
+
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+        int l=get(root->left);
+        int r=get(root->right);
+        if(abs(l-r)>1) return false;
+        return isBalanced(root->left) &&  isBalanced(root->right);
+    }
+};
+
+
+

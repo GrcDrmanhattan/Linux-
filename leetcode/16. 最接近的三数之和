@@ -1,0 +1,114 @@
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+ 
+ 
+示例：
+
+输入：nums = [-1,2,1,-4], target = 1
+输出：2
+解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+
+===============================================================
+
+class Solution 
+{
+public:
+    int threeSumClosest(vector<int>& nums, int target) 
+    {
+        if(nums.size()<3) return 0;
+        sort(nums.begin(),nums.end());
+        int res=nums[0]+nums[1]+nums[2];
+        int tem;
+        int l,r;
+      
+        for(int i=0;i<nums.size();++i)
+        {
+            l=i+1;
+            r=nums.size()-1;
+            while(l<r)
+            {
+                tem=nums[i]+nums[l]+nums[r];
+                if(abs(target-tem)<abs(target-res))
+                {
+                    res=tem; //更新最接近的数
+                    
+                }
+                if(tem>target) r--;   //如果没有更新就移动左右边界
+                else if(tem<target) l++;
+                else return res;
+
+            }
+        }
+        return res;
+    }
+
+};
+
+
+
+-------------  0102 /2021 / yxc
+
+
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        pair<int, int > res(INT_MAX, INT_MAX);
+        sort(nums.begin(), nums.end());
+
+
+        for(int i=0;i<nums.size();++i)
+        { 
+            for(int j=i+1, k=nums.size()-1 ; j<k ;++j)
+            {
+            
+                while(j< k-1 && nums[i]+nums[j]+nums[k-1] >= target) k--; // 找到大于等于tar的最小值
+
+                int s=nums[i] + nums[j] + nums[k];
+                res=min(res, make_pair(abs(s-target), s));
+
+                if(j< k-1)
+                {
+                    s=nums[i] + nums[j] + nums[k-1]; // 小于tar的最大值
+                    res=min(res, make_pair(abs(s-target), s));
+                }   
+            }
+        }
+
+
+        return res.second;
+    }
+};
+
+
+
+----------------------------------------- 0128 / 2021 
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        pair<int, int> res(INT_MAX, INT_MAX); // 差值 ，结果
+
+        for(int i=0;i<nums.size();++i)
+        {
+            for(int j=i+1, k=nums.size()-1; j< k;++j)
+            {
+                while(j< k-1 && nums[i]+ nums[j]+nums[k-1]>=target) k--;
+
+                int t=nums[i]+nums[j]+nums[k];
+
+                res=min(res ,make_pair(abs(t-target), t));
+
+                if(j< k-1)
+                {
+                    t=nums[i]+nums[j]+nums[k-1];
+                    res=min(res, make_pair(abs(t-target), t));
+                }
+            }
+        }
+
+        return res.second;
+    }
+};
+

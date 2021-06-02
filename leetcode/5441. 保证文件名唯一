@@ -1,0 +1,92 @@
+names = ["pes","fifa","gta","pes(2019)"]
+输出：["pes","fifa","gta","pes(2019)"]
+解释：文件系统将会这样创建文件名：
+"pes" --> 之前未分配，仍为 "pes"
+"fifa" --> 之前未分配，仍为 "fifa"
+"gta" --> 之前未分配，仍为 "gta"
+"pes(2019)" --> 之前未分配，仍为 "pes(2019)"
+
+
+===============
+
+// class Solution 
+// {
+// public:
+//     map<string,int> cnt;
+//     map<string,bool> vis;
+    
+//     string i2c(int x)
+//     {
+//         if(x==0 ) return "0";
+//         string res="";
+//         while(x)
+//         {
+//             res = (char)( x % 10 + '0') + res;
+//             x/=10;
+//         }
+//         return res;
+//     }
+    
+//     vector<string> getFolderNames(vector<string>& nm) 
+//     {
+//         cnt.clear();
+//         vis.clear();
+//         vector<string> res;
+        
+//         for(auto& cur:nm)
+//         {
+//             if(vis[cur] == false)
+//             {
+//                 vis[cur] = true;
+//                 cnt[cur] = 1;
+//                 res.push_back(cur);
+//             }
+//             else
+//             {
+//                 int c=max(cnt[cur],1);
+//                 string now = cur + "(" + i2c(c) + ")";
+//                 while(vis[now])
+//                 {
+//                     now = cur + "(" + i2c(++c) + ")";
+//                 }
+//                 vis[now] = true;
+//                 cnt[cur] = c+1;
+//                 res.push_back(now);
+//             }
+//         }
+                
+//         return res;
+//     }
+// };
+
+class Solution
+{
+public:
+    vector<string> getFolderNames(vector<string>& nm)
+    {
+        unordered_map<string ,int> cnt;
+        unordered_set<string> hash;
+        
+        vector<string> res;
+        for(auto name: nm)
+        {
+            string suc;//后缀
+            int k=0;
+            if(cnt.count(name)) k=cnt[name];
+            
+            while(hash.count(name+suc))
+            {
+                ++k;
+                suc="(" + to_string(k) + ")";
+            }
+            
+            cnt[name]=k;
+            hash.insert(name+suc);
+            res.push_back(name+suc);
+        }
+        
+        return res;
+    }
+
+};
+

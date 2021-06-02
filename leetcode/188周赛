@@ -1,0 +1,44 @@
+一道题不会做
+
+1.给你一个目标数组 target 和一个整数 n。每次迭代，需要从  list = {1,2,3..., n} 中依序读取一个数字。
+
+请使用下述操作来构建目标数组 target ：
+
+Push：从 list 中读取一个新元素， 并将其推入数组中。
+Pop：删除数组中的最后一个元素。
+如果目标数组构建完成，就停止读取更多元素。
+
+输入：target = [1,2,3], n = 3
+输出：["Push","Push","Push"]  
+
+输入：target = [1,2], n = 4
+输出：["Push","Push"]
+解释：只需要读取前 2 个数字就可以停止。
+
+class Solution {
+public:
+    vector<string> buildArray(vector<int>& target, int n) 
+    {
+        if(target.size()==0 || n==0) return {};
+        vector<string> res;
+        int j=0;//target数组的
+        for(int i=1;i<=n && j<target.size();++i)
+        {
+            res.push_back("Push");
+            if(i==target[j])
+            {
+                ++j;//相等什么也不做，target数组向下移动一个
+            }
+            else
+            {
+                
+                res.push_back("Pop");
+            
+            }
+        }
+        
+        return res;
+
+    }
+};
+

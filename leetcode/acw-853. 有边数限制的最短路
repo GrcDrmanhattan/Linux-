@@ -1,0 +1,103 @@
+853. 有边数限制的最短路
+
+给定一个n个点m条边的有向图，图中可能存在重边和自环， 边权可能为负数。
+
+请你求出从1号点到n号点的最多经过k条边的最短距离，如果无法从1号点走到n号点，输出impossible。
+
+注意：图中可能 存在负权回路 。
+
+输入格式
+第一行包含三个整数n，m，k。
+
+接下来m行，每行包含三个整数x，y，z，表示存在一条从点x到点y的有向边，边长为z。
+
+输出格式
+输出一个整数，表示从1号点到n号点的最多经过k条边的最短距离。
+
+如果不存在满足条件的路径，则输出“impossible”。
+
+数据范围
+1≤n,k≤500,
+1≤m≤10000,
+任意边长的绝对值不超过10000。
+
+输入样例：
+3 3 1
+1 2 1
+2 3 1
+1 3 3
+输出样例：
+3
+
+####################################################
+
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+
+using namespace std;
+
+const int N=510;
+const int M=10010;
+
+int n;
+int m;
+int k;
+
+struct Edge
+{
+    int a;
+    int b;
+    int w;
+}edges[M];
+
+
+int dis[N];
+int backup[N];//上一次的结果
+
+int bellman_ford()
+{
+    memset(dis,0x3f,sizeof(dis));
+    dis[1]=0;
+    
+    for(int i=0;i<k;++i)//不超过k边
+    {
+        memcpy(backup,dis,sizeof(dis));//备份上一个
+        
+        for(int j=0;j<m;++j)
+        {
+            int a=edges[j].a;
+            int b=edges[j].b;
+            int w=edges[j].w;
+            
+            dis[b]=min(dis[b],backup[a]+w);
+        }
+    }
+    
+    if( dis[n] > 0x3f3f3f3f /2) return -1;
+    return dis[n];
+}
+
+
+int main()
+{
+    scanf("%d%d%d",&n,&m,&k);
+    
+    for(int i=0;i<m;++i)
+    {
+        int a;
+        int b;
+        int c;
+        scanf("%d%d%d",&a,&b,&c);
+        
+        edges[i]={a,b,c};
+    }
+    
+    int res=bellman_ford();
+    
+    if(res == -1) printf("impossible");
+    else printf("%d\n",res);
+    
+    return 0;
+}
+

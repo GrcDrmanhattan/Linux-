@@ -1,0 +1,157 @@
+479. 加分二叉树
+
+设一个 n 个节点的二叉树 tree 的中序遍历为（1,2,3,…,n），其中数字 1,2,3,…,n 为节点编号。
+
+每个节点都有一个分数（均为正整数），记第 i 个节点的分数为 di，tree 及它的每个子树都有一个加分，任一棵子树 subtree（也包含 tree 本身）的加分计算方法如下：     
+
+subtree的左子树的加分 × subtree的右子树的加分 ＋ subtree的根的分数 
+
+若某个子树为空，规定其加分为 1。
+
+叶子的加分就是叶节点本身的分数，不考虑它的空子树。
+
+试求一棵符合中序遍历为（1,2,3,…,n）且加分最高的二叉树 tree。
+
+要求输出： 
+
+（1）tree的最高加分 
+
+（2）tree的前序遍历
+
+输入格式
+第 1 行：一个整数 n，为节点个数。 
+
+第 2 行：n 个用空格隔开的整数，为每个节点的分数（0<分数<100）。
+
+输出格式
+第 1 行：一个整数，为最高加分（结果不会超过int范围）。     
+
+第 2 行：n 个用空格隔开的整数，为该树的前序遍历。如果存在多种方案，则输出字典序最小的方案。
+
+数据范围
+n<30
+输入样例：
+5
+5 7 1 2 10
+输出样例：
+145
+3 1 2 4 5
+
+
+----------------------- 0506 / 2021/  yxc 
+
+区间dp
+时间On^3
+
+
+// f[l, r] 所有中序遍历在区间lr之间二叉树的集合，属性是分值的最大值
+
+// 集合划分计算，根据根结点的不同划分
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 35;
+
+int n;
+int w[N];
+int f[N][N];
+int g[N][N]; // 记录区间的根结点
+
+void dfs(int l ,int r)
+{
+    if(l>r) return ; // 没有等号
+    
+    int rt= g[l][r];
+    cout<<rt<<' ';
+    dfs(l, rt-1);
+    dfs(rt+1, r);
+}
+
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) cin>>w[i];
+    
+    for(int len =1 ;len <= n;++len){
+        for(int l=1;l+len-1 <= n;++l){
+            int r = l+len-1;
+            if(len == 1) {
+                f[l][r] = w[l]; // 叶子
+                g[l][r] = l;// 叶子结点，根结点就是自己
+            }
+            else{
+                for(int k=l; k <= r;++k){ // 根结点从l到r
+                    int ll= k == l ? 1 : f[l][k-1];
+                    int rr = k == r ? 1 : f[k+1][r];
+                    int score = ll * rr + w[k];
+                    if(f[l][r] < score){
+                        f[l][r] = score;
+                        g[l][r] = k;
+                    }
+                }
+            }
+        }
+    }
+    
+    cout<<f[1][n]<<endl;
+    dfs(1, n);
+    return 0;
+}
+
+
+
+------------------------- 0506 
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 35;
+
+int n;
+int g[N][N];
+int f[N][N];
+int w[N];
+
+void dfs(int l ,int r){
+    if(l> r) return ;
+    int rt=g[l][r];
+    cout<<rt<<' ';
+    dfs(l, rt-1);
+    dfs(rt+1, r);
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) cin>>w[i];
+    
+    for(int len =1 ; len <=n;++len){ // m枚举每个区间
+        for(int l=1; l+ len - 1 <= n;++l){ // 然后枚举区间左右端点
+            int r=l+len-1;
+            if(len ==1){
+                f[l][r]=w[l];
+                g[l][r]=l;
+            }
+            else{
+                for(int k=l;k<=r;++k){ // 在左右区间之间进行划分
+                    int ll= k == l ? 1 : f[l][k-1];
+                    int rr= k == r ? 1 : f[k+1][r];
+                    int s=ll * rr + w[k];
+                    if(s > f[l][r]){
+                        f[l][r]=s;
+                        g[l][r]=k;
+                    }
+                }
+            }
+        }
+    }
+    
+    cout<<f[1][n]<<endl;
+    dfs(1, n);
+    return 0;
+}
+

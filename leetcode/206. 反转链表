@@ -1,0 +1,112 @@
+206. 反转链表
+
+反转一个单链表。
+
+示例:
+
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+//画图就可以 递归解法 
+//时间On，
+//空间on，由于使用递归，将会使用隐式栈空间。递归深度可能会达到 n层
+class Solution
+{
+public:
+    ListNode* reverseList(ListNode* head)
+    {
+        if(!head || !head->next ) return head;   //要返回head
+
+        ListNode* last=reverseList(head->next);//反转之后的新头部last
+        
+        head->next->next=head;
+        head->next=NULL;//后面接一个null
+        
+        return last;
+    }
+};
+
+// 0820 lbldong
+//迭代 时间复杂度 On，空间复杂度O1
+
+class Solution
+{
+public:
+    ListNode* reverseList(ListNode* head)
+    {
+        if(!head || !head->next) return head;
+        ListNode* pre=NULL;
+        ListNode* cur=head;
+        ListNode* nxt=head;
+
+        while(cur != NULL)
+        {
+            nxt=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=nxt;
+        }
+
+        return pre;
+    }
+};
+
+
+
+----------------------------------------------  0127 / 2021 / yxc 
+
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head) return head;
+
+        auto a=head;
+        auto b=a->next;
+
+        while(b)
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;    
+            b=c;
+        }
+
+        head->next=nullptr;
+        return a;
+    }
+};
+
+
+------------------------- 0204 
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !head->next) return head;
+
+        auto a=head;
+        auto b=a->next;
+
+        while(b)
+        {
+            auto c=b->next;
+            b->next=a;
+            a=b;b=c;
+        }
+
+        head->next=nullptr;
+        return a;
+    }
+};
+
+

@@ -1,0 +1,190 @@
+给定一个二叉树，检查它是否是镜像对称的。
+
+ 
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+ 
+
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+    1
+   / \
+  2   2
+   \   \
+   3    3
+
+###########################         ######################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+// class Solution 
+// {
+// public:
+//     bool isSymmetric(TreeNode* root) 
+//     {
+//         if(!root) return true;
+//         return helper(root->left,root->right);
+//     }
+
+//     bool helper(TreeNode* p,TreeNode* q)
+//     {
+//         if(!q && !p) return true;
+//         if(!q || !p) return false;
+//         if(q->val == p->val) return helper(p->left,q->right) && helper(p->right,q->left);//如果节点相等，继续比较对称的子树
+//         return false;
+//     }
+// };
+
+//时间复杂度On，遍历所有节点
+//空间复杂度 为递归的深度，最坏也就是跟树高度有关，最坏情况下树变成一个链表结构，高度是n，O(n)
+
+
+// class Solution
+// {
+// public:
+//     bool isSymmetric(TreeNode* root)
+//     {   
+//         if(root==NULL) return true;
+//         return helper(root->left,root->right);//根不为空，判断左右子树是否相等
+
+//     }
+
+//     bool helper(TreeNode* p,TreeNode* q)
+//     {
+//         //四种情况
+//         if(p==NULL && q==NULL) return true;
+//         if(p==NULL || q==NULL) return false;
+
+//         if(q->val==p->val) 
+//         {
+//             return helper(p->left,q->right) && helper(p->right,q->left);
+        
+//         }
+
+//         return false;//两个节点值不相等返回fales
+//     }
+// };
+
+
+//迭代
+//时间和空间都是O(n)
+
+class Solution
+{
+public:
+    bool isSymmetric(TreeNode* root)
+    {
+        if(root==NULL || root->left ==NULL && root->right==NULL) return true;
+
+        queue<TreeNode*> q;
+        q.push(root->left);
+        q.push(root->right);
+
+        while(!q.empty())
+        {
+            TreeNode* ll=q.front();q.pop();
+            TreeNode* rr=q.front();q.pop();
+
+            if(ll==NULL && rr==NULL) continue;//继续循环
+            if(ll==NULL || rr==NULL) return false;
+            if(ll->val != rr->val) return false;
+
+            if(ll->val == rr->val)
+            {
+                q.push(ll->right);
+                q.push(rr->left);
+
+                q.push(ll->left);
+                q.push(rr->right);
+            }
+        }
+
+        return true;
+    }
+};
+
+
+
+
+------------------------------------------------   1224
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+
+        if(help(root->left, root->right) ) return true;
+        return false;
+
+    }
+
+    bool help(TreeNode* p, TreeNode* q)
+    {
+        if(!p || !q) return !q && !p;
+
+        if(p->val != q->val) return false;
+
+        return help(p->left, q->right) && help(p->right, q->left);
+    }
+};
+
+
+
+----------------------------------- 0127 /  2021 / yxc
+
+
+
+class Solution {
+public:
+
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root->left, root->right);//然后去判断左右子树是否是对称的
+    }
+
+    bool dfs(TreeNode* l, TreeNode* r)
+    {
+        if(!l && !r) return true; //左右子树的根节点为空返回true  要在前？
+        
+        if(!l || !r || l->val != r->val) return false;
+        
+        //否则继续递归
+        return dfs(l->left, r->right) && dfs(l->right, r->left);
+    }
+};
+
+
+------------------------- 0314/  2021/  
+
+递归On
+
+从上到下每个节点仅被遍历一遍
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root->left, root->right);
+    }
+
+    bool dfs(TreeNode* l, TreeNode* r)
+    {
+        if(!l && !r) return true;
+        if(!l || !r || l->val != r->val) return false;
+        return dfs(l->left, r->right) && dfs(l->right, r->left);
+    }
+};

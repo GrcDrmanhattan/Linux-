@@ -1,0 +1,97 @@
+632. 最小区间
+
+你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。
+
+我们定义如果 b-a < d-c 或者在 b-a == d-c 时 a < c，则区间 [a,b] 比 [c,d] 小。
+
+ 
+
+示例 1：
+
+输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+输出：[20,24]
+解释： 
+列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
+列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
+列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
+示例 2：
+
+输入：nums = [[1,2,3],[1,2,3],[1,2,3]]
+输出：[1,1]
+示例 3：
+
+输入：nums = [[10,10],[11,11]]
+输出：[10,11]
+示例 4：
+
+输入：nums = [[10],[11]]
+输出：[10,11]
+示例 5：
+
+输入：nums = [[1],[2],[3],[4],[5],[6],[7]]
+输出：[1,7]
+ 
+
+提示：
+
+nums.length == k
+1 <= k <= 3500
+1 <= nums[i].length <= 50
+-105 <= nums[i][j] <= 105
+nums[i] 按非递减顺序排列
+
+-----------------   1226/ 2020 /yxc
+
+
+// 小根堆 
+// 相当于在k个列表 选数，然后覆盖
+// 总计n个元素 时间nlogk, 每个元素出堆要logk
+// k路归并 
+
+
+
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        vector<int> res;
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> hp;// 小根堆
+
+        int maxv= INT_MIN;
+
+        // cout<<INT_MIN<<' '<<INT_MAX<<' '<<endl;
+
+        for(int i=0;i < nums.size();++i) // 创建含有链表数目个元素的堆
+        {
+            hp.push({nums[i][0], i ,0}); // 先将每个列表的第一个元素放入堆
+            maxv=max(maxv, nums[i][0]);
+        }
+
+        while(hp.size()) // 枚举所有的最小值
+        {
+            auto t=hp.top(); // 最小值
+            hp.pop();
+
+            int l=t[0], r=maxv;// 左边界等于堆顶最小值，右边界是大于等于堆顶的最小值
+
+            if(res.empty() || res[1] - res[0] > r-l)// 更新res
+                res= {l, r};
+            
+            int i=t[1] ; // 第i个列表
+            int j=t[2] + 1; // 第i个列表的下一个元素
+
+            if(j<nums[i].size())
+            {
+                hp.push({nums[i][j], i, j});
+                maxv=max(maxv, nums[i][j]);
+            }
+            else break;
+        }
+        
+
+        return res;
+    }
+};
+
+
+
+

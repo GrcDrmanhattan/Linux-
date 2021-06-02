@@ -1,0 +1,98 @@
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 ""。
+
+示例 1:
+
+输入: ["flower","flow","flight"]
+输出: "fl"
+示例 2:
+
+输入: ["dog","racecar","car"]
+输出: ""
+解释: 输入不存在公共前缀。
+说明:
+
+所有输入只包含小写字母 a-z 。
+
+#############################################
+
+// class Solution 
+// {
+// public:
+//     string longestCommonPrefix(vector<string>& strs) 
+//     {
+//         if(strs.size() ==0) return "";
+//         // string res=strs[0];
+//         int minlength=INT_MAX;
+//         for(int i=0;i<strs.size();++i)
+//         {
+//             if(strs[i].size()<minlength) minlength=strs[i].size();
+//         }   //找到最小长度，肯定是最小长度，短板木桶
+
+//         string ans;
+//         for(int i=0;i<minlength;++i)
+//         {
+//             char tem=strs[0][i];    //第一个string作为基准，进行比较
+//             int flag=1;
+//             for(int j=1;j<strs.size();++j)//轮流比较其余字符串的第i个字母和第一个字符串的第i个
+//             {
+//                if(tem != strs[j][i])
+//                {
+//                    flag=0;
+//                    break;//不相同就立即跳出循环
+//                }
+//             }
+
+//             //如果其余的第i个字母相同，加入结果
+//             if(flag) ans+=tem;
+//             else  return ans; 
+//         } 
+
+//         return ans;       
+//     }
+// };
+
+class Solution
+{
+public:
+    string longestCommonPrefix(vector<string>& strs)
+    {
+        string res="";
+        if(strs.size() ==0) return "";
+        int minsize=INT_MAX;
+        for(int i=0;i<strs.size();++i)
+        {
+            if(strs[i].size()<minsize) minsize=strs[i].size();
+        }
+
+        for(int i=0;i<minsize;++i)
+        {
+            int tem=strs[0][i];
+            int flag=1;
+            for(int j=1;j<strs.size();++j)//竖着比较每个单词的第i个字母
+            {
+                //如果遍历到某个单词的i字母不相等，直接跳出for，已经找到结果了
+                //如果相等就直接++i，进行和首单词的下一个字母比较
+                if(tem!=strs[j][i])
+                {
+                    flag=0;
+                    break;
+                }
+            }
+
+            if(flag)
+            {
+                res+=tem;
+            }
+            else
+            {
+                return res;
+            }
+
+        }
+
+        return res;
+    }
+};
+

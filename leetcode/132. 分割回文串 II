@@ -1,0 +1,102 @@
+132. 分割回文串 II
+
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。
+
+返回符合要求的最少分割次数。
+
+示例:
+
+输入: "aab"
+输出: 1
+解释: 进行一次分割就可将 s 分割成 ["aa","b"] 这样两个回文子串。
+
+
+---------------- 0109 / 2021 / yxc
+
+
+// 预处理数组g N^2, dp状态计算 n个 每次On，也是N^2, 总时间复杂度是On^2
+
+
+// 简单的dp
+// 以最后一个段不同作为区分集合里面
+// f[i] 表示1到i分成的集合到最少部分， 分割次数等于部分-1
+
+// 怎么计算f[i]呢，将fi表示的所有情况分段，然后所有的部分取min就是fi了
+
+// g[i][j] 表示从i到j是回文
+
+
+class Solution {
+public:
+    int minCut(string s) {
+        int n = s.size();
+        s = ' ' + s;
+
+        vector<vector<bool>> g(n+1, vector<bool>(n+1));
+        vector<int> f(n+1, 1e8);
+
+        // 快速的判断ij之间是否是回文
+        for(int j=1;j<=n;++j)
+            for(int i=1;i<=n;++i)
+            {
+                if(i==j) g[i][j]=true;
+                else if(s[i]==s[j])
+                {
+                    if(i+1 > j-1 || g[i+1][j-1]) g[i][j]= true;
+                }
+            }
+        
+        // dp 计算
+
+        f[0]=0;
+        for(int i=1;i<=n;++i) // 分成i段
+            for(int j=1;j<=i;++j)
+            {
+                if(g[j][i]) f[i] = min(f[i], f[j-1]+1);
+                // 分成i段，最后一部分是1到i，2到i，。。。i到i，然后前j段的最小部分加上最后一部分就是本段的答案，所有的段取min就是f[i]表示的含义了
+                
+            }
+
+        return f[n]-1;
+    }
+};
+
+
+
+
+
+------------------------------------ 0125 / 2021 
+
+
+class Solution {
+public:
+    int minCut(string s) {
+        int n=s.size();
+        s=' '+s;
+
+        vector<vector<bool>> f(n+1, vector<bool>(n+1));
+        vector<int> g(n+1, 1e8);// 前i个可以分成的最小部分数目
+
+        for(int j=1;j<=n;++j)
+            for(int i=1;i<=n;++i)
+            {
+                if(i==j) f[i][j]=true;
+                else if(s[i]==s[j])
+                {
+                    if(i+1>j-1 || f[i+1][j-1]) f[i][j]=true;
+                }
+            }
+
+        g[0]=0;
+
+        for(int i=1;i<=n;++i)
+            for(int j=1;j<=i;++j)// 按照最后一段是j到i划分集合
+            {
+                if(f[j][i]) g[i]=min(g[i], g[j-1]+1);
+            }
+
+        return g[n]-1;
+    }
+};
+
+

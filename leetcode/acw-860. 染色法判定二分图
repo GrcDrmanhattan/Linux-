@@ -1,0 +1,100 @@
+860. 染色法判定二分图
+给定一个n个点m条边的无向图，图中可能存在重边和自环。
+
+请你判断这个图是否是二分图。
+
+样例
+4 4
+1 3
+1 4
+2 3
+2 4
+Yes
+
+####################################################
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+using namespace std;
+
+const int N=1e5+10;
+const int M=2e5+10;
+
+int n,m;
+
+int h[N];
+int e[M];
+int ne[M];
+int idx;
+
+int color[N];
+
+//染色 颜色1 和颜色2
+
+void add(int a,int b)
+{
+    e[idx]=b;
+    
+    ne[idx]=h[a];
+    h[a]=idx;
+    idx++;
+    
+}
+
+bool dfs(int u,int c)
+{
+    color[u]=c;//只要一个节点确定颜色就可以整个连通块就确定好颜色
+    
+    for(int i=h[u];i!=-1;i=ne[i])//u的连通块染色
+    {
+        int j=e[i];
+        
+        if(!color[j])
+        {
+            if(!dfs(j,3-c)) return false;//如果染成相反颜色就返回false
+        }
+        else if(color[j]==c) return false;//如果颜色和u相同就返回false
+    }
+    
+    return true;
+}
+
+
+int main()
+{
+    scanf("%d%d",&n,&m);
+    
+    memset(h,-1,sizeof(h));
+    
+    while(m--)
+    {
+        int a,b;
+        
+        scanf("%d%d",&a,&b);
+        add(a,b);
+        add(b,a);
+        
+    }
+    
+    bool flag=true;
+    
+    for(int i=1;i<=n;++i)
+    {
+        if(!color[i])//没有染色就dfs（i）把i的连通块染色
+        {
+            if(!dfs(i,1))//dfs返回false表示有矛盾发生
+            {
+                flag=false;
+                break;
+            }
+        }
+    }
+    
+    if(flag) puts("Yes");
+    else puts("No");
+    
+    return 0;
+}
+

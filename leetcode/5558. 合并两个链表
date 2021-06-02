@@ -1,0 +1,86 @@
+5558. 合并两个链表
+给你两个链表 list1 和 list2 ，它们包含的元素分别为 n 个和 m 个。
+
+请你将 list1 中第 a 个节点到第 b 个节点删除，并将list2 接在被删除节点的位置。
+
+下图中蓝色边和节点展示了操作后的结果：
+
+
+请你返回结果链表的头指针。
+
+ 
+
+示例 1：
+
+
+
+输入：list1 = [0,1,2,3,4,5], a = 3, b = 4, list2 = [1000000,1000001,1000002]
+输出：[0,1,2,1000000,1000001,1000002,5]
+解释：我们删除 list1 中第三和第四个节点，并将 list2 接在该位置。上图中蓝色的边和节点为答案链表。
+输入：list1 = [0,1,2,3,4,5,6], a = 2, b = 5, list2 = [1000000,1000001,1000002,1000003,1000004]
+输出：[0,1,1000000,1000001,1000002,1000003,1000004,6]
+解释：上图中蓝色的边和节点为答案链表。
+ 
+ 
+ ----------------------------------------------》》》》》》
+ 
+ /**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+        
+        ListNode* p=list1;
+        ListNode* tm=p;//tm初始不能位空，当ab相等时，没有进入for会导致tm未被初始化
+        
+        for(int i=0;i<a-1;++i)//p和tm循环结束后都指向a的前一个
+        {
+            p=p->next;
+            tm=p;
+            
+        }
+        
+        for(int j=0;j<b-a+1;++j)
+            tm=tm->next;//tm指向b位置的元素
+        
+        
+        p->next=list2;//p连接list2
+        ListNode* ll=list2;
+        while(ll->next)
+        {
+            ll=ll->next;
+        }
+        
+        if(tm->next!=NULL) ll->next=tm->next;//如果tm不是最后一个，就连接
+        
+        return list1;
+    }
+};
+
+
+
+// yxc
+class Solution {
+public:
+    ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+        auto p=list1,q=list1;
+
+        for(int i=0;i<a-1;++i) p=p->next;//p走到a前一个位置,走了a-1步
+        for(int j=0;j<b+1;++j) q=q->next;//q走到b后面的位置，走了b+1步
+        p->next=list2;
+
+        while(list2->next) list2=list2->next;
+        list2->next=q;
+
+        return list1;
+    }
+};
+

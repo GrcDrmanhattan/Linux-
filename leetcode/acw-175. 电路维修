@@ -1,0 +1,264 @@
+175. 电路维修
+达达是来自异世界的魔女，她在漫无目的地四处漂流的时候，遇到了善良的少女翰翰，从而被收留在地球上。
+
+翰翰的家里有一辆飞行车。
+
+有一天飞行车的电路板突然出现了故障，导致无法启动。
+
+电路板的整体结构是一个R行C列的网格（R,C≤500），如下图所示。
+
+每个格点都是电线的接点，每个格子都包含一个电子元件。
+
+电子元件的主要部分是一个可旋转的、连接一条对角线上的两个接点的短电缆。
+
+在旋转之后，它就可以连接另一条对角线的两个接点。
+
+电路板左上角的接点接入直流电源，右下角的接点接入飞行车的发动装置。
+
+达达发现因为某些元件的方向不小心发生了改变，电路板可能处于断路的状态。
+
+她准备通过计算，旋转最少数量的元件，使电源与发动装置通过若干条短缆相连。
+
+不过，电路的规模实在是太大了，达达并不擅长编程，希望你能够帮她解决这个问题。
+
+输入格式
+输入文件包含多组测试数据。
+
+第一行包含一个整数T，表示测试数据的数目。
+
+对于每组测试数据，第一行包含正整数R和C，表示电路板的行数和列数。
+
+之后R行，每行C个字符，字符是”/”和”"中的一个，表示标准件的方向。
+
+输出格式
+对于每组测试数据，在单独的一行输出一个正整数，表示所需的缩小旋转次数。
+
+
+
+如果无论怎样都不能使得电源和发动机之间连通，输出NO SOLUTION。
+
+数据范围
+1≤R,C≤5001≤R,C≤500
+1≤T≤51≤T≤5
+只需要按照下面的方式旋转标准件，就可以使得电源和发动机之间连通。
+
+样例
+输入样例：
+1
+3 5
+\\/\\
+\\///
+/\\\\
+输出样例：
+1
+样例解释
+样例的输入对应于题目描述中的情况。
+
+¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥
+
+//只包含0，1的bfs
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<deque>
+
+using namespace std;
+
+#define x first
+#define y second 
+
+typedef pair<int,int> PII;
+const int N=510,M=N*N;
+
+int n,m;
+char g[N][N];
+
+int dis[N][N];
+bool st[N][N];
+
+
+int bfs()
+{
+    deque<PII> q;
+    
+    memset(dis,0x3f,sizeof(dis));
+    memset(st,0,sizeof(st));
+    
+    int dx[]={-1,-1,1,1};//从一个点向4个对角线的坐标
+    int dy[]={-1,1,1,-1};//坐标？？以纵向为x，横向为y，左上角00，在当前点上面x--，下面x++，左面y--，右面y++
+    
+    int ix[]={-1,-1,0,0};//求出每个方向上的边，四个方向的字符在数组里的下标
+    int iy[]={-1,0,0,-1};
+    
+    char cs[5]="\\/\\/";//从一个点向4个对角线的正确的方向
+    
+    dis[0][0]=0;
+    q.push_back({0,0});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop_front();
+        
+        int x=t.x;
+        int y=t.y;
+        
+        if(x==n && y==m) return dis[x][y];//出队才知道最小值
+        
+        if(st[x][y]) continue;
+        st[x][y]=true;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            
+            if(a<0 || a>n || b<0 || b>m) continue;
+            
+            int ga=x+ix[i];
+            int gb=y+iy[i];
+            
+            int w=(g[ga][gb] != cs[i]);
+            
+            int d=dis[x][y]+w;
+            if(d<=dis[a][b])
+            {
+                dis[a][b]=d;
+                if(!w) q.push_front({a,b});//权值是0 插入队头
+                else q.push_back({a,b});//权值1，插入队尾
+            }
+        }
+    }
+    
+    
+    return -1;//不会被执行到
+}
+
+int main()
+{
+    int t;
+    scanf("%d",&t);
+    while(t--)
+    {
+        scanf("%d%d",&n,&m);
+        
+        for(int i=0;i<n;++i) scanf("%s",g[i]);//字符从00开始
+        // printf("%d\n",bfs());
+        
+        if(n + m &1) puts("NO SOLUTION");//终点坐标之和奇数一定没有解,因为是从00点开始走的，所以只能到偶数点
+        else printf("%d\n",bfs());
+    }
+    
+    return 0;
+}
+
+
+
+--------------------- 0413 / 2021/  yxc 
+
+
+// 无向图的最短路
+// 每个点可能被更新多次，需要st数组，看作dijskra算法
+// 顺时针四个点的坐标关系dxdy，ixiy是顺时针输入数组种对应的字符的坐标关系，
+//cs数组是从中心顺时针到四个点的对角线怎么走
+
+// 狄杰斯特拉算法的写法
+
+
+#include<iostream>
+#include<algorithm>
+#include<deque>
+#include<cstring>
+
+using namespace std;
+
+#define x first
+#define y second
+
+const int N=510;
+
+int n,m;
+
+int dis[N][N];
+bool st[N][N];
+
+char g[N][N];
+
+int bfs()
+{
+    deque<pair<int, int>> q;
+    
+    memset(dis, 0x3f , sizeof(dis));
+    memset(st, 0, sizeof(st));
+    
+    int dx[4]={-1, -1 ,1 ,1};
+    int dy[4]={-1, 1, 1, -1};
+    
+    int ix[]={-1,-1,0,0};//求出每个方向上的边，四个方向的字符在数组里的下标
+    int iy[]={-1,0,0,-1};
+    
+    char cs[5]="\\/\\/";
+    
+    dis[0][0]=0;
+    q.push_back({0, 0});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop_front();
+        
+        int x=t.x;
+        int y=t.y;
+        
+        if(x==n && y==m) return dis[x][y];
+        
+        if(st[x][y]) continue;
+        st[x][y]=true;
+        
+        for(int i=0;i<4;++i)
+        {
+            int a=x+dx[i];
+            int b=y+dy[i];
+            
+            if(a<0 || a > n || b<0 || b>m) continue;
+            
+            int ga= x + ix[i];
+            int gb= y + iy[i];
+            
+            int w= (g[ga][gb] != cs[i]);
+            
+            int d=dis[x][y] + w;
+            
+            if(d <= dis[a][b]){
+                dis[a][b]=d;
+                
+                if(!w) q.push_front({a, b});
+                else q.push_back({a, b});
+            }
+        }
+        
+    }
+    
+    return -1;
+    
+}
+
+int main()
+{
+    int t;
+    scanf("%d",&t);
+    while(t--)
+    {
+        cin>>n>>m;
+        
+        for(int i=0;i<n;++i) cin>>g[i];//字符从00开始
+        
+        
+        if((n + m )&1) puts("NO SOLUTION");//终点坐标之和奇数一定没有解,因为是从00点开始走的，所以只能到偶数点
+        else printf("%d\n",bfs());
+    }
+    
+    return 0;
+}
+
+

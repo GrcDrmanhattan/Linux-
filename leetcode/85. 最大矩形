@@ -1,0 +1,176 @@
+85. 最大矩形
+
+给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+
+ 
+
+示例 1：
+
+
+输入：matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+输出：6
+解释：最大矩形如上图所示。
+示例 2：
+
+输入：matrix = []
+输出：0
+示例 3：
+
+输入：matrix = [["0"]]
+输出：0
+示例 4：
+
+输入：matrix = [["1"]]
+输出：1
+示例 5：
+
+输入：matrix = [["0","0"]]
+输出：0
+ 
+
+提示：
+
+rows == matrix.length
+cols == matrix[0].length
+0 <= row, cols <= 200
+matrix[i][j] 为 '0' 或 '1'
+
+
+--------------------- 0118 / 2021 / yxc
+
+// lc 84 题解 清晰易懂
+
+https://leetcode-cn.com/problems/largest-rectangle-in-histogram/solution/84-by-ikaruga/
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {  // 84 lc
+        int res=0;
+        int n=heights.size();
+        stack<int> st;
+        vector<int> l(n), r(n);
+
+        for(int i=0;i<n;++i)
+        {
+            while(st.size() && heights[st.top()] >= heights[i]) st.pop();
+            if(st.empty()) l[i]=-1;
+            else l[i]=st.top();
+            st.push(i);
+        }
+
+        st=stack<int>();
+
+        for(int i=n-1;i>=0;--i)
+        {
+            while(st.size() && heights[st.top()] >= heights[i]) st.pop();
+            if(st.empty()) r[i]=n;
+            else r[i]=st.top();
+            st.push(i);
+        }
+
+        for(int i=0;i<n;++i)
+        {
+            res=max(res, heights[i] * (r[i]-l[i]-1));
+        }
+
+        return res;
+    }
+
+
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return 0;
+        int n=matrix.size();
+        int m=matrix[0].size();
+
+        vector<vector<int>> h(n, vector<int>(m)); // h[i][j], ij位置往上这一行的1的个数
+
+        for(int i=0;i<n;++i)
+        {
+            for(int j=0;j<m;++j)
+            {
+                if(matrix[i][j]=='1')
+                {
+                    if(i) h[i][j] = h[i-1][j]+1;
+                    else h[i][j]=1;
+                }
+            }
+        }
+
+        int res=0;
+        for(int i=0;i<n;++i) res=max(res , largestRectangleArea(h[i])); // h[i] 每行往上的长度，也就是84的高度
+
+        return res;
+    }
+};
+
+
+
+--------------------- 0311 /2021/  
+
+时间On^2
+
+
+
+
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return 0;
+        int n=matrix.size();
+        int m=matrix[0].size();
+        
+        vector<vector<int>> h(n, vector<int>(m));
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+            {
+                if(matrix[i][j]=='1')
+                {
+                    if(i==0) h[i][j]=1;
+                    else h[i][j] = h[i-1][j] + 1;
+                
+                }
+            }
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            res=max(res, get(h[i]));
+
+        return res;
+    }
+
+
+    int get(vector<int>& h) // 求每行的柱形图的体积
+    {
+        int res=0;
+        stack<int> st;
+        int n=h.size();
+        vector<int> l(n), r(n);
+
+        for(int i=0;i<n;++i)
+        {
+            while(st.size() && h[st.top()] >= h[i]) st.pop();
+            if(st.empty()) l[i]=-1;
+            else l[i]=st.top();
+            st.push(i);
+        }
+
+        st=stack<int>();
+
+        for(int i=n-1;i>=0;--i)
+        {
+            while(st.size() && h[st.top()] >= h[i]) st.pop();
+            if(st.empty()) r[i]=n;
+            else r[i]=st.top();
+            st.push(i);
+        }
+
+        for(int i=0;i<n;++i)
+            res=max(res, h[i] * (r[i]-l[i]-1));
+
+        return res;
+    }
+};
+
+

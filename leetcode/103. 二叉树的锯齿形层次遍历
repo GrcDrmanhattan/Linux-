@@ -1,0 +1,193 @@
+103. 二叉树的锯齿形层次遍历
+
+给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回锯齿形层次遍历如下：
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+##########################  记录行号 偶数行反转
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution 
+{
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) 
+    {
+        vector<vector<int>> res;
+        if(!root) return {};
+        queue<TreeNode*> q;
+        q.push(root);
+        // bool flag=true; //真，代表从右到左
+        int level=0;  
+        while(!q.empty())
+        {
+            // int level=0;
+            int n=q.size();
+            vector<int> temp;
+            while(n--)
+            {
+                TreeNode* node=q.front();
+                q.pop();
+                // if(level%2==0)
+                //     temp.push_back(node->val);
+                // else
+                //     temp.insert(temp.begin(),node->val);    // 每次插入到首部之前,或者下面的解法
+                // q.pop();
+                temp.push_back(node->val);
+                if(node->left) q.push(node->left);
+                if(node->right) q.push(node->right);
+            
+            }
+            // flag=false;
+            level++;
+            if(level%2==0) reverse(temp.begin(),temp.end());  //  偶数行反转行序列顺序
+            res.push_back(temp);
+        }
+        return res;
+    }
+};
+
+// 0819 
+
+class Solution
+{
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root)
+    {
+        if(!root) return {};
+        vector<vector<int>> res;
+        vector<int> tmp;
+        queue<TreeNode*> q;
+        q.push(root);
+        int level=0; //记录行号，初始0行
+
+        while(!q.empty())
+        {
+            int n=q.size();
+            level++;//队列不为空行号加一
+            while(n--)
+            {
+                TreeNode* node=q.front();
+                q.pop();
+
+                tmp.push_back(node->val);
+
+                if(node->left) q.push(node->left);
+                if(node->right) q.push(node->right);
+            }
+
+            if(level%2 ==0)//偶数行
+            {
+                reverse(tmp.begin(),tmp.end());
+                res.push_back(tmp);
+            }
+            else
+            {
+                res.push_back(tmp);
+            }
+
+            tmp.clear();
+        }
+
+        return res;
+    }
+};
+
+-----------------------------------------------  1224
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root) return res;
+
+        queue<TreeNode*> q;
+        q.push(root);
+        int l=1;
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+            l++;   // 初始根第一层，进入队列不为空时，l++，根第二层，然后第三层反转
+
+            while(n--)
+            {
+                auto t=q.front();
+               
+                tmp.push_back(t->val);
+                q.pop();
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            if(l&1) reverse(tmp.begin(),tmp.end());
+
+            res.push_back(tmp);
+        }
+
+        return res;
+    }
+};
+
+
+
+---------------------------------------------- 0206 / 2021/  self
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(!root) return {};
+
+        queue<TreeNode*> q;
+        q.push(root);
+        int l=0; // 刚开始0，每次进入一层l++。因此根是1，第二层是2，所以偶数反转
+
+        while(q.size())
+        {
+            int n=q.size();
+            vector<int> tmp;
+            l++;//队列不空，说明有有一层存在，l++
+
+            while(n--)
+            {
+                auto t=q.front();
+                tmp.push_back(t->val);
+                q.pop();
+
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+
+            if(l % 2==0)  reverse(tmp.begin(), tmp.end());
+            res.push_back(tmp);
+            
+        }
+
+        return res;
+    }
+};
+

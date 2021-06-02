@@ -1,0 +1,120 @@
+五一到了，ACM队组织大家去登山观光，队员们发现山上一个有N个景点，并且决定按照顺序来浏览这些景点，即每次所浏览景点的编号都要大于前一个浏览景点的编号。
+
+同时队员们还有另一个登山习惯，就是不连续浏览海拔相同的两个景点，并且一旦开始下山，就不再向上走了。
+
+队员们希望在满足上面条件的同时，尽可能多的浏览景点，你能帮他们找出最多可能浏览的景点数么？
+
+输入格式
+第一行包含整数N，表示景点数量。
+
+第二行包含N个整数，表示每个景点的海拔。
+
+输出格式
+输出一个整数，表示最多能浏览的景点数。
+
+数据范围
+2≤N≤1000 
+输入样例：
+8
+186 186 150 200 160 130 197 220
+输出样例：
+4
+
+---------------------------------------  左右两个上升子序列取最大值
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1010;
+
+int n;
+int a[N];
+int f[N],g[N];
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) cin>>a[i];
+    
+    for(int i=1;i<=n;++i)
+    {
+        f[i]=1;
+        for(int j=1;j<i;++j)
+        {
+            if(a[j]<a[i]) f[i]=max(f[i],f[j]+1);
+        }
+    }
+    
+    for(int i=n;i;--i)
+    {
+        g[i]=1;
+        for(int j=n;j>i;--j)
+        {
+            if(a[j]<a[i]) g[i]=max(g[i],g[j]+1);
+        }
+    }
+    
+    int res=0;
+    for(int i=1;i<=n;++i) res=max(res,g[i]+f[i]-1);
+    printf("%d\n",res);
+    return 0;
+}
+
+
+
+------------------ 0426 / /2021/  
+
+
+
+// 按顺序选择一个子序列，必须是先严格上升然后严格下降，因为只要下降了就不能上升了
+/*
+可以先上升，再下降，也可以一直下降，也可以一直上升。
+我们只需要计算以每个点为中间，左边下降，右边也是下降的最大长度。
+可以先计算出，从左边开始，对于每个点的最大上升子序列最大值。从右边开始，往左边走的对于每个点的最大上升子序列最大值。
+最后遍历每个点，对于每个点作为中间的点，最大的值是 f[i] + g[i] - 1;
+*/
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int n;
+int a[N];
+int f[N], g[N];
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;++i) cin>>a[i];
+    
+    int res=0;
+    
+    for(int i=1;i<=n;++i)
+    {
+        f[i]=1;
+        for(int j=1;j<i;++j)
+            if(a[j] < a[i])
+                f[i]=max(f[i] , f[j] + 1);
+    }
+    
+    for(int i=n;i;--i)
+    {
+        g[i]=1;
+        for(int j=n;j>i;--j)
+            if(a[j] < a[i])
+                g[i]=max(g[i] , g[j] + 1);
+    }
+    
+    for(int i=1;i<=n;++i) res=max(res, f[i]+g[i]-1);
+    
+    cout<<res<<endl;
+    return 0;
+}
+
+

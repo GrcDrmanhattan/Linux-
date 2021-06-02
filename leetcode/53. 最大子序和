@@ -1,0 +1,233 @@
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+示例:
+
+输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
+_____________________动态规划
+
+class Solution 
+{
+public:
+    int maxSubArray(vector<int>& nums) 
+    {
+        int res=nums[0];
+        int cur=0;
+        for(int num:nums)
+        {
+            cur+=num;
+            if(cur>res) res=cur;
+            if(cur<0) cur=0;
+        }
+
+        return res;
+    }
+};
+
+class Solution
+{
+public:
+    int maxSubArray(vector<int>& nums) //时间复杂度是 O(N)，空间复杂度也是 O(N)
+    {
+        int n=nums.size();
+        if(n==0) return 0;
+        int res=INT_MIN;
+        // vector<int> dp;//出错
+        vector<int> dp(n+1,0); //dp[i]表示以 nums[i] 为结尾的「最大子数组和
+
+        dp[0]=nums[0];
+        for(int i=1;i<n;++i)
+        {
+            dp[i]=max(nums[i],nums[i]+dp[i-1]);
+        }
+
+        for(int i=0;i<n;++i)
+        {
+            res=max(res,dp[i]);
+        }
+
+        return res;
+    }
+};
+
+class Solution
+{
+public:
+    int maxSubArray(vector<int>& nums)
+    {
+        int n=nums.size();
+        if(n==0) return 0;
+        int res=nums[0];
+
+        int dp_pre=nums[0];//进一步压缩空间复杂度
+        int dp_cur=0;
+
+        for(int i=1;i<n;++i)
+        {
+            dp_cur=max(nums[i],nums[i]+dp_pre);
+            dp_pre=dp_cur;
+            res=max(res,dp_cur);
+        }
+
+        return res;
+
+    }
+};
+
+
+
+
+--------------------------------------------------- 0126 / 2021 / yxc
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+
+        int s=0;
+        for(auto x:nums)
+        {
+            if(s<=0) s=x;
+            else s+=x;
+
+            res=max(res, s);
+        }
+
+        return res;
+    }
+};
+
+
+
+---------------------------------  dp
+
+
+// f[i]=max(nums[i], (nums[i] + f[i-1]))
+// 转换为 f[i]=nums[i] + max(0 , f[i-1])
+//将f[i-1]用last记录
+
+// 时间On，空间只记录last，不开数组，O1
+
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+
+        for(int i=0, last=0;i<nums.size();++i)// 用last记录f[i-1],因为每次只用到f[i-1],就不用开数组
+        {
+            last=nums[i]+max(last, 0);// 新的last用旧的last也就是f[i-1]更新
+            res=max(res, last);
+        }
+        return res;
+    }
+};
+
+
+
+
+
+
+---------------------------------------- 0127 
+
+
+
+// 分治方法
+// 时间On，空间logn层
+// 线段树
+
+
+class Solution {
+public:
+
+    struct Node{
+        int sum;// 当前段段总和
+        int s;//当前段的最大连续子数组的和
+        int ls, rs;// 最大前缀 ， 最大后缀
+    };
+
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+        for(auto x:nums) res=max(res ,x);// 如果全是负数
+        if(res<0) return res; // 如果最大值都小于0，则表示全部都是负数
+
+        auto t=build(nums, 0, nums.size()-1);
+        return t.s;
+    }
+
+    Node build(vector<int> nums, int l, int r)
+    {
+        if(l==r)
+        {
+            int v=max(nums[l], 0);
+            return {nums[l], v, v, v}; // 区间就一个数，全部和当然是本身，但连续数组和、前缀、后缀不一定，因为有可能是负数
+        }
+
+        int mid= l + r >>1;
+        auto ll=build(nums , l, mid);
+        auto rr=build(nums, mid+1, r);
+
+        Node res;
+        res.s=max(max(ll.s, rr.s), (ll.rs + rr.ls));
+        res.sum=ll.sum + rr.sum;
+        res.ls=max(ll.sum + rr.ls, ll.ls);
+        res.rs=max(ll.rs + rr.sum, rr.rs);
+
+        return res;
+    }
+};
+
+
+
+
+-------------------------- 0308 /2021 
+
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+        int s=0;
+
+        for(auto x:nums)
+        {
+            if(s<=0) s=x;
+            else s+=x;
+
+            res=max(res, s);
+        }
+
+        return res;
+    }
+};
+
+
+
+
+---------------------------------- 0308 / 
+
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int last=0;
+        int res=INT_MIN;
+
+        for(int i=0; i<nums.size();++i)
+        {
+            last=nums[i] + max(0, last);
+            res=max(res, last);
+        }
+
+        return res;
+    }
+};
+
+
+

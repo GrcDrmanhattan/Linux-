@@ -1,0 +1,69 @@
+179. 最大数
+
+给定一组非负整数 nums，重新排列它们每个数字的顺序（每个数字不可拆分）使之组成一个最大的整数。
+
+注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+
+ 
+
+示例 1：
+
+输入：nums = [10,2]
+输出："210"
+示例 2：
+
+输入：nums = [3,30,34,5,9]
+输出："9534330"
+示例 3：
+
+输入：nums = [1]
+输出："1"
+示例 4：
+
+输入：nums = [10]
+输出："10"
+ 
+
+提示：
+
+1 <= nums.length <= 100
+0 <= nums[i] <= 109
+
+-------------------------- 0301 / 2021   百度一面
+
+
+// 定义比较关系， 要满足全序关系 ，
+// 反对称性， 传递性 ， 完全性
+// a<=b, b<=a == a==b
+// a<b, b<c , a< c;
+// a<b or b<a 
+
+
+
+时间Onlogn
+空间On
+
+
+class Solution {
+public:
+    static bool cmp(string &a, string &b){
+        return a+ b > b+ a;
+    }
+
+    string largestNumber(vector<int>& nums) {
+        string res="";
+        vector<string> tmp;
+        for(auto x:nums) tmp.push_back(to_string(x));
+
+        sort(tmp.begin(), tmp.end(), cmp);
+        for(auto x:tmp) res+=x;
+        
+        int k=0;
+        while(k+1 < res.size() && res[k]=='0') k++;
+
+        return res.substr(k);
+    }
+};
+
+
+

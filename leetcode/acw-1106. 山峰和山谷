@@ -1,0 +1,207 @@
+1106. 山峰和山谷
+FGD小朋友特别喜欢爬山，在爬山的时候他就在研究山峰和山谷。
+
+为了能够对旅程有一个安排，他想知道山峰和山谷的数量。
+
+给定一个地图，为FGD想要旅行的区域，地图被分为 n×n 的网格，每个格子 (i,j) 的高度 w(i,j) 是给定的。
+
+若两个格子有公共顶点，那么它们就是相邻的格子，如与 (i,j) 相邻的格子有(i−1,j−1),(i−1,j),(i−1,j+1),(i,j−1),(i,j+1),(i+1,j−1),(i+1,j),(i+1,j+1)。
+
+我们定义一个格子的集合 S 为山峰（山谷）当且仅当：
+
+S 的所有格子都有相同的高度。
+S 的所有格子都连通。
+对于 s 属于 S，与 s 相邻的 s′ 不属于 S，都有 ws>ws′（山峰），或者 ws<ws′（山谷）。
+如果周围不存在相邻区域，则同时将其视为山峰和山谷。
+你的任务是，对于给定的地图，求出山峰和山谷的数量，如果所有格子都有相同的高度，那么整个地图即是山峰，又是山谷。
+
+输入格式
+第一行包含一个正整数 n，表示地图的大小。
+
+接下来一个 n×n 的矩阵，表示地图上每个格子的高度 w。
+
+输出格式
+共一行，包含两个整数，表示山峰和山谷的数量。
+
+数据范围
+1≤n≤1000,
+0≤w≤109
+
+样例
+输入样例1：
+5
+8 8 8 7 7
+7 7 8 8 7
+7 7 7 7 7
+7 8 8 7 8
+7 8 8 8 8
+输出样例1：
+2 1
+输入样例2：
+5
+5 7 8 3 1
+5 5 7 6 6
+6 6 6 2 8
+5 7 2 5 8
+7 1 0 1 7
+输出样例2：
+3 3
+
+###########33333333#################################3    Floodfill
+
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+
+#define x first
+#define y second
+
+using namespace std;
+typedef pair<int,int> PII;
+
+const int N=1010,M=N*N;
+
+PII q[M];
+
+int n;
+int h[N][N];
+bool st[N][N];
+
+void bfs(int x,int y,bool &has_higher,bool &has_lower)
+{
+    int hh=0;
+    int tt=0;
+    q[0]={x,y};
+    st[x][y]=true;
+    
+    while(hh<=tt)
+    {
+        auto t=q[hh++];
+        for(int i=t.x-1;i<=t.x+1;++i)
+            for(int j=t.y-1;j<=t.y+1;++j)
+            {
+                if(i==t.x && j==t.y) continue;
+                if(i<0 || i>=n || j<0 || j>=n ) continue;
+                if(h[i][j]!=h[t.x][t.y])
+                {
+                    if(h[i][j]>h[t.x][t.y]) has_higher=true;
+                    else has_lower=true;
+                }
+                else if(!st[i][j])
+                {
+                    q[++tt]={i,j};
+                    st[i][j]=true;
+                }
+            }
+    }
+}
+
+
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            scanf("%d",&h[i][j]);
+            
+    int peak=0;
+    int valley=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+            if(!st[i][j])
+            {
+                bool has_higher=false;
+                bool has_lower=false;
+                bfs(i,j,has_higher,has_lower);
+                
+                if(!has_higher) peak++;//  没有比他更高的，山峰++
+                if(!has_lower) valley++;//没有更低的，山谷++
+            }
+            
+    printf("%d %d\n",peak,valley);
+    
+    return 0;
+    
+}
+
+--------------------- 0321/  2021/  
+
+
+#include<iostream>
+#include<algorithm>
+#include<queue>
+
+using namespace std;
+
+const int N=1010;
+
+bool st[N][N];
+int g[N][N];
+int n;
+
+queue<pair<int ,int>> q;
+
+void bfs(int x, int y, bool &higher, bool &lower)
+{
+    st[x][y]=true;
+    q.push({x , y});
+    
+    while(q.size())
+    {
+        auto t=q.front();
+        q.pop();
+        
+        int a=t.first;
+        int b=t.second;
+        
+        for(int i=a-1;i<=a+1;++i)
+            for(int j=b-1;j<=b+1;++j)
+            {
+                if(i<0 || i>=n || j<0 || j>=n) continue;
+                if(g[i][j] != g[a][b])
+                {
+                    if(g[i][j] > g[a][b]) higher=true;
+                    else lower=true;
+                }
+                else if(!st[i][j])
+                {
+                    q.push({i, j});
+                    st[i][j]=true;
+                }
+            }
+    }
+    
+}
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i)    
+        for(int j=0;j<n;++j)
+            cin>>g[i][j];
+            
+    int peak=0;
+    int valley=0;
+    
+    for(int i=0;i<n;++i)
+        for(int j=0;j<n;++j)
+        {
+            if(!st[i][j])
+            {
+                bool higher=false;
+                bool lower=false;
+                bfs(i ,j, higher, lower);
+                if(!higher) peak++;
+                if(!lower) valley++;
+            }
+        }
+    
+    
+    cout<<peak<<' '<<valley<<endl;
+    return 0;
+}
+
+
+
+

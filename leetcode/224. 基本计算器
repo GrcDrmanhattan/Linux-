@@ -1,0 +1,189 @@
+实现一个基本的计算器来计算一个简单的字符串表达式的值。
+
+字符串表达式可以包含左括号 ( ，右括号 )，加号 + ，减号 -，非负整数和空格  。
+
+
+===================================
+
+class Solution 
+{
+public:
+    int calculate(string s) 
+    {
+        int n=s.size();
+        int sign=1;
+        int res=0;
+        
+        stack<int> st;
+        for(int i=0;i<n;++i)
+        {
+            int num=0;
+            if(s[i]>='0')
+            {
+                while(i<n && s[i]>='0')
+                {
+                    num=num*10+(s[i]-'0');
+                    i++;
+                }
+                i--;
+                res+=num*sign;
+
+            }
+            if(s[i]=='(')
+            {
+                st.push(res);
+                st.push(sign);
+                res=0;
+                sign=1;
+            }
+            if(s[i]=='+') sign=1;               
+            if(s[i]=='-') sign=-1;
+            if(s[i]==')')
+            {
+                res*=st.top();st.pop();
+                res+=st.top();st.pop();
+            }
+        }
+        
+        return res;
+    }
+};
+
+===============================方法2======================
+
+class Solution 
+{
+public:
+    int calculate(string s) 
+    {
+        int begin=0;
+        return helper(s,begin);
+    }
+
+    int helper(string s,int& i)
+    {
+        char oper= '+';
+        int nums=0;
+        int res=0;//初始化否则出错
+        stack<int> st;
+        for( i;i<s.size();++i)
+        {
+            if(s[i]>='0' && s[i] <='9')
+            {
+                nums =nums *10 +(s[i] -'0');//要加括号，容易溢出报错
+            }
+            if(s[i] == '(')
+            {
+                nums = helper(s,++i);
+                ++i;
+            }
+
+            if(( (s[i] > '9' || s[i] <'0') && s[i] != ' ' ) || i==s.size()-1)//空格' '
+            {
+                int pre=0;
+                switch (oper)
+                {
+                     case  '+' :
+                        st.push(nums);
+                        break;
+                    case '-':
+                        st.push(-nums);
+                        break;
+                    case '*':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre*nums);
+                        break;
+                    case '/':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre / nums);
+                        break;
+                }
+                   
+                oper =s[i];
+                nums=0;
+            }
+            if(s[i]==')')
+            {
+                break;
+            }
+        }
+
+        while(!st.empty())
+        {
+            res+=st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
+
+
+class Solution    //爆栈
+{
+public:
+    int calculate(string s)
+    {
+        char oper= '+';//之前补上+号
+        int nums=0;
+        int res=0;//初始化否则出错
+        stack<int> st;
+        for(int i=0;i<s.size();++i)
+        {
+            if(s[i]>='0' && s[i] <='9')//存储数字
+            {
+                nums =nums *10 +(s[i] -'0');//要加括号，容易溢出报错
+            }
+            if(s[i] == '(')
+            {
+                // ++i;
+                nums =calculate(s);
+                ++i;//在前后都可以
+            }
+
+            if(( (s[i] > '9' || s[i] <'0') && s[i] != ' ' ) || i==s.size()-1)//空格' '
+            {
+                int pre=0;
+                switch (oper)
+                {
+                     case  '+' :
+                        st.push(nums);
+                        break;
+                    case '-':
+                        st.push(-nums);
+                        break;
+                    case '*':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre*nums);
+                        break;
+                    case '/':
+                        pre=st.top();
+                        st.pop();
+                        st.push(pre / nums);
+                        break;
+                }
+                   
+                oper =s[i];
+                nums=0;
+            }
+            if(s[i]==')')
+            {
+                break;
+            }
+        }
+
+        while(!st.empty())
+        {
+            res+=st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
+
+
+
+
+

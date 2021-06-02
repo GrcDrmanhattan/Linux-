@@ -1,0 +1,93 @@
+145. 二叉树的后序遍历
+
+给定一个二叉树，返回它的 后序 遍历。
+
+示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [3,2,1]
+
+##########################
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//0824 非递归
+class Solution 
+{
+public:
+    vector<int> postorderTraversal(TreeNode* root) 
+    {
+        if(!root) return {};//必须要判断一下
+        vector<int> res;
+        stack<TreeNode*> st1;
+        stack<TreeNode*>  st2;
+
+        st1.push(root);
+
+        while(!st1.empty())
+        {
+            auto tmp=st1.top();
+            st1.pop();
+
+            st2.push(tmp);
+
+            if(tmp->left) st1.push(tmp->left);//先压入左子树
+            if(tmp->right) st1.push(tmp->right);//后右子树
+        }
+
+        while(!st2.empty())
+        {
+            res.push_back(st2.top()->val);
+            st2.pop();
+        }
+
+
+        return res;
+    }
+};
+
+
+------------------------- 0224 / 2021/ 
+
+
+时间On， 空间On
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+
+        while(s.size() || root)
+        {
+            while(root)
+            {
+                s.push(root);
+                res.push_back(root->val);
+                root=root->right;
+            }
+
+            root=s.top()->left;
+            s.pop();
+        }
+
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+

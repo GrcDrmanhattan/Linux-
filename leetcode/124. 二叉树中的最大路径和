@@ -1,0 +1,138 @@
+给定一个非空二叉树，返回其最大路径和。
+
+本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+
+示例 1:
+
+输入: [1,2,3]
+
+       1
+      / \
+     2   3
+
+输出: 6
+示例 2:
+
+输入: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+输出: 42
+
+===================================
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+//时间复杂度 O(n)，每个节点都要遍历
+//空间复杂度：O(N)，其中 N
+//N 是二叉树中的节点个数。空间复杂度主要取决于递归调用层数，最大层数等于二叉树的高度，最坏情况下，二叉树的高度等于二叉树中的节点个数
+
+
+class Solution //返回路径最大的节点的和
+{
+public:
+    int res=INT_MIN;
+    int maxPathSum(TreeNode* root) 
+    {
+        helper(root);
+        return res;
+
+    }
+    //通过后序遍历的方式，先计算出左右子树的最大路径和，然后再计算当前树的最大路径和
+    int helper(TreeNode* root)//返回的是以root为根的树中，root为起点的路径的最大和
+    {
+        if(root==NULL) return 0;//递归边界
+        int ll=max(0,helper(root->left));//本次递归做什么
+        int rr=max(0,helper(root->right));
+        res=max(res,root->val+ll+rr);
+        // 返回节点的最大贡献值
+        return root->val + max(ll,rr);//递归向上一层返回什么
+    }
+};
+
+
+
+
+
+
+
+
+-------------------------------------- 0125 / 2021 / yxc
+
+
+
+// res 不一定经过根
+
+对于res来说是当前节点加上左右最大路径和，在树中枚举路径，要枚举路径的最高点
+
+对于dfs来说，返回从当前节点向下的最大路径和
+
+
+
+class Solution {
+public:
+    int res=INT_MIN;
+
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+
+        dfs(root);
+        return res;
+    }
+
+         // 以rt为最高点的所有路径的最大是多少，rt是起点
+         
+    int dfs(TreeNode* rt) // rt是最高点， 返回从rt向下延伸的路径最大值，可以向左延伸也可以向右，没有交集，互相独立
+    {
+        if(!rt) return 0;
+
+        int l = max(0, dfs(rt->left));
+        int r = max(0, dfs(rt->right));
+
+        res=max(res, l+r+rt->val); // 左右独立， 从rt往左走的最大值加上向右走的最大值，加上本身的值和res取max
+
+        return max(l, r)+rt->val;//左右独立
+    }
+};
+
+
+
+
+---------------------------- 0314  / 2021/  
+
+
+class Solution {
+public:
+    int res=INT_MIN;
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* rt) // 返回以rt为最高点的所有路径和的最大和
+    {
+        if(!rt) return 0;
+        int l=max(0, dfs(rt->left));
+        int r=max(0, dfs(rt->right));
+
+        res=max(res, l+r+rt->val);
+        return max(l, r) + rt->val;
+    }
+};
+
+
+
+

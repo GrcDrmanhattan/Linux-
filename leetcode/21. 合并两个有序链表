@@ -1,0 +1,121 @@
+将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+ 
+
+示例：
+
+输入：1->2->4, 1->3->4
+输出：1->1->2->3->4->4
+
+========================================
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+// class Solution 
+// {
+// public:
+//     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) 
+//     {
+//         if(l1==nullptr) return l2;
+//         if(l2==nullptr) return l1;
+//         ListNode* head=new ListNode(-1);
+//         ListNode* tem=head;
+        
+//         while(l1 && l2)      //这样写没有错误
+//         {
+//             if(l1->val<l2->val)
+//             {
+//                 tem->next=l1;
+//                 l1=l1->next;
+//             }
+//             else{
+//                 tem->next=l2;
+//                 l2=l2->next;
+//             }
+//             tem=tem->next;
+//         }
+        
+
+//         if(!l1) tem->next=l2;
+//         else tem->next=l1;
+        
+//         return head->next;        
+//     }
+
+// };
+
+
+class Solution
+{
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)
+    {
+        if(l1==NULL) return l2;
+        if(l2==NULL) return l1;
+
+        ListNode* newhead=new ListNode(-1);
+        ListNode* tmp=newhead;
+
+        while(l1 && l2)
+        {
+            if(l1->val<l2->val)
+            {
+                tmp->next=l1;
+                l1=l1->next;
+            }
+            else//需要时else，不能两个if
+            {
+                tmp->next=l2;
+                l2=l2->next;
+            }
+
+            tmp=tmp->next;
+        }
+
+        if(l1) tmp->next=l1;
+        if(l2) tmp->next=l2;
+
+        return newhead->next;
+    }
+};
+
+------------------------- 0302/ 2021/  
+
+
+时间O(n+m)
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        auto d=new ListNode(-1);
+        auto c=d;
+
+        while(l1 && l2)
+        {
+            
+            if( l1->val < l2->val){
+                c=c->next=l1;
+                l1=l1->next;
+            }else
+            {
+                c=c->next=l2;
+                l2=l2->next;
+            }
+        }
+
+        if(l1) c->next=l1;
+        if(l2) c->next=l2;
+
+        return d->next;
+
+    }
+};
+

@@ -1,0 +1,101 @@
+给定一个正整数 n，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的正方形矩阵。
+
+示例:
+
+输入: 3
+输出:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+
+
+========================================================= 和螺旋矩阵1 一样
+
+class Solution 
+{
+public:
+    vector<vector<int>> generateMatrix(int n) 
+    {
+        vector<vector<int>> res(n,vector<int>(n));
+        int up=0;
+        int down=n-1;
+        int le=0;
+        int right=n-1;
+        int num=1;
+
+        while(num <= n*n)
+        {
+            for(int i=le;i<=right;++i) //从第一行开始填数字
+            {
+                res[up][i]=num;
+                num++;
+            }
+            
+            if(++up>down) break;//第一行写完后，up+1，满足向下循环
+            for(int i=up;i<=down;++i)
+            {
+                res[i][right]=num;
+                num++;
+            }
+
+            if(--right<le) break;
+            for(int i=right;i>=le;--i)
+            {
+                res[down][i]=num;
+                num++;
+            }
+
+            if(--down<up) break;
+            for(int i=down;i>=up;--i)
+            {
+                res[i][le]=num;
+                num++;
+            }
+
+            if(++le>right) break;
+        }
+
+        return res;
+    }
+};
+
+
+
+
+-------------------------------------------- 0204 / 2021/ yxc 
+
+
+时间On^2
+
+
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> res(n, vector<int>(n));
+
+        int dx[]={0, 1, 0, -1};
+        int dy[]={1, 0, -1, 0};
+        int d=0;
+        int x=0;
+        int y=0;
+
+        for(int i=1;i<=n*n;++i)
+        {
+            res[x][y]=i;
+            int a=x+dx[d];
+            int b=y+dy[d];
+            if(a<0 || a>=n || b<0 || b>=n || res[a][b])
+            {
+                d=(d+1) % 4;
+                a=x+dx[d];
+                b=y+dy[d];
+            }
+            x=a;y=b;
+        }
+
+        return res;
+    }
+};
+

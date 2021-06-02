@@ -1,0 +1,98 @@
+给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+
+函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。
+
+说明:
+
+返回的下标值（index1 和 index2）不是从零开始的。
+你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+示例:
+
+输入: numbers = [2, 7, 11, 15], target = 9
+输出: [1,2]
+解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+
+=====================================
+
+// class Solution 
+// {
+// public:
+//     vector<int> twoSum(vector<int>& numbers, int target) 
+//     {
+//         vector<int> res;
+//         int n=numbers.size();
+//         map<int,int> mp;
+
+//         for(int i=0;i<n;++i)
+//         {
+//             if(mp.count(target-numbers[i]))
+//             {
+//                 res.push_back(mp[target-numbers[i]]+1);
+//                 res.push_back(i+1);
+//             }
+
+//             mp[numbers[i]]=i;
+//         }
+
+//         return res;
+//     }
+// };
+
+#############################3  双指针
+
+//O(n) 时间
+class Solution
+{
+public:
+    vector<int> twoSum(vector<int>& numbers, int target)
+    {
+        vector<int> res;
+        int n=numbers.size();
+        int ll=0;
+        int rr=n-1;
+
+        while(ll<rr)
+        {
+            int sum=numbers[ll]+numbers[rr];
+            if(sum==target)
+            {
+                res.push_back(ll+1);
+                res.push_back(rr+1);
+                break;//唯一答案，跳出
+            }
+            else if(sum<target)
+            {
+                ++ll;//++在前速度快
+            }
+            else
+            {
+                --rr;
+            }
+        }
+
+        return res;
+    }
+};
+
+
+-------------------  0102/ 2021/ yxc
+
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        vector<int> res;
+        
+        for(int i=0, j=numbers.size()-1;i < j;++i)
+        {
+            while(i<j && numbers[i] + numbers[j]> target) j--; // j是最大的和大于target的那个j
+
+            if( i<j && numbers[i] + numbers[j] == target) return {i+1, j+1};
+        }
+
+        return {};
+    }
+};
+
+
+

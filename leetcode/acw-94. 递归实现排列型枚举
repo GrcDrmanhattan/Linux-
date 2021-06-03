@@ -1,0 +1,66 @@
+94. 递归实现排列型枚举
+
+把 1∼n 这 n 个整数排成一行后随机打乱顺序，输出所有可能的次序。
+
+输入格式
+一个整数 n。
+
+输出格式
+按照从小到大的顺序输出所有方案，每行 1 个。
+
+首先，同一行相邻两个数用一个空格隔开。
+
+其次，对于两个不同的行，对应下标的数一一比较，字典序较小的排在前面。
+
+数据范围
+1≤n≤9
+输入样例：
+3
+输出样例：
+1 2 3
+1 3 2
+2 1 3
+2 3 1
+3 1 2
+3 2 1
+
+
+------------------------ 0603/  2021/  yxc 
+
+// 输出全排列
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 12;
+
+int n;
+vector<int> path;
+
+
+void dfs(int u, int state)
+{
+    if(u==n){
+        for(auto x:path) cout<<x<<' ';
+        cout<<endl;
+        return;
+    }
+    
+    for(int i=0;i<n;++i)
+        if(!(state>>i&1)){ // 当前数i在u位置可以使用，以前没有被用过
+            path.push_back(i+1);
+            dfs(u+1, state | (1<<i)); // 搜索下一个位置u+1可以放哪个数字， 将状态i位置为1标记为使用过
+            path.pop_back();
+        }
+}
+
+
+int main()
+{
+    cin>>n;
+    dfs(0, 0);
+    return 0;
+}
+
+

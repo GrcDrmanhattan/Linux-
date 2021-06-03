@@ -28,6 +28,8 @@
 ------------------------ 0603/  2021/  yxc 
 
 // 输出全排列
+// 依次搜索每个位置可以放哪个数字，从位置0开始，当搜索到位置n结束，已经有0-n-1，n个数字了
+
 
 #include <iostream>
 #include <cstring>
@@ -47,7 +49,7 @@ void dfs(int u, int state)
         return;
     }
     
-    for(int i=0;i<n;++i)
+    for(int i=0;i<n;++i) // 枚举状态的每一位，看是否为0没使用过
         if(!(state>>i&1)){ // 当前数i在u位置可以使用，以前没有被用过
             path.push_back(i+1);
             dfs(u+1, state | (1<<i)); // 搜索下一个位置u+1可以放哪个数字， 将状态i位置为1标记为使用过

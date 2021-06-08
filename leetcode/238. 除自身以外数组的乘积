@@ -20,20 +20,28 @@
 
 ----------------------- 0608 / 2021/  yxc
 
+
 // 前后缀分解 
 // 经典应用
 
 // 预处理一个前缀和数组p，一个变量s表示后缀和
+// 前缀和 pi = a1 * a2 * .. ai
+// 后缀和 si = an * an-1 *... ai
+// resi = pi * si
+
 // 空间On， 时间On
+
+
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
         int n=nums.size();
         vector<int> p(n, 1);
         for(int i=1;i<n;++i) p[i] = p[i-1] * nums[i-1];// 当前的前缀和=前一个前缀和*当前的数
+        
         int s=1;
         for(int i=n-1;i>=0;--i){
-            p[i] *= s;
+            p[i] *= s; // 答案等于前缀和 * 后缀和
             s*=nums[i];//更新后缀和
         }
         return p;

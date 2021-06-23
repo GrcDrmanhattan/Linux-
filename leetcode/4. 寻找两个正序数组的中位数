@@ -125,3 +125,42 @@ public:
     }
 };
 
+
+---------------------- 0623 / 2021/  
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int n=nums1.size() + nums2.size();
+        if(n%2){
+            return find(nums1, 0, nums2, 0, n/2+1);
+        }
+        else{
+            int l=find(nums1, 0, nums2, 0, n/2);
+            int r=find(nums1, 0, nums2, 0, n/2+1);
+            return (l+r)/2.0;
+        }
+    }
+
+    int find(vector<int>& a, int si, vector<int>& b, int sj, int k)
+    {
+        if(a.size()-si > b.size()-sj) return find(b, sj, a, si ,k);
+
+        if(k==1){
+            if(a.size()==si) return b[sj];
+            else return min(a[si], b[sj]);
+        }
+
+        if(a.size()==si) return b[sj+k-1];
+
+        int i=min((int)a.size(), si+k/2);
+        int j=sj+k-k/2;
+        if(a[i-1] < b[j-1]){
+            return find(a, i, b ,sj, k-(i-si));
+        }else{
+            return find(a, si, b, j, k-(j-sj));
+        }
+    }
+};
+
+

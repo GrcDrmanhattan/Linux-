@@ -175,3 +175,32 @@ public:
 
 
 
+-------------------------- 0624 / 2021 / 
+
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int n=s.size();
+        int m=p.size();
+        vector<vector<int>> f(n+1, vector<int>(m+1, 0));
+        s=' ' + s;
+        p=' ' + p;
+        f[0][0]=1;
+
+        for(int i=0;i<=n;++i){
+            for(int j=1;j<=m;++j){
+                if(j+1<=m && p[j+1]=='*') continue;
+                if(p[j]!='*' ){
+                    f[i][j]=i && f[i-1][j-1] && (p[j]=='.' || p[j]==s[i]);
+                }else if (p[j]=='*'){
+                    f[i][j] = f[i][j-2] || (i && f[i-1][j] && (p[j-1]==s[i] || p[j-1]=='.'));
+                }
+            }
+        }
+
+        return f[n][m];
+    }
+};
+
+

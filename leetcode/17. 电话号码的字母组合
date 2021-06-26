@@ -111,3 +111,34 @@ public:
 };
 
 
+----------------------- 0626  / 2021/   
+
+class Solution {
+public:
+    string s[10]={
+        "","","abc","def",
+        "ghi","jkl","mno",
+        "pqrs","tuv","wxyz"
+    };
+    vector<string> res;
+    vector<string> letterCombinations(string digits) {
+        
+        if(digits.empty()) return {};
+        dfs(digits, 0, "");
+
+        return res;
+    }
+
+    void dfs(string digits, int u ,string tmp){
+        if(u==digits.size()){
+            res.push_back(tmp);
+            return ;
+        }
+
+        for(auto x:s[digits[u] -'0']){
+            dfs(digits, u+1, tmp+x);
+        }
+    }
+};
+
+

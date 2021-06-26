@@ -168,3 +168,25 @@ public:
 };
 
 
+----------------------- 0626 / 2021 
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+
+        for(int i=0;i<nums.size();++i){
+            if(i && nums[i-1]==nums[i]) continue;
+            for(int j=i+1, k=nums.size()-1;j<k;++j){
+                if(j>i+1 && nums[j-1]==nums[j]) continue;
+                while(j<k-1 && nums[i]+nums[j]+nums[k-1]>=0) k--;// 当k-1不满足要求了就停下
+                if(nums[i]+nums[j]+nums[k]==0) res.push_back({nums[i], nums[j],nums[k]});
+            }
+
+        }
+        return res;
+    }
+};
+
+

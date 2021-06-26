@@ -198,3 +198,36 @@ public:
     }
 };
 
+
+----------------------- 0626 /  2021/   
+
+
+class Solution {
+public:
+    struct cmp{
+        bool operator()(ListNode* a, ListNode* b) const {
+            return a->val > b->val;
+        }
+    };
+   
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        auto d=new ListNode(-1);
+        auto c=d;
+
+        priority_queue<ListNode*, vector<ListNode*>, cmp> p;
+        for(auto x:lists) if(x) p.push(x);
+
+        while(p.size()){
+            auto t=p.top();
+            p.pop();
+
+            c=c->next=t;
+            if(t->next) p.push(t->next);  
+        }
+
+        return d->next;
+    }
+};
+
+
+

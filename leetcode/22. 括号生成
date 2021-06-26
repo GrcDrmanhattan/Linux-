@@ -100,3 +100,28 @@ public:
 };
 
 
+
+---------------------------- 0626  /2021/  
+
+class Solution {
+public:
+    vector<string> res;
+    int n;
+    vector<string> generateParenthesis(int n_) {
+        n=n_;
+        dfs(0, 0, "");
+        return res;
+    }
+
+    void dfs(int l ,int r , string tmp){
+        if(l==n && r==n){
+            res.push_back(tmp);
+            return ;
+        }
+
+        if(l<n) dfs(l+1, r, tmp+'(');
+        if(r<n && l>r) dfs(l, r+1, tmp+')');
+    }
+};
+
+

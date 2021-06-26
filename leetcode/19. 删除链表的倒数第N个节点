@@ -296,3 +296,29 @@ public:
 };
 
 
+-------------------------- 0626  /2021/  
+
+
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        auto d=new ListNode(-1);
+        d->next=head;
+
+        auto i=d;
+        auto j=d;
+        for(int len=0;len<=n;++len) i=i->next;
+
+        while(i){
+            i=i->next;
+            j=j->next;
+        }
+
+        j->next=j->next->next;
+
+        return d->next;
+    }
+};
+
+

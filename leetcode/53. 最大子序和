@@ -231,3 +231,21 @@ public:
 
 
 
+----------------------- 0628 /  2021/  
+
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res=INT_MIN;
+        int last=0;
+        for(auto x:nums){
+            last=max(last+x, x);
+            res=max(res, last);
+        }
+        return res;
+    }
+};
+
+
+

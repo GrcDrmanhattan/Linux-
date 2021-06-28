@@ -47,3 +47,29 @@ public:
 };
 
 
+
+------------------- 0628 /2021 
+
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> res;
+        unordered_map<string, vector<string>> mp;
+
+        for(auto x:strs){
+            auto c=x;
+            sort(c.begin(), c.end());
+            // cout<<c<<endl;
+            // cout<<"--"<<x<<endl;
+            mp[c].push_back(x);
+        }
+
+        for(auto [x, v]:mp) res.push_back(v);
+
+        return res;
+    }
+};
+
+
+

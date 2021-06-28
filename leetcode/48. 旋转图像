@@ -62,3 +62,34 @@ public:
 };
 
 
+
+------------------ 0628 /2021/  
+
+
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        for(int i=0;i<n;++i){
+            for(int j=i+1;j<n;++j)
+                swap(matrix[i][j], matrix[j][i]);
+        }
+
+        for(int i=0;i<n;++i){
+            for(int j=0, k=n-1;j<k; j++, k--)
+                swap(matrix[i][j], matrix[i][k]);
+        }
+    }
+};
+/*
+1 4 7 
+2 5 8
+3 6 9
+
+7 4 1
+8 5 2
+9 6 3
+
+*/
+
+

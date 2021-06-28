@@ -148,3 +148,33 @@ public:
 };
 
 
+
+---------------------- 0628 / 2021/  
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        int res=0;
+        int st=0;
+        stack<int> mp;
+
+        for(int i=0;i<s.size();++i){
+            if(s[i]=='(') mp.push(i);
+            else{
+                if(mp.size()){
+                    mp.pop();
+                    if(mp.empty()){
+                        res=max(res, i-st+1);
+                    }
+                    else{
+                        res=max(res, i-mp.top());
+                    }
+                }else st=i+1;
+            }
+        }
+
+        return res;
+    }
+};
+
+

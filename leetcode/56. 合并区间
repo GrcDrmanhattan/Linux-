@@ -132,3 +132,25 @@ public:
 };
 
 
+
+----------------------- 0702  / 2021 
+
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& a) {
+        vector<vector<int>> res;
+        sort(a.begin(), a.end());
+
+        for(auto x:a){
+            int l=x[0];
+            int r=x[1];
+
+            if(res.empty() || res.back()[1] < l) res.push_back({l, r});
+            else res.back()[1]=max(r, res.back()[1]);
+        }
+        return res;
+    }
+};
+
+

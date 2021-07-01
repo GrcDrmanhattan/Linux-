@@ -66,4 +66,20 @@ public:
 };
 
 
+---------------- 0702 / 2021 
+
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int j=0;
+        for(int i=0;i<nums.size();++i){
+            if(j<i) return false;
+            j=max(j, nums[i]+i); //每个位置最多跳到ni+i
+        }
+        return true;
+    }
+};
+
+
 

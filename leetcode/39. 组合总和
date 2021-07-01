@@ -173,3 +173,32 @@ public:
 };
 
 
+--------------- 0701 // 2021/  
+
+// 递归枚举，依次以每个点为起点枚举，每个点可以有一个或者多个，直到和大于等于target返回
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> tmp;
+    vector<vector<int>> combinationSum(vector<int>& c, int target) {
+        dfs(c, 0, target);
+        return res;
+    }
+
+    void dfs(vector<int>&c ,int st, int target){
+        if(target<0) return;
+        if(target==0){
+            res.push_back(tmp);
+            return;
+        }
+
+        for(int i=st;i<c.size();++i){
+            tmp.push_back(c[i]);
+            dfs(c, i , target-c[i]); // i是枚举的起点
+            tmp.pop_back();
+        }
+    }
+};
+
+

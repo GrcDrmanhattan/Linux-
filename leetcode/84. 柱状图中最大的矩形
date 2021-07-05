@@ -106,3 +106,38 @@ public:
 
 
 
+----------------------- 0706/ 2021
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n=heights.size();
+        vector<int> ll(n);
+        vector<int> rr(n);
+        stack<int> st;
+
+        for(int i=0;i<n;++i) // 从左到右找到左边第一个比当前栈顶小的元素,当前元素是最新插入的，之前的栈顶比他大的当然不会作为答案输出
+        {
+            while(st.size() && heights[st.top()] >= heights[i]) st.pop();
+            if(st.empty()) ll[i]=-1;
+            else ll[i] = st.top();
+            st.push(i);
+        }
+
+        st=stack<int>();
+
+        for(int i=n-1;i>=0;--i){ // 从右到左找到右边第一个小的元素，当前元素是最新插入的，栈顶是之前的
+            while(st.size() && heights[st.top()] >= heights[i]) st.pop();
+            if(st.empty()) rr[i]=n;
+            else rr[i]=st.top();
+            st.push(i);
+        }
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            res=max(res, heights[i] * (rr[i]-ll[i]-1));
+
+        return res;
+    }
+};
+

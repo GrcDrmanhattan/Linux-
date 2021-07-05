@@ -77,3 +77,52 @@ public:
 };
 
 
+
+-------------------- 0705 / 2021
+
+
+class Solution {
+public:
+    int m;
+    int n;
+    int dx[4]={0, 1 ,0 ,-1};
+    int dy[4]={1, 0, -1, 0};
+    bool st[210][210];
+    vector<vector<char>> g;
+
+    bool exist(vector<vector<char>>& board, string word) {
+        m=board.size();
+        n=board[0].size();
+        g=board;
+
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                if(!st[i][j] && dfs(i, j, word, 0))
+                    return true;
+            }
+        
+        return false;
+    }
+
+    bool dfs(int x ,int y , string& word, int u){
+        if(g[x][y] != word[u]) return false;
+        if(u==word.size()-1) return true;
+
+        st[x][y]=true;
+
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<m && b>=0 && b<n && !st[a][b]){
+                if(dfs(a, b, word, u+1)) return true;
+            }
+        }
+
+        st[x][y]=false;
+        return false;
+    }
+    
+};
+
+
+

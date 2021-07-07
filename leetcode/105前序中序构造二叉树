@@ -164,3 +164,28 @@ public:
 
 
 
+--------------------------- 0707  /2021 
+
+
+class Solution {
+public:
+    unordered_map<int ,int > mp;
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for(int i=0;i<inorder.size();++i) mp[inorder[i]]=i;
+        return dfs(preorder, 0, preorder.size()-1, inorder, 0 , inorder.size()-1);
+    }
+
+    TreeNode* dfs(vector<int>& preorder, int ps, int pe, vector<int>& inorder, int is, int ie){
+        if(ps > pe || is >ie) return nullptr;
+        auto root=new TreeNode(preorder[ps]);
+        int k=mp[preorder[ps]];
+        // ps,  ? pe
+        // is k, ie
+        root->left = dfs(preorder, ps+1, k-is+ps, inorder, is, k);
+        root->right = dfs(preorder, k-is+ps+1, pe, inorder, k+1, ie);
+
+        return root;
+    }
+};
+
+

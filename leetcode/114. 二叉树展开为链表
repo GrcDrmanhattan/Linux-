@@ -97,3 +97,23 @@ public:
 
 
 
+----------------------------- 0708  / 2021/  
+
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        while(root){
+            auto p=root->left;
+            if(p){ // 入如果有左儿子
+                while(p->right) p=p->right;
+                p->right = root->right;
+                root->right = root->left;
+                root->left = nullptr;
+            }
+            //没有左子树，就将当前结点指向右
+            root  = root->right;
+        }
+    }
+};
+
+

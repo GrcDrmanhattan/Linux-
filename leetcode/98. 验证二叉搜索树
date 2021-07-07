@@ -89,3 +89,26 @@ public:
 
 
 
+------------------------ 0707 / 2021 
+
+
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root, -1e8, -1e8);
+        
+    }
+
+    bool dfs(TreeNode* u, int minv, int maxv){
+        if(!u) return true;
+        if(minv !=-1e8 && minv >= u->val) return false;
+        if(maxv != -1e8 && maxv <= u->val) return false;
+
+        return dfs(u->left, minv, u->val) && dfs(u->right, u->val, maxv);
+    }
+};
+
+
+

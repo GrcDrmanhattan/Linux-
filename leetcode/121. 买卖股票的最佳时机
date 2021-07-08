@@ -45,3 +45,24 @@ public:
     }
 };
 
+
+--------------------------------- 0708 / 2021 
+
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res=0;
+        int m=INT_MAX;
+        for(auto x:prices){
+            res=max(res, x-m);
+            m=min(m, x);
+        }
+
+        return res;
+        
+    }
+};
+
+

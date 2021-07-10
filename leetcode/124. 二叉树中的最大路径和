@@ -136,3 +136,26 @@ public:
 
 
 
+------------------------ 0710 / 2021/ 
+
+
+class Solution {
+public:
+    int res=INT_MIN;
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* root){
+        if(!root) return 0;
+        int ll=max(0, dfs(root->left));
+        int rr=max(0 ,dfs(root->right));
+
+        res=max(res, ll+rr+root->val);
+        return max(ll, rr) + root->val;
+    }
+};
+
+

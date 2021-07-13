@@ -541,3 +541,78 @@ public:
 
 
 
+------------------------ 0713 / 2021 
+
+
+class LRUCache {
+public:
+    struct node{
+        int key ;
+        int value;
+        node* left;
+        node* right;
+
+        node(int k, int v){
+            key=k;
+            value=v;
+            left=right=nullptr;
+        }
+
+    }*L, *R;
+
+    void remove(node* p){
+        p->left->right = p->right;
+        p->right->left = p->left;
+    }
+
+    void insert(node* p){
+        p->right = L->right;
+        p->left = L;
+
+        L->right->left = p;
+        L->right =p;
+    }
+
+    int n;
+    unordered_map<int, node*> hs;
+
+    LRUCache(int capacity) {
+        n=capacity;
+        L= new node(-1, -1);
+        R=new node(-1, -1);
+
+        L->right=R;
+        R->left = L;
+    }
+    
+    int get(int key) {
+        if(hs.count(key)==0) return -1;
+        auto p=hs[key];
+        remove(p);
+        insert(p);
+        return p->value;
+    }
+    
+    void put(int key, int value) {
+        if(hs.count(key)==0){
+            if(n == hs.size()){
+                auto p=R->left;
+                remove(p);
+                hs.erase(p->key);
+            }
+
+            auto p=new node(key, value);
+            insert(p);
+            hs[key]=p;
+        }
+        else{
+            auto p=hs[key];
+            p->value = value;
+            remove(p);
+            insert(p);
+        }
+    }
+};
+
+
+

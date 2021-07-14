@@ -730,3 +730,140 @@ public:
 
 
 
+----------------------- 0714  /2021/  
+
+
+class LFUCache {
+public:
+    struct node{
+        int key;
+        int value;
+        node* left;
+        node* right;
+
+        node(int k ,int v){
+            key = k;
+            value=v;
+            left=nullptr;
+            right=nullptr;
+        }
+    };
+
+    struct Block{
+        int cnt;
+        Block* left;
+        Block* right;
+
+        node* head;
+        node* tail;
+
+        Block(int c){
+            cnt=c;
+            left=right=nullptr;
+
+            head=new node(-1, -1);
+            tail=new node(-1, -1);
+
+            head->right=tail;
+            tail->left=head;
+        }
+
+        ~Block(){
+            delete head;
+            delete tail;
+        }
+
+        bool empty(){
+            return head->right == tail;
+        }
+
+        void remove(node* p){
+            p->left->right = p->right;
+            p->right->left = p->left;
+        }
+
+        void insert(node *p){
+            p->right = head->right;
+            p->left = head;
+
+            head->right->left = p;
+            head->right = p;
+        }
+    }*lb, *rb;
+
+    void remove(Block *p){
+        p->left->right = p->right;
+        p->right->left = p->left;
+    }
+
+    void insert(Block *p){ // 将t插在p右面
+        auto t = new Block(p->cnt + 1);
+
+        t->right  = p->right;
+        t->left = p;
+
+        p->right->left = t;
+        p->right  = t;
+    }
+
+    int n;
+    unordered_map<int, node*> hn;
+    unordered_map<int, Block*> hb;
+
+    LFUCache(int capacity) {
+        n=capacity;
+        
+        lb=new Block(0);
+        rb=new Block(INT_MAX);
+
+        lb->right=rb;
+        rb->left=lb;
+    }
+    
+    int get(int key) {
+        if(hb.count(key)==0) return -1;
+
+        auto b=hb[key];
+        auto p=hn[key];
+
+        b->remove(p);
+        if(b->right->cnt != b->cnt + 1) insert(b);
+        b->right->insert(p);
+        
+        if(b->empty()) remove(b);
+        hb[key] = b->right; 
+
+        return p->value;
+    }
+    
+    void put(int key, int value) {
+        if(n==0) return ;
+
+        if(hb.count(key)==0){
+            if(n == hb.size()){
+                auto p=lb->right->tail->left;
+                lb->right->remove(p);
+
+                if(lb->right->empty()) remove(lb->right);
+
+                hn.erase(p->key);
+                hb.erase(p->key);
+            }
+
+            auto p=new node(key , value);
+            if(lb->right->cnt > 1) insert(lb);
+            lb->right->insert(p);
+
+            hn[key] = p;
+            hb[key] = lb->right;
+
+        }
+        else{
+            auto p=hn[key];
+            p->value=value;
+            get(p->key);
+        }
+    }
+};
+
+

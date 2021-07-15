@@ -1,0 +1,83 @@
+148. 排序链表
+
+给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+
+进阶：
+
+你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？
+ 
+
+示例 1：
+
+
+输入：head = [4,2,1,3]
+输出：[1,2,3,4]
+示例 2：
+
+
+输入：head = [-1,5,3,4,0]
+输出：[-1,0,3,4,5]
+示例 3：
+
+输入：head = []
+输出：[]
+ 
+
+提示：
+
+链表中节点的数目在范围 [0, 5 * 104] 内
+-105 <= Node.val <= 105
+------------------------------ 0715  /2021/  yxc 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+// 迭代的归并排序，空间O1可以，时间nlogn
+// 从下到上迭代， 归并
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        int n=0;
+        for(auto p=head;p;p=p->next) n++;
+
+        for(int i=1;i<n; i*=2){ // 先合并长度是1的，一直到长度是n-1
+            auto dummy=new ListNode(-1);
+            auto cur=dummy;
+
+            for(int j=1;j<=n; j+= i*2){
+                auto p=head;
+                auto q=p;
+                for(int k=0;k<i && q;++k) q=q->next; // 先合并pq端，然后o走到q的下一段，
+                auto o=q;
+                for(int k=0;k<i && o;++k) o=o->next;//o是
+
+                int l=0;
+                int r=0;
+                while(l<i && r<i && p && q){
+                    if(p->val <= q->val) cur=cur->next=p, p=p->next, l++;
+                    else cur=cur->next=q, q=q->next, r++;
+                }
+
+                while(l<i && p) cur=cur->next=p,p=p->next, l++;
+                while(r<i && q) cur=cur->next=q, q=q->next, r++;
+                head=o;
+            }
+
+            cur->next=nullptr;
+            head=dummy->next;
+        }
+
+        return head;
+    }
+};
+

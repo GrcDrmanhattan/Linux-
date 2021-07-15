@@ -54,7 +54,7 @@ public:
             auto dummy=new ListNode(-1);
             auto cur=dummy;
 
-            for(int j=1;j<=n; j+= i*2){
+            for(int j=1;j<=n; j+= i*2){ // 合并长度是1的 1，2端，然后3， 4段
                 auto p=head;
                 auto q=p;
                 for(int k=0;k<i && q;++k) q=q->next; // 先合并pq端，然后o走到q的下一段，

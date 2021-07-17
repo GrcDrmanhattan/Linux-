@@ -38,12 +38,13 @@ buildings 按 lefti 非递减排序
 -------------------------- 0717  / / 2021/  
 yxc 
 
+//pair 默认对first升序，当first相同时对second升序
 
 class Solution {
 public:
     vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
         vector<vector<int>> res;
-        multiset<int> hs;
+        multiset<int> hs; // 维护高度，存储的都是高度所以是正数
         vector<pair<int, int>> points;
         for(auto x:buildings){
             //pair 默认对first升序，当first相同时对second升序

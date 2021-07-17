@@ -123,3 +123,22 @@ public:
 
 
 
+------------------- 0718 / 2021/ 
+
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        if(!root) return 0;
+        auto res=dfs(root);
+        return max(res[0], res[1]);
+    }
+
+    vector<int> dfs(TreeNode* u){
+        if(!u) return {0, 0};
+        auto l=dfs(u->left);
+        auto r=dfs(u->right);
+
+        return {max(l[0], l[1]) + max(r[0], r[1]), u->val + l[0]+r[0]};
+    }
+};
+

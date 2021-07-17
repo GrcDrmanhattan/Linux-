@@ -58,3 +58,24 @@ public:
 
 
 
+----------------------------------------- 0717  / 2021 / yxc 
+时间·On
+
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        const int n=nums.size();
+        vector<int> f(n+1); // 从1到i个屋子，fi表示选择第i个的
+        vector<int> g(n+1); // 从1到i个屋子，gi表示不选择第i个
+
+        for(int i=1;i<=n;++i){ // 从前到后递推  
+            f[i] = g[i-1] + nums[i-1];
+            g[i] = max(f[i-1], g[i-1]);// 不选择第i个，则i-1个可以选择也可以不选择
+        }
+
+        return max(f[n], g[n]);
+    }
+};
+
+

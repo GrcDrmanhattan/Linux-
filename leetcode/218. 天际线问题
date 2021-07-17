@@ -77,3 +77,44 @@ public:
 };
 
 
+------------------------------ 
+
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<vector<int>> res;
+        multiset<int> hs;
+        vector<pair<int, int>> poionts;
+
+        for(auto x:buildings){
+            poionts.push_back({x[0], -x[2]});
+            poionts.push_back({x[1], x[2]});
+        }
+
+        sort(poionts.begin(), poionts.end());
+        hs.insert(0);
+
+        for(auto x:poionts){
+            int d=x.first;
+            int h=abs(x.second);
+
+            if(x.second < 0){
+                if(h > *hs.rbegin()){
+                    res.push_back({d, h});
+                }
+
+                hs.insert(h);
+            }
+            else{
+                hs.erase(hs.find(h));
+                if(h > *hs.rbegin()){
+                    res.push_back({d, *hs.rbegin()});
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+

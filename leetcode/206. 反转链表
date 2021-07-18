@@ -110,3 +110,18 @@ public:
 };
 
 
+
+------------------- 0718  /2021
+ 
+ class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !head->next) return head;
+
+        auto res=reverseList(head->next);
+        head->next->next=head;
+        head->next=nullptr;
+        return res;
+    }
+};
+

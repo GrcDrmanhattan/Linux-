@@ -33,5 +33,71 @@ trie.search("app");     // 返回 True
 1 <= word.length, prefix.length <= 2000
 word 和 prefix 仅由小写英文字母组成
 insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次
-----------------------------------------  0718  / 2021/  
+----------------------------------------  0718  / 2021/   yxc
+
+
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    struct node{
+        bool isend;
+        node* son[26];
+        node(){
+            isend = false;
+            for(int i=0;i<26;++i){
+                son[i]=nullptr;
+            }
+        }
+    }*rt;
+
+    Trie() {
+        rt=new node();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        auto p=rt;
+        for(auto x:word){
+            int u=x-'a';
+            if(!p->son[u]) p->son[u]=new node();
+            p=p->son[u];
+        }
+        p->isend=true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        auto p=rt;
+        for(auto x:word){
+            int u=x-'a';
+            if(!p->son[u]) return false;
+            p=p->son[u];
+        }
+
+        return p->isend;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        auto p=rt;
+        for(auto x:prefix){
+            int u=x-'a';
+            if(!p->son[u]) return false;
+            p=p->son[u];
+        }
+
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */
+ 
+ 
+ 
 

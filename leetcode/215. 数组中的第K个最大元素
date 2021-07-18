@@ -20,7 +20,7 @@ class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
         priority_queue<int> q;
-        for(auto x:nums) q.push(x);
+        for(auto x:nums) q.push(x); // 先把所有元素插入，大根队，顶元素是最大的，然后弹出，第k个就是第k大的
 
         int cnt=0;
         int res;

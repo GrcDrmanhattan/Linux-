@@ -151,7 +151,7 @@ public:
                 head=o;
             }
 
-            c->next=nullptr;
+            c->next=nullptr; // 当把这一层合并完后收尾工作
             head=dumm->next; // 去进入上一层排序时，要把head放回最开始的位置，因为j从1开始就可以p从头开始归并
         }
 

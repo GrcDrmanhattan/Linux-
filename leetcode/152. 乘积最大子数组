@@ -42,4 +42,27 @@ public:
 };
 
 
+------------------- 0719 /2021
+ 
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n=nums.size();
+        int res=nums[0];
+        int f=nums[0]; // f表示以i右边界的最大值
+        int g=nums[0]; // g表示最小值
+
+        for(int i=1;i<n;++i){
+            int a=nums[i];
+            int fa=f*a;
+            int ga=g*a;
+            f=max(a, max(fa, ga)); // 更新g和f
+            g=min(a, min(fa, ga));
+            res=max(res, f);
+        }
+
+        return res;
+    }
+};
+
 

@@ -132,7 +132,7 @@ public:
             auto dumm=new ListNode(-1);
             auto c=dumm;
 
-            for(int j=1;j<=n;j+=2*i){ // 每次合并完最小长度是i的，
+            for(int j=1;j<=n;j+=2*i){ // 每次合并完最小长度是i的，对于长度i的，合并完
                 auto p=head;
                 auto q=p;
                 for(int k=0;k<i && q;k++) q=q->next;

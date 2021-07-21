@@ -25,7 +25,7 @@
 // 经典应用
 
 // 预处理一个前缀和数组p，一个变量s表示后缀和
-// 前缀和 pi = a1 * a2 * .. ai
+// 前缀和 pi = a1 * a2 * .. ai-1 
 // 后缀和 si = an * an-1 *... ai
 // resi = pi * si
 
@@ -47,5 +47,32 @@ public:
         return p;
     }
 };
+
+
+------------------------------  0721c/ 2021 
+
+前缀就是不包含当前的数
+
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> pre(n, 1);
+        for(int i=1;i<n;++i) pre[i]=pre[i-1]*nums[i-1]; // p[i-1] * 前一个数
+
+        int s=1;
+        for(int i=n-1;i>=0;--i){
+            pre[i] *= s;
+            s *= nums[i];
+        }
+        return pre;
+    }
+};
+
+// 1 2 3 4 
+// 1 1 2 6
+// 24  12  4  1
+//24 12 8 6
 
 

@@ -94,3 +94,23 @@ TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 
 
 
+
+-------------------------- 0721/  2021 
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root) return NULL;
+        if(root==p || root==q) return root;
+
+        auto ll=lowestCommonAncestor(root->left, p, q);
+        auto rr=lowestCommonAncestor(root->right, p ,q);
+
+        if(!ll && !rr) return NULL;
+        if(ll && rr) return root;
+        if(ll) return ll;
+        else return rr;
+    }
+};
+
+

@@ -203,3 +203,50 @@ public:
     }
 };
 
+
+----------------- 0723 / 2021 / 
+
+class Codec {
+public:
+    string path;
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        dfs_s(root);
+        return path;
+    }
+
+    void dfs_s(TreeNode* u){
+        if(u==NULL) {
+            path +="*,";
+            return ;
+        }
+        else{
+            path += to_string(u->val) + ',';
+            dfs_s(u->left);
+            dfs_s(u->right);
+        }
+    }
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dfs_d(data, u);
+    }
+
+    TreeNode* dfs_d(string& data, int &u){
+        if(data[u]=='*'){
+            u+=2;
+            return NULL;
+        }
+        else{
+            int k=u;
+            while(u<data.size() && data[u] != ',') u++;
+            auto res=new TreeNode(stoi(data.substr(k, u-k)));
+            u++;// 跳过逗号
+            res->left=dfs_d(data, u);
+            res->right=dfs_d(data ,u);
+            return res;
+        }
+    }
+};
+
+

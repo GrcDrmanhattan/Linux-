@@ -104,7 +104,7 @@ public:
         int n=nums.size();
         vector<int> q;
         for(auto x:nums){
-            if(q.empty() || x > q.back()) q.push_back(x);
+            if(q.empty() || x > q.back()) q.push_back(x); // 可以产生一个长度更长的序列
             else{
                 if(x<= q[0]) q[0]=x;
                 else{

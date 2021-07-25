@@ -122,3 +122,30 @@ public:
 
 
 
+------------------------- 0725  / 2021  
+
+//冷冻期和买入是持续的
+//卖出则是当天卖出就是卖出的状态
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        if(!n) return 0;
+
+        vector<vector<int>> f(n+1, vector<int>(3));
+        f[0][0]=0;//冷冻期
+        f[0][1]=-prices[0];//买入
+
+        for(int i=1;i<n;++i){
+            f[i][0]=max(f[i-1][0], f[i-1][2]);
+            f[i][1]=max(f[i-1][1], f[i-1][0]-prices[i]);
+            f[i][2]=f[i-1][1]+prices[i];
+        }
+
+        return max(f[n-1][0], max(f[n-1][1], f[n-1][2]));
+    }
+};
+
+
+

@@ -136,3 +136,39 @@ public:
 
 
 
+----------------------- 0726  /2021 
+ 
+ class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& e, vector<double>& v, vector<vector<string>>& q) {
+        vector<double> res;
+        unordered_set<string> st;
+        unordered_map<string , map<string, double>> d;
+
+        for(int i=0;i<e.size();++i){
+            auto a=e[i][0];
+            auto b=e[i][1];
+            double c=v[i];
+            st.insert(a);
+            st.insert(b);
+            d[a][b]=c;
+            d[b][a]=1/c;
+        }
+
+        for(auto k:st)
+            for(auto i:st)
+                for(auto j:st)
+                    if(d[i][k] && d[k][j]) d[i][j]=d[i][k] * d[k][j];
+
+        for(int i=0;i<q.size();++i){
+            auto a=q[i][0];
+            auto b=q[i][1];
+            if(d[a][b]) res.push_back(d[a][b]);
+            else res.push_back(-1);
+        }
+
+        return res;
+    }
+};
+
+

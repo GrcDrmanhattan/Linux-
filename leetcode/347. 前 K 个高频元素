@@ -167,3 +167,28 @@ public:
 
 
 
+----------------------- 0726  /2021 
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> res;
+        int n=nums.size();
+        unordered_map<int ,int>cnt;
+        for(auto x:nums) cnt[x]++;
+
+        vector<int> s(n+1);
+        for(auto [x, c]:cnt) s[c]++;
+
+        int i=n;
+        int t=0;
+        while(t<k) t+=s[i--];
+
+        for(auto [x, c]:cnt)
+            if(c > i) res.push_back(x);
+
+        return res;
+    }
+};
+
+

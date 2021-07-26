@@ -90,5 +90,25 @@ public:
 ----------------- yxc 使用树状数组暂时不会， 算法提高高级数据结构
 
 
+--------------- 0726  /2021  
+
+class Solution {
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        vector<vector<int>> res;
+        auto cmp=[](const vector<int>& a, const vector<int>& b){
+            return a[0] > b[0] || (a[0]==b[0] && a[1]< b[1]);
+        };
+
+        sort(people.begin(), people.end(), cmp);
+
+        for(auto x:people){
+            res.insert(res.begin()+x[1], x);
+        }
+
+        return res;
+    }
+};
+
 
 

@@ -79,3 +79,27 @@ public:
 
 
 
+---------------- 0728  /2021 
+
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();
+        int s=0;
+        for(auto x:nums) s+=x;
+        if(s%2) return false;
+        s/=2;
+        vector<int> f(s+1);
+        f[0]=1;
+
+        for(int i=1;i<=n;++i)
+            for(int j=s;j>=nums[i-1];--j)
+                f[j] |= f[j-nums[i-1]];
+
+        return f[s];
+    }
+};
+
+
+

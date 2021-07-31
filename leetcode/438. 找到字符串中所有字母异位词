@@ -95,3 +95,31 @@ public:
 };
 
 
+---------------------- 0731  /2021 
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> res;
+        unordered_map<char, int> cnt;
+        for(auto x:p) cnt[x]++;
+
+        int t=cnt.size();
+        int succ=0;
+        for(int i=0, j=0;i<s.size();++i){
+            cnt[s[i]]--;
+            if(cnt[s[i]] == 0) succ++;
+
+            while(i-j+1>p.size()){
+                if(cnt[s[j]] ==0) succ--;
+                cnt[s[j]]++;
+                j++;
+            }
+
+            if(succ == t) res.push_back(j);
+        }
+        return res;
+    }
+};
+
+

@@ -48,6 +48,8 @@ public:
 
 ----------------- 0731 / 2021 
 
+对原数组求前缀和后，一个和为 k 的子数组即为一对前缀和的差值为 k 的位置。
+
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {

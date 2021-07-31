@@ -53,3 +53,22 @@ public:
 };
 
 
+------------------- 0731 / 2021 
+
+class Solution {
+public:
+    int res=0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* u){
+        if(!u) return 0;
+        int ll=dfs(u->left);
+        int rr=dfs(u->right);
+        res=max(res, ll+rr);
+        return max(ll, rr) + 1;//加上来到当前结点的边
+    }
+};
+

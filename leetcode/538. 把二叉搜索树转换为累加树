@@ -82,4 +82,28 @@ public:
 };
 
 
+------------------ 0731 /2021 
+
+// 将所有大于等于点的值累加到当前值上，从数组后开始
+// 因为是二叉搜索树，相当于要从右子树开始遍历，
+
+class Solution {
+public:
+    int res=0;
+    TreeNode* convertBST(TreeNode* root) {
+        dfs(root);
+        return root;
+    }
+
+    void dfs(TreeNode* u){
+        if(!u) return ;
+        dfs(u->right);
+        int tmp=u->val;
+        u->val += res; // 当前结点要累加上后缀和
+        res += tmp; //然后更新后缀和
+        dfs(u->left);
+    }
+};
+
+
 

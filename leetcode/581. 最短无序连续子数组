@@ -130,3 +130,29 @@ public:
 
 
 
+---------------- 0801  / 2021  
+
+//中段数组虽是无序的，但满足最小值大于左段的最大值，最大值小于右段的最小值。 
+
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        const int n=nums.size();
+        int l=0;
+        int r=n-1;
+        while(l+1<n && nums[l] <= nums[l+1]) l++;
+        if(l==r) return 0;
+
+        while(r>=0 && nums[r] >= nums[r-1]) r--;
+        // 找到中间的左右边界
+        for(int i=l+1;i<n;++i)
+            while(l>=0 && nums[l] > nums[i]) l--;
+        
+        for(int i=r-1;i>=0;--i)
+            while(r<n && nums[r] < nums[i]) r++;
+
+        return r-l-1;
+    }
+};
+
+

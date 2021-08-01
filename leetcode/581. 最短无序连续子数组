@@ -134,6 +134,8 @@ public:
 
 //中段数组虽是无序的，但满足最小值大于左段的最大值，最大值小于右段的最小值。 
 
+// 要使得左边最大值小于右边最小值，这样排序后才可以保证左边不变
+
 class Solution {
 public:
     int findUnsortedSubarray(vector<int>& nums) {

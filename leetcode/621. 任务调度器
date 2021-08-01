@@ -93,3 +93,21 @@ public:
 };
 
 
+------------------- 0801 / 2021 
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        unordered_map<char, int>  cnt;
+        for(auto x:tasks) cnt[x]++;
+        int k=0;
+        int mc=0;
+        for(auto [x, c]:cnt) mc=max(mc, c);
+        for(auto [x, c]:cnt)
+            if(c==mc) k++;
+
+        return max((int)tasks.size(), (mc-1)*(n+1)+k);
+    }
+};
+
+

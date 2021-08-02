@@ -72,3 +72,22 @@ public:
     }
 };
 
+
+------------------- 0802  / 2021 /
+
+class Solution {
+public:
+    int res=0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* u){
+        if(!u) return 0;
+        int l=dfs(u->left);
+        int r=dfs(u->right);
+        res=max(res, l+r);
+        return max(l, r)+1;
+    }
+};

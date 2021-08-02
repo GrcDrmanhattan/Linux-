@@ -107,3 +107,26 @@ public:
 
 
 
+---------------------------- 0803  /2021 
+
+
+
+class Solution {
+public:
+    int sum=0;
+    TreeNode* convertBST(TreeNode* root) {
+        dfs(root);
+        return root;
+    }
+
+    void dfs(TreeNode* u){
+        if(!u) return ;
+        dfs(u->right);
+        int tmp=u->val;
+        u->val += sum;
+        sum+=tmp;
+        dfs(u->left);
+    }
+};
+
+

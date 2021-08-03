@@ -171,3 +171,31 @@ public:
     }
 };
 
+
+------------------ 0803  2021 
+
+
+class Solution {
+public:
+    int res=0;
+    unordered_map<int, int> cnt;
+
+    int pathSum(TreeNode* root, int targetSum) {
+        cnt[0]++;
+        dfs(root, targetSum, 0);
+        return res;
+    }
+
+    void dfs(TreeNode* u, int targetSum, int cur){
+        if(!u) return ;
+        cur += u->val;
+        res += cnt[cur-targetSum];
+
+        cnt[cur]++;
+        dfs(u->left, targetSum, cur);
+        dfs(u->right, targetSum, cur);
+        cnt[cur]--;
+    }
+};
+
+

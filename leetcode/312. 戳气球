@@ -103,7 +103,7 @@ public:
         for(int len = 3; len<=n+2;++len){
             for(int i=0;i+len-1<=n+1;++i){
                 int j=i+len-1;
-                for(int k=i+1;k<j;++k)
+                for(int k=i+1;k<j;++k) // 枚举k最后一次打气球的位置
                     f[i][j]=max(f[i][j] , f[i][k] + f[k][j] + s[i]*s[j]*s[k]);
             }
         }

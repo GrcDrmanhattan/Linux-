@@ -244,3 +244,38 @@ public:
 };
 
 
+----------------------- 0808  /2021 
+
+// 如果遇到字母，则直接添加在答案中；
+// 如果遇到 k[encoded_string] 的规则，则解析出数字k和字符串encoded_string，
+// 然后递归解码encoded_string，并将解码得到的结果在答案中添加k次；
+
+class Solution {
+public:
+    string decodeString(string s) {
+        int u=0;
+        return dfs(s, u);
+    }
+
+    string dfs(const string &s, int &u){
+        string res;
+        while(u<s.size() && s[u] != ']'){
+            if(isalpha(s[u])) res += s[u++];
+            else if(isdigit(s[u])){
+                int k=u;
+                while(k<s.size() && isdigit(s[k])) k++;
+                int t = stoi(s.substr(u, k-u));
+                u=k+1;
+
+                string y=dfs(s, u);
+                while(t--) res += y;
+                u++;
+            }
+        }
+
+        return res;
+    }
+};
+
+
+

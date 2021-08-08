@@ -172,3 +172,40 @@ public:
 };
 
 
+
+--------------------- 0808  /2021 
+ 
+ class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        vector<double> res;
+        unordered_map<string, unordered_map<string, double>> mp;
+        unordered_set<string> st;
+
+        for(int i=0;i<equations.size();++i){
+            auto a=equations[i][0];
+            auto b=equations[i][1];
+            auto c=values[i];
+            mp[a][b]=c;
+            mp[b][a]=1/c;
+            st.insert(a);
+            st.insert(b);
+        }
+
+        for(auto k:st)
+            for(auto i:st)
+                for(auto j:st)
+                    if(mp[i][k] && mp[k][j]) mp[i][j] = mp[i][k] * mp[k][j];
+
+        for(auto x:queries){
+            auto a=x[0];
+            auto b=x[1];
+            if(mp[a][b]) res.push_back(mp[a][b]);
+            else res.push_back(-1);
+        }
+
+        return res;
+    }
+};
+
+

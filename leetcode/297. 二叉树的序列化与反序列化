@@ -250,3 +250,52 @@ public:
 };
 
 
+
+-------------------- 0811  /2021 
+
+class Codec {
+public:
+    string path;
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        dfs(root);
+        return path;
+    }
+
+    void dfs(TreeNode* u){
+        if(!u) {
+            path+="*,";
+            return ;
+        }
+        path+=to_string(u->val)+',';
+        dfs(u->left);
+        dfs(u->right);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int u=0;
+        return dd(data, u);
+    }
+
+    TreeNode* dd(string& data, int &u){
+        if(data[u]=='*'){
+            u+=2;
+            return NULL;
+        }
+        else{
+            int k=u;
+            while(k<data.size() && data[k] != ',') k++;
+            auto res=new TreeNode(stoi(data.substr(u, k-u)));
+             u=k+1;
+            res->left=dd(data, u);
+            res->right=dd(data, u);
+            return res;
+        }
+    }
+};
+
+
+
+
+

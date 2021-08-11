@@ -119,7 +119,7 @@ public:
             while(q.size() && i-q.front()+1 > k) q.pop_front();
             while(q.size() && nums[i] >= nums[q.back()]) q.pop_back();
             q.push_back(i);
-            if(i-k+1 >=0) res.push_back(nums[q.front()]);
+            if(i-k+1 >=0) res.push_back(nums[q.front()]);  // 当窗口长度为k时 保存当前窗口中最大值
         }
 
         return res;

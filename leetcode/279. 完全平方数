@@ -97,3 +97,25 @@ public:
 
 
 
+--------------------------- 0811  /2021 
+
+
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> f(n+1, 0x3f3f3f3f);
+        f[0]=0;
+
+        for(int i=1;i<=n;++i)
+            for(int j=0;j * j<=i;++j)
+                f[i]=min(f[i], f[i-j*j]+1);
+
+        return f[n];
+    }
+};
+
+
+二重循环，状态数On，转移sqrt(n) 
+时间两个相乘
+
+ 

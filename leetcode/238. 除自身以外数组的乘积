@@ -76,3 +76,25 @@ public:
 //24 12 8 6
 
 
+---------------- 0812  /2021 
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        const int n=nums.size();
+        vector<int> res;
+        vector<int> pre(n, 1);
+        for(int i=1;i<n;++i) pre[i] = pre[i-1] * nums[i-1];
+
+        int s=1;
+        for(int i=n-1;i>=0;--i)
+        {
+            pre[i] *= s;
+            s*=nums[i];
+        }
+
+        return pre;
+    }
+};
+
+

@@ -74,3 +74,26 @@ public:
     }
 };
 
+
+------------------ 0811 / /2021 
+
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        const int n=matrix.size();
+        const int m=matrix[0].size();
+
+        int l=0;
+        int r=m-1;
+        while(l<n && r>=0){
+            if(matrix[l][r]==target) return true;
+            else if(matrix[l][r] < target) l++;
+            else r--;
+        }
+
+        return false;
+    }
+};
+
+

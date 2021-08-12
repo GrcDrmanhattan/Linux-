@@ -46,7 +46,7 @@ public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         if(p->val > q->val) swap(p, q);
         if(p->val <= root->val && q->val >= root->val) return root;
-        if(q->val < root->val) return lowestCommonAncestor(root->left, p, q); //都在左子树
+        if(q->val < root->val) return lowestCommonAncestor(root->left, p, q); //都在左子树,就在左子树继续搜索
         else return lowestCommonAncestor(root->right, p, q);
     }
 };

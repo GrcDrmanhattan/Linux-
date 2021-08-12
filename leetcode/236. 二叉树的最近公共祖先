@@ -126,11 +126,11 @@ public:
         if(!root) return NULL;
         if(root == p || root == q) return root;
 
-        auto ll=lowestCommonAncestor(root->left, p, q);
+        auto ll=lowestCommonAncestor(root->left, p, q); // 在左子树找答案
         auto rr=lowestCommonAncestor(root->right, p, q);
-        if(ll==NULL) return rr;
+        if(ll==NULL) return rr; // 答案肯定在右子树，如果ll为空
         if(rr==NULL) return ll;
-        return root; 
+        return root;  //在左右子树都没有找到，则根结点是答案
     }
 };
 

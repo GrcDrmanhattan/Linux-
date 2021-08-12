@@ -98,3 +98,22 @@ public:
 };
 
 
+-------------------- 0812  /2021 
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> res;
+        const int n=nums.size();
+        vector<int> pre(n, 1);
+        for(int i=1;i<n;++i) pre[i] = pre[i-1] * nums[i-1];
+        int s=1;
+        for(int i=n-1;i>=0;--i){
+            pre[i] *= s;//相当于最开始n-1的对应的后缀和是1，
+            s*=nums[i];
+        }
+        return pre;
+    }
+};
+
+

@@ -72,3 +72,34 @@ public:
  
  
  
+------------------- 0814  /2021 
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int> st;
+    stack<int> m;
+    MinStack() {
+
+    }
+    
+    void push(int val) {
+        st.push(val);
+        if(m.empty() || val <= m.top()) m.push(val);
+    }
+    
+    void pop() {
+        if(st.top()==m.top()) m.pop();
+        st.pop();
+    }
+    
+    int top() {
+        return st.top();
+    }
+    
+    int getMin() {
+        return m.top();
+    }
+};
+
+

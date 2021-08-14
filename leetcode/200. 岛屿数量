@@ -523,3 +523,45 @@ public:
     }
 };
 
+
+-------------------------------   0814  /2021 
+
+
+class Solution {
+public:
+    int n;
+    int m;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    vector<vector<char>> g;
+    bool st[310][310];
+
+    int numIslands(vector<vector<char>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+        int cnt=0;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j){
+                if(g[i][j]=='1' && !st[i][j]){
+                    dfs(i ,j);
+                    cnt++;
+                }
+            }
+        return cnt;
+    }
+
+    void dfs(int x, int y){
+        st[x][y]=true;
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b]=='1' && !st[a][b]){
+                dfs(a, b);
+            }
+        }
+    }
+};
+
+

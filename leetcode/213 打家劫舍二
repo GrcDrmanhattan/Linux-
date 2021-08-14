@@ -111,7 +111,6 @@ class Solution {
 public:
     int rob(vector<int>& nums) {
         const int n=nums.size();
-        if(n==0) return 0;
         if(n==1) return nums[0];
         int res=0;
         vector<int> f(n+1);

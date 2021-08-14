@@ -45,3 +45,27 @@ public:
 };
 
 
+
+----------------------- 0814  /2021 
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        const int n=nums.size();
+        int v=0;
+        int cnt=0;
+
+        for(auto x:nums){
+            if(cnt==0){
+                cnt=1;
+                v=x;
+            }else{
+                if(v==x) cnt++;
+                else cnt--;
+            }
+        }
+
+        return v;
+    }
+};
+

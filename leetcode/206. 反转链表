@@ -149,3 +149,25 @@ public:
 };
 
 
+---------------------------- 0814   /2021 
+
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !head->next) return head;
+        auto a=head;
+        auto b=a->next;
+
+        while(b){
+            auto c=b->next;
+            b->next=a;
+            a=b;b=c;
+        }
+
+        head->next=nullptr;
+        return a;
+    }
+};
+
+

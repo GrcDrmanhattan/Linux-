@@ -66,3 +66,30 @@ public:
 };
 
 
+----------------- 0820  / 2021  
+
+//递推，从i-1递推出i
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int res=nums[0];
+        int f=nums[0];//以i为右端点最大值
+        int g=nums[0];// 最小值
+        const int n=nums.size();
+
+        for(int i=1;i<n;++i){
+            int a=nums[i];
+            int fa=f*a;
+            int ga=g*a;
+            f=max(a, max(fa, ga));//更新fi
+            g=min(a, min(ga, fa));
+            res=max(res, f);
+        }
+
+        return res;
+
+    }
+};
+
+

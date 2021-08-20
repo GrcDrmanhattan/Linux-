@@ -79,11 +79,11 @@ public:
         const int n=nums.size();
 
         for(int i=1;i<n;++i){
-            int a=nums[i];
+            int a=nums[i]; // i为右端点， 只有i这一个数
             int fa=f*a;
             int ga=g*a;
-            f=max(a, max(fa, ga));//更新fi
-            g=min(a, min(ga, fa));
+            f=max(a, max(fa, ga));//更新fi， 三种情况取max
+            g=min(a, min(ga, fa));//三种情况取min
             res=max(res, f);
         }
 

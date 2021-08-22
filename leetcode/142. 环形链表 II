@@ -155,3 +155,35 @@ public:
 };
 
 
+--------------------- 0821 / 2021 
+
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !head->next) return NULL;
+
+        auto i=head;
+        auto j=head;
+
+        while(i&&j){
+            i=i->next;
+            j=j->next;
+            if(j) j=j->next;
+
+            if(i==j){
+                i=head;
+                while(i != j){
+                    i=i->next;
+                    j=j->next;
+                }
+
+                return i;
+            }
+        }
+
+        return NULL;
+    }
+};
+
+

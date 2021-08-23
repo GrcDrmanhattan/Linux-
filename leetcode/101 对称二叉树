@@ -207,3 +207,21 @@ public:
 };
 
 
+--------------------- 0823 / 2021 
+
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root->left, root->right);
+    }
+
+    bool dfs(TreeNode* x, TreeNode* y){
+        if(!x && !y) return true;
+        if(!x || !y || x->val != y->val) return false;
+        return dfs(x->left, y->right) && dfs(x->right, y->left);
+    }
+};
+
+

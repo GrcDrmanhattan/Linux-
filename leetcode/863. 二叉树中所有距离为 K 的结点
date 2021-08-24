@@ -68,7 +68,7 @@ public:
     void dfs2(TreeNode* target, TreeNode* fa, int k){
         if(!k) res.push_back(target->val);
         for(auto s:mp[target]){
-            if(s!=fa){
+            if(s!=fa){ // 不能遍历到父节点
                 dfs2(s, target, k-1);
             }
         }

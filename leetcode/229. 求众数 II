@@ -26,6 +26,8 @@
 -109 <= nums[i] <= 109
 -------------------------------- 0827 /2021 yxc 
 
+可以在Okn的时间求出，出现次数超过n/k的元素
+
 class Solution {
 public:
     vector<int> majorityElement(vector<int>& nums) {

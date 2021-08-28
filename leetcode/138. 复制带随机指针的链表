@@ -97,4 +97,36 @@ public:
 };
 
 
+----------------------- 0828  / 2021  
+
+// 时间On
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(!head) return head;
+
+        for(auto p=head;p;p=p->next->next){
+            auto t=new Node(p->val);
+            t->next=p->next;
+            p->next=t;
+        }
+
+        for(auto p=head;p;p=p->next->next){
+            if(p->random) p->next->random=p->random->next;
+        }
+
+        auto d=new Node(-1);
+        auto c=d;
+
+        for(auto p=head;p;p=p->next){
+            c->next=p->next;
+            c=c->next;
+            p->next=p->next->next;
+        }
+        return d->next;
+    }
+};
+
+
+
 

@@ -63,3 +63,32 @@ public:
 };
 
 
+---------------------- 0829  /2021 
+
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) {
+        unordered_set<string> st(banned.begin(), banned.end());
+        unordered_map<string, int> cnt;
+        string word;
+
+        for(auto c:paragraph){
+            c=tolower(c);
+            if(isalpha(c)) word += c;
+            else{
+                if(word.size() && !st.count(word)) cnt[word]++;
+                word.clear();
+            }
+        }
+
+        if(word.size() && !st.count(word)) cnt[word]++;
+
+        string res;
+        for(auto [x, c]:cnt){
+            if(cnt[res] < c) res=x;
+        }
+        return res;
+    }
+};
+
+

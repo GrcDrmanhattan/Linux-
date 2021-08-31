@@ -1,0 +1,63 @@
+692. 前K个高频单词
+
+给一非空的单词列表，返回前 k 个出现次数最多的单词。
+
+返回的答案应该按单词出现频率由高到低排序。如果不同的单词有相同出现频率，按字母顺序排序。
+
+示例 1：
+
+输入: ["i", "love", "leetcode", "i", "love", "coding"], k = 2
+输出: ["i", "love"]
+解析: "i" 和 "love" 为出现次数最多的两个单词，均为2次。
+    注意，按字母顺序 "i" 在 "love" 之前。
+ 
+
+示例 2：
+
+输入: ["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"], k = 4
+输出: ["the", "is", "sunny", "day"]
+解析: "the", "is", "sunny" 和 "day" 是出现次数最多的四个单词，
+    出现次数依次为 4, 3, 2 和 1 次。
+ 
+
+注意：
+
+假定 k 总为有效值， 1 ≤ k ≤ 集合元素数。
+输入的单词均由小写字母组成。
+ 
+
+扩展练习：
+
+尝试以 O(n log k) 时间复杂度和 O(n) 空间复杂度解决。
+
+---------------- 0831  /2021 yxc 
+
+// 返回true表示排序在后面
+
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> cnt;
+        for(auto &x:words) cnt[x]++;
+        using pis=pair<int, string>;
+        vector<pis> ws;
+        for(auto [x, c]:cnt) ws.push_back({c, x});
+
+        auto cmp=[](pis a, pis b){
+            if(a.first != b.first) return a.first < b.first;  //频率不等,频率小的放在后面
+            return a.second > b.second; //否则字典序大的放在后面
+        };
+
+        vector<string> res;
+        make_heap(ws.begin(), ws.end(), cmp);
+        while(k--){
+            res.push_back(ws[0].second);
+            pop_heap(ws.begin(), ws.end(), cmp);
+            ws.pop_back();
+        }
+        return res;
+    }
+};
+
+
+

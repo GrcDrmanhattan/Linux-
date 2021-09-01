@@ -47,11 +47,11 @@ public:
 
         int part4=num % 1000; //最低三位
         num/=1000;
-        int part3 = num % 1000;
+        int part3 = num % 1000; // 
         num/=1000;
         int part2 = num % 1000;
         num/=1000;
-        int part1 = num;
+        int part1 = num; // 最高
 
         if(part1 != 0) res=get(part1) + "Billion ";
         if(part2 != 0) res= res + get(part2) + "Million ";

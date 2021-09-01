@@ -102,6 +102,10 @@ public:
 
 --------------------- 
 
+k是单词平均长度， 开头字母四种可能，剩下的三种可能
+
+时间nm*4 * 3^(k-1)
+
 class Solution {
 public:
     struct node{

@@ -100,3 +100,70 @@ public:
 };
 
 
+--------------------- 
+
+class Solution {
+public:
+    struct node{
+        int id;
+        node* son[26];
+        node(){
+            id=-1;
+            for(int i=0;i<26;++i) son[i]=nullptr;
+        }
+    };
+
+    node* rt;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    unordered_set<int> ids;
+    vector<vector<char>> g;
+    vector<string> res;
+
+    void insert(string& s, int id){
+        auto p=rt;
+        for(auto x:s){
+            int u=x-'a';
+            if(!p->son[u]) p->son[u]=new node();
+            p=p->son[u];
+        }
+
+        p->id = id;
+    }
+
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        g=board;
+        rt=new node();
+        for(int i=0;i<words.size();++i) insert(words[i], i);
+        
+
+        for(int i=0;i<g.size();++i){
+            for(int j=0;j<g[0].size();++j){
+                int u=g[i][j]-'a';
+                if(rt->son[u]) dfs(i, j, rt->son[u]);
+            }
+        }
+
+        for(auto x:ids) res.push_back(words[x]);
+        return res;
+    }
+
+    void dfs(int x, int y, node* p){
+        if(p->id != -1) ids.insert(p->id);
+
+        char t= g[x][y];
+        g[x][y]='.';
+
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<g.size() && b>=0 && b<g[0].size() && g[a][b] != '.'){
+                int u=g[a][b]-'a';
+                if(p->son[u]) dfs(a, b ,p->son[u]);
+            }
+        }
+
+        g[x][y]=t;
+    }
+};
+

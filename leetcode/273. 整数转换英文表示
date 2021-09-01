@@ -74,11 +74,11 @@ public:
     }
 
     string get(int u){ // 获取三位数的表示 567
-        int ll=u%10;
+        int ll=u%10; // 个位
         u/=10;
-        int mm=u%10;
+        int mm=u%10; // 十位
         u/=10;
-        int hh=u;
+        int hh=u;  // 百位
         string res="";
 
         if(hh != 0) res = low[hh] + " Hundred ";

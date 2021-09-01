@@ -93,3 +93,66 @@ public:
 };
 
 
+------------------------ 0901  / 2021 
+
+class Solution {
+public:
+    void trim(string &s){
+        if(s.empty()) return ;
+        s.erase(0, s.find_first_not_of(" "));
+        s.erase(s.find_last_not_of(" ")+1);
+    }
+
+    string low[10]={
+        "","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+    };
+
+    string mid[10]={
+        "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen",
+        "Eighteen","Nineteen",
+    };
+
+    string high[10]={
+        "","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety",
+    };
+
+    string numberToWords(int num) {
+        if(num==0) return "Zero";
+        int part4 = num%1000;
+        num/=1000;
+        int part3 = num%1000;
+        num/=1000;
+        int part2 = num%1000;
+        num/=1000;
+        int part1 = num;
+        string res;
+
+        if(part1 != 0) res = res + get(part1) + "Billion ";
+        if(part2 != 0) res = res + get(part2) + "Million ";
+        if(part3 != 0) res = res + get(part3) + "Thousand ";
+        if(part4 != 0) res= res + get(part4);
+
+        trim(res);
+        return res;
+    }
+
+    string get(int u){
+        int ll=u%10;
+        u/=10;
+        int mm=u%10;
+        u/=10;
+        int hh=u;
+        string res;
+
+        if(hh != 0) res = res + low[hh] + " Hundred ";
+        
+        if(mm==1) res= res + mid[ll];
+        else if(mm==0) res = res + low[ll];
+        else res= res + high[mm] + " "+low[ll];
+
+        trim(res);
+        res=res + " ";
+        return res;
+    }
+};
+

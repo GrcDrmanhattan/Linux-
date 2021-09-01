@@ -83,3 +83,58 @@ public:
  
  
  
+-------------------- 0901  /2021 
+
+class RandomizedCollection {
+public:
+    /** Initialize your data structure here. */
+    unordered_map<int,unordered_set<int>> mp;
+    vector<int> v;
+
+    RandomizedCollection() {
+
+    }
+    
+    /** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+    bool insert(int val) {
+        bool res=mp[val].empty();
+        v.push_back(val);
+        mp[val].insert(v.size()-1);
+        return res;
+    }
+    
+    /** Removes a value from the collection. Returns true if the collection contained the specified element. */
+    bool remove(int val) {
+        if(mp[val].size()){
+            int y=v.back();
+            int px=*mp[val].begin();
+            int py=v.size()-1;
+
+            swap(v[px], v[py]); // 将元素换到末尾
+            mp[val].erase(px), mp[val].insert(py);//交换下标
+            mp[y].erase(py), mp[y].insert(px);
+
+            v.pop_back(); //最后remove
+            mp[val].erase(py);
+            return true;
+        }
+
+        return false;
+    }
+    
+    /** Get a random element from the collection. */
+    int getRandom() {
+        return v[rand() % v.size()];
+    }
+};
+
+/**
+ * Your RandomizedCollection object will be instantiated and called as such:
+ * RandomizedCollection* obj = new RandomizedCollection();
+ * bool param_1 = obj->insert(val);
+ * bool param_2 = obj->remove(val);
+ * int param_3 = obj->getRandom();
+ */
+ 
+ 
+ 

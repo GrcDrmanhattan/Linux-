@@ -210,4 +210,68 @@ public:
     }
 };
 
+---------------------- 0902  /2021  c语言
+
+时间Onlogn，n是链表长度
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+struct ListNode* merge(struct ListNode* l1, struct ListNode* l2){
+    struct ListNode* d=malloc(sizeof(struct ListNode));
+    d->val = 0;
+
+    struct ListNode* p=l1;
+    struct ListNode* q=l2;
+    struct ListNode* c=d;
+
+    while(p != NULL && q != NULL){
+        if(p->val <= q->val){
+            c->next=p;
+            p=p->next;
+        }else {
+            c->next=q;
+            q=q->next;
+        }
+
+        c=c->next;
+    }
+
+    if(p!= NULL) c->next=p;
+    else if(q!=NULL) c->next=q;
+
+    return d->next;
+}
+
+struct ListNode* toSort(struct ListNode* head, struct ListNode* tail){
+    if(head == NULL) return head;
+    if(head->next == tail){
+        head->next=NULL;
+        return head;
+    }
+
+    struct ListNode* slow=head;
+    struct ListNode* fast=head;
+
+    while(fast != tail){
+        slow=slow->next;
+        fast=fast->next;
+        if(fast != tail){
+            fast=fast->next;
+        }
+    }
+
+    struct ListNode* mid=slow;
+    return merge(toSort(head, mid), toSort(mid, tail));
+}
+
+struct ListNode* sortList(struct ListNode* head){
+    return toSort(head, NULL);
+}
+
 

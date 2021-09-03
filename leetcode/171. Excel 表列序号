@@ -63,3 +63,25 @@ public:
 };
 
 
+---------------------- 0903  /2021  
+
+class Solution {
+public:
+    int titleToNumber(string columnTitle) {
+        int a=0;
+        long long p=26;
+        for(long long i=0;i<columnTitle.size()-1;++i){
+            a+=p;
+            p*=26;
+        }
+        int b=0;
+
+        for(auto x:columnTitle){
+            b=b*26 + x-'A';
+        }
+
+        return a+b+1;
+    }
+};
+
+

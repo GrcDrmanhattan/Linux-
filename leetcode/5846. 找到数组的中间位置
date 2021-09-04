@@ -68,4 +68,22 @@ public:
 };
 
 
+------------ yxc
+
+class Solution {
+public:
+    int findMiddleIndex(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> s(n + 2);
+        for (int i = 1; i <= n; i ++ ) s[i] = s[i - 1] + nums[i - 1];
+        s[n + 1] = s[n];
+        for (int i = 1; i <= n; i ++ )
+            if (s[i - 1] == s[n] - s[i])
+                return i - 1;
+        return -1;
+    }
+};
+
+
+
 

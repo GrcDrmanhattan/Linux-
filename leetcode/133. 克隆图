@@ -127,5 +127,36 @@ public:
 
 
 
+--------------------- 0904  /2021  / 
+
+
+
+class Solution {
+public:
+    unordered_map<Node* ,Node*> mp;
+
+    Node* cloneGraph(Node* node) {
+        if(!node) return nullptr;
+        dfs(node);
+
+        for(auto [s, d]:mp){
+            for(auto x:s->neighbors){
+                d->neighbors.push_back(mp[x]);
+            }
+        }
+
+        return mp[node];
+    }
+
+    void dfs(Node* u){
+        if(!u) return ;
+        mp[u]= new Node(u->val);
+        for(auto x:u->neighbors){
+            if(mp.count(x)==0) dfs(x);
+        }
+    }
+};
+
+
 
 

@@ -52,3 +52,32 @@ public:
 
 
 
+------------------------- 0905  /2021   
+On
+
+从左往右，如果当前的孩子比左边孩子优秀，他的糖果比前面的多1；
+3.从右往左，如果当前孩子比右边孩子优秀，他的糖果比右边至少多1.
+
+class Solution {
+public:
+
+    int candy(vector<int>& ratings) {
+        const int n=ratings.size();
+        vector<int> f(n, 1);
+
+        for(int i=1;i<n;++i){
+            if(ratings[i] > ratings[i-1]) f[i]=f[i-1]+1;
+        }
+
+        for(int i=n-2;i>=0;--i){
+            if(ratings[i] > ratings[i+1]) f[i]=max(f[i], f[i+1]+1);
+        }
+
+        int sum=0;
+        for(auto x:f) sum += x;
+        return sum;
+        
+    }
+};
+
+

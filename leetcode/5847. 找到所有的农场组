@@ -77,4 +77,40 @@ public:
 
 
 
+------------------- 0905 / yxc 
+
+class Solution {
+public:
+    vector<vector<int>> findFarmland(vector<vector<int>>& g) {
+        vector<vector<int>> res;
+        const int n=g.size();
+        const int m=g[0].size();
+
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(g[i][j]){
+                    int x=i;
+                    int y=j;
+                    int c=x;
+                    int d=y;
+                    for(int a=i;a<n && g[a][j];++a){
+                        for(int b=j;b<m && g[a][b];++b){
+                            g[a][b]=0;
+                            c=max(c, a);
+                            d=max(d ,b);
+                            
+                        }
+                    }
+                    res.push_back({x, y, c, d});
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+
 

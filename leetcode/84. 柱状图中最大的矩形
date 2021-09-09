@@ -141,3 +141,41 @@ public:
     }
 };
 
+
+
+-------------------  0909  / 2021  
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        const int n=heights.size();
+        int res=0;
+        vector<int> ll(n);
+        vector<int> rr(n);
+        stack<int> st;
+
+        for(int i=0;i<n;++i){
+            while(st.size() && heights[i] <= heights[st.top()]) st.pop();
+            if(st.size()) ll[i]=st.top();
+            else ll[i]=-1;//可以防止数组只有一个元素的情况
+            st.push(i);
+        }
+
+        // for(auto x:ll) cout<<x<<endl;
+
+        st=stack<int>();
+        for(int i=n-1;i>=0;--i){
+            while(st.size() && heights[i] <= heights[st.top()]) st.pop();
+            if(st.size()) rr[i]=st.top();
+            else rr[i]=n;
+            st.push(i);
+        }
+        // for(auto x:rr) cout<<"--"<<x<<endl;
+        for(int i=0;i<n;++i)
+            res=max(res, heights[i] * (rr[i]-ll[i]-1));
+        
+        return res;
+    }
+};
+
+

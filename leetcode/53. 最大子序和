@@ -268,3 +268,19 @@ public:
 
 
 
+---------------------- 0909  /2021  /
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int last=0;
+        int res=INT_MIN;
+        for(auto x:nums){
+            last=x + max(last, 0);
+            res=max(res, last);
+        }
+        return res;
+    }
+};
+
+

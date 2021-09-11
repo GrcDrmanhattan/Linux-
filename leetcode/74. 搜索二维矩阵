@@ -1,0 +1,52 @@
+74. 搜索二维矩阵
+
+编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+
+每行中的整数从左到右按升序排列。
+每行的第一个整数大于前一行的最后一个整数。
+ 
+
+示例 1：
+
+
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+输出：true
+示例 2：
+
+
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+输出：false
+ 
+
+提示：
+
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 100
+-104 <= matrix[i][j], target <= 104
+
+------------------------- 0911/  2021  / yxc 
+
+// 二分时间lognm
+// logn + logm
+// 二分出第一个大于等于tar的值,有可能大于tar，所以最后要判断
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        const int n=matrix.size();
+        const int m=matrix[0].size();
+        int l=0;
+        int r=n*m-1;
+        while(l<r){
+            int mid=l+r>>1;
+            if(matrix[mid/m][mid%m] >= target) r=mid;
+            else l=mid+1;
+        }
+
+        return matrix[r/m][r%m] == target;
+    }
+};
+
+
+

@@ -149,7 +149,7 @@ public:
         for(int i=0;i<n;++i){
             if(!(state>>i&1) && tar[i] == x){
                 v |= 1<<i;
-                break;
+                break; // 找到第一个位置后就break
             }
         }
 

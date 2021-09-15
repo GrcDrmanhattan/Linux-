@@ -46,3 +46,57 @@ target 的长度在 [1, 15] 范围内，由小写字母组成。
 
 ---------------- 0913  /2021  / yxc
 
+class Solution {
+public:
+    const int inf=20;
+    vector<string> strs;
+    string tar;
+    static const int N=1<<15;
+    int f[N];
+    int g[N][26];
+    int n;
+
+    int minStickers(vector<string>& stickers, string target) {
+        tar=target;
+        strs=stickers;
+        n=tar.size();
+        memset(f, -1, sizeof(f));
+        memset(g, -1, sizeof(g));
+
+        int res=dfs(0);
+        if(res == inf) return -1;
+        return res;
+    }
+
+    int dfs(int state){
+        auto &v=f[state];
+        if(v!=-1) return v;
+        if(state == (1<<n)-1) return v=0;
+        v=inf;
+        for(auto w:strs){
+            auto cur=state;
+            for(auto x:w){
+                cur = fill(cur, x);
+                if(cur != state) v=min(v,dfs(cur) + 1);
+            }
+        }
+        return v;
+    }
+
+    int fill(int state, char c){ // 将当前状态的某位替换成字母c之后的状态
+        if(g[state][c-'a'] != -1) return g[state][c-'a'];
+        auto& v=g[state][c-'a'];
+        v=state;
+
+        for(int i=0;i<n;++i){
+            if(!(state>>i&1) && tar[i]==c) {
+                v += 1<<i;
+                break;
+            }
+        }
+        return v;
+    }
+};
+
+
+

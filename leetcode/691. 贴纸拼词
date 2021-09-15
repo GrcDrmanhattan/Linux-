@@ -100,3 +100,60 @@ public:
 
 
 
+------------- 0915  /2021 
+
+class Solution {
+public:
+    static const int N=1<<15;
+    const int inf=20;
+    int n;
+    vector<string> stickers;
+    string tar;
+    int f[N]; // 满足当前状态的贴纸数目
+    int g[N][26]; // 当前状态n替换一个字母为x后的状态是多少
+
+    int minStickers(vector<string>& _stickers, string target) {
+        tar=target;
+        stickers=_stickers;
+        n=tar.size();
+        memset(f, -1, sizeof(f));
+        memset(g, -1, sizeof(g));
+        
+        int res=dfs(0);
+        if(res == inf) return -1;
+        return res;
+    }
+
+    int dfs(int state){
+        auto &v=f[state];
+        if(v!= -1) return v;
+        if(state == (1<<n)-1) return v=0;
+        v=inf;
+
+        for(auto w:stickers){
+            auto cur=state;
+            for(auto x:w){
+                cur=fill(cur, x);
+                if(cur != state) v=min(v, dfs(cur)+1);
+            }
+        }
+
+        return v;
+    }
+
+    int fill(int state, char x){
+        auto &v=g[state][x-'a'];
+        if(v != -1) return v;
+        v=state;
+
+        for(int i=0;i<n;++i){
+            if(!(state>>i&1) && tar[i] == x){
+                v |= 1<<i;
+                break;
+            }
+        }
+
+        return v;
+    }
+};
+

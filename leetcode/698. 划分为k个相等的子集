@@ -65,3 +65,44 @@ public:
 };
 
 
+-------------------- 0916  /2021  
+
+class Solution {
+public:
+    vector<int> g;
+    bool st[20];
+    int n;
+    int k;
+    bool canPartitionKSubsets(vector<int>& nums, int _k) {
+        g=nums;
+        n=g.size();
+        k=_k;
+        int sum=0;
+        for(auto x:g) sum+=x;
+        if(sum %k) return false;
+        sum/=k;
+        sort(g.begin(), g.end(), greater<int>());
+        return dfs(0, 0, sum ,0);
+    }
+
+    bool dfs(int u, int cur, int len ,int cnt){
+        if(cnt == k-1) return true;
+        if(cur == len) return dfs(0, 0, len, cnt+1);
+
+        for(int i=0;i<n;++i){
+            if(st[i]) continue;
+            if(cur + g[i] <= len){
+                st[i]=true;
+                if(dfs(i+1, cur+g[i], len, cnt)) return true;
+                st[i]=false;
+            }
+
+            while(cur ==0 || cur + g[i] == len) return false;
+            while(i+1<n && g[i+1]==g[i]) i++;
+        }
+
+        return false;
+    }
+};
+
+

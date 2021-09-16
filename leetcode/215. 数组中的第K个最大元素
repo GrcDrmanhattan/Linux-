@@ -129,4 +129,30 @@ public:
     }
 };
 
+---------------------- 0916 / 2021   
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        const int n=nums.size();
+        return find(nums, 0, n-1, k-1);
+    }
+
+    int find(vector<int>& nums, int l, int r, int k){
+        if(l==r) return nums[l];
+        int i=l-1;
+        int j=r+1;
+        int x=nums[l+r>>1];
+        while(i<j){
+            while(nums[++i] > x);
+            while(nums[--j] < x);
+            if(i<j) swap(nums[i], nums[j]);
+        }
+
+        if(k<=j) return find(nums, l, j, k);
+        else return find(nums, j+1, r, k);
+    }
+};
+
+
 

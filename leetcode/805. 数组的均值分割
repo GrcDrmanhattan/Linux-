@@ -34,7 +34,6 @@ public:
             dfs1(u+1, n, sum);
             dfs1(u+1, n, sum + nums[u]);
         }
-
     }
 
 
@@ -50,10 +49,10 @@ public:
         dfs1(m, n, 0);
         int s1=0; // 左部分
         int s2=accumulate(nums.begin()+m, nums.end(),0);//右部分
-        st.erase(st.find(0));
+        st.erase(st.find(0));//左部分取空，则右部分不能为空，因为要分成两组，不能不分，所以右删除0，然后判断是否存在左部分和0的相反数
         if(st.count(0)) return true;
 
-        st.insert(0);
+        st.insert(0);//左部分取全集，则右不能取全集，需要删除
         st.erase(st.find(s2));
         if(st.count(-accumulate(nums.begin(), nums.begin()+m, 0))) return true;
         return dfs2(0, m, 0, 0);

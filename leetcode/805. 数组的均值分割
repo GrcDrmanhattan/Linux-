@@ -71,3 +71,54 @@ public:
 };
 
 
+---------
+
+class Solution {
+public:
+    vector<int> nums;
+    unordered_multiset<int> st;
+
+    bool splitArraySameAverage(vector<int>& _nums) {
+        nums=_nums;
+        const int n=nums.size();
+        if(n==1) return false;
+        int sum =accumulate(nums.begin(), nums.end(), 0);
+        for(auto& x:nums) x= x*n-sum;
+        int m=n/2;
+        dfs(m, n, 0);
+
+        int s1=0;
+        int s2=accumulate(nums.begin()+m, nums.end(), 0);
+        st.erase(st.find(0));//??
+        if(st.count(0)) return true;
+
+        st.insert(0);
+        st.erase(st.find(s2));
+        if(st.count(-accumulate(nums.begin(), nums.begin()+m, 0))) return true;
+        return dfs1(0, m, 0, 0);
+    }
+
+    void dfs(int u, int n ,int sum){
+        if(u==n){
+            st.insert(sum);
+            return ;
+        }
+        else{
+            dfs(u+1, n, sum);
+            dfs(u+1, n, sum+nums[u]);
+        }
+    }
+
+    bool dfs1(int u, int n, int sum ,int cnt){
+        if(u==n){
+            if(cnt && cnt <n && st.count(-sum)) return true;
+            return false;
+        }
+        else{
+            if(dfs1(u+1, n, sum,cnt)) return true;
+            if(dfs1(u+1, n, sum+nums[u],cnt+1)) return true;
+            return false;
+        }
+    }
+};
+

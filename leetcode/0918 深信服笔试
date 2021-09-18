@@ -1,0 +1,118 @@
+1 厨师做饭 
+
+2
+2
+5
+6
+4
+2
+4
+6
+5
+2
+3
+3
+3
+3
+4
+6
+1
+5
+1
+1
+7
+
+
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+class LRU{
+ public:
+  struct node{
+      int k;
+      node* left;
+      node* right;
+      node(int _k){
+          k=_k;
+          left =right =nullptr;
+      }
+  };   
+    node* head;
+    node* tail;
+    int n;
+    unordered_map<int, node* > hn;
+    int res;
+    
+    LRU(int size){
+        n=size;
+        res=0;
+        head=new node(-1);
+        tail=new node(-1);
+        head->right = tail;
+        tail->left = head;
+    }
+
+  void remove(node* p){
+      p->left->right = p->right ;
+      p->right->left=p->left;
+  }
+   
+    void insert(node* p){
+        p->right = head->right;
+        p->left = head;
+        
+        head->right->left=p;
+        head->right =p;
+    }
+    
+    void put(int k){
+        if(hn.count(k) ==0){
+            if(n==hn.size()){
+                res += 6;
+                auto p=tail->left;
+                remove(p);
+                hn.erase(p->k);
+            }
+            res += 15;
+            auto p=new node(k);
+            insert(p);
+            hn[k]=p;
+        }
+        else{
+            res+=15;
+            auto p=hn[k];
+            remove(p);
+            insert(p);
+        }
+    }
+};
+
+int main(){
+    LRU* lru=new LRU(3);
+    
+    int x;
+    
+    while(1){
+        cin>>x;
+        if(x == 7){
+            cout<<lru->res<<endl;
+            break;
+        }else{
+            
+            lru->put(x);
+            cout<<"---"<<lru->res<<endl;
+        }
+        
+    }
+    
+    // cout<<<<endl;
+    return 0;
+}
+//更换6 ，做饭15
+
+
+
+-------------------2  不同路径数2
+

@@ -16,3 +16,58 @@ A[i] 的数据范围为 [0, 10000].
 
 -------------------- 0916 / 2021  // yxc 
 
+//折半dfs
+//划分成两个子集的平均数 一定等于原集合的平均数
+// 通过每个数减去平均值，转换成每个数和为0，最后求是否两部分sum， -sum
+
+class Solution {
+public:
+    unordered_multiset<int> st;
+    vector<int> nums;
+
+    void dfs1(int u, int n, int sum){//dfs右部分，将和加入哈希表
+        if(u==n) {
+            st.insert(sum);
+            return ;
+        }
+        else{
+            dfs1(u+1, n, sum);
+            dfs1(u+1, n, sum + nums[u]);
+        }
+
+    }
+
+
+    bool splitArraySameAverage(vector<int>& _nums) {
+        nums=_nums;
+        const int n=nums.size();
+        if(n==1 ) return false;
+        int sum=accumulate(nums.begin(), nums.end(), 0);
+        for(auto&x :nums) x = x*n - sum;//每个数都扩大n倍，平均值就是sum了
+        
+        // 将数组分成左右两部分，左0-m-1，右m-n-1
+        int m=n/2;
+        dfs1(m, n, 0);
+        int s1=0; // 左部分
+        int s2=accumulate(nums.begin()+m, nums.end(),0);//右部分
+        st.erase(st.find(0));
+        if(st.count(0)) return true;
+
+        st.insert(0);
+        st.erase(st.find(s2));
+        if(st.count(-accumulate(nums.begin(), nums.begin()+m, 0))) return true;
+        return dfs2(0, m, 0, 0);
+    }
+
+    bool dfs2(int u, int n, int sum, int cnt){
+        if(u==n){
+            if(cnt && cnt < n && st.count(-sum)) return true;
+            return false;
+        }else{
+            if(dfs2(u+1, n, sum, cnt)) return true;
+            if(dfs2(u+1, n, sum+nums[u], cnt+1)) return true;
+            return false;
+        }
+    }
+};
+

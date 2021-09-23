@@ -101,3 +101,36 @@ public:
 };
 
 
+------------ 0923  / 2021   
+
+class Solution {
+public:
+    vector<string> res;
+
+    vector<string> restoreIpAddresses(string s) {
+        dfs(s, 0, 0, "");
+        return res;
+    }
+
+    void dfs(string&s , int u ,int k, string tmp){
+        if(u==s.size()){
+            if(k==4){
+                tmp.pop_back();
+                res.push_back(tmp);
+            }
+            return;
+        }
+
+        if(k==4) return ;
+
+        int x=0;
+        for(int i=u;i<s.size();++i){
+            if(i>u && s[u] == '0') break; // i不是第一个，并且su是0
+            x= x*10+s[i]-'0';
+            if(x<=255) dfs(s, i+1, k+1, tmp+to_string(x)+'.');
+            else break;
+        }
+    }
+};
+
+

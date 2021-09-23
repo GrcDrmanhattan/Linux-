@@ -36,7 +36,7 @@ public:
     void dfs(TreeNode* p){
         if(!p) return;
         if(p->left){
-            if(!p->left->left && !p->left->right) res+= p->left->val;  
+            if(!p->left->left && !p->left->right) res+= p->left->val;  //只统计左叶子结点，dfs
         }
         dfs(p->left);
         dfs(p->right);

@@ -1,0 +1,51 @@
+------------
+
+int main()
+{
+    int a[4][3]={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int (*p)[3]=a;
+    
+    cout<<*(*(a+1)+2)<< " ,"<<*(*(p+2))+1<<endl;   //  6，8
+    return 0;
+}
+
+
+--------------
+
+int x,y=1;
+    int a,b;
+    x=(a=5) + (b=8); // x=13
+    x*=y+7;  
+    cout<<x<<endl;  // 13 * 8 = 104
+    
+    
+-------------
+
+void Max();
+void Max(int a){cout<<"1"<<endl;};
+void Max(double a , double = 1.2){cout<<"3"<<endl;};
+void Max(const char* a, const char* b){cout<<"2"<<endl;};
+
+
+int main()
+{
+    Max(2.4); // 3 
+    return 0;
+}
+
+------------
+
+
+int main()
+{
+    int x;
+    float y;
+    
+    scanf("%3d%f", &x, &y); 12345M678 
+    cout<<x<<endl;  // 123
+    return 0;
+}
+
+
+----------
+

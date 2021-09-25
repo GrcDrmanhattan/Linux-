@@ -157,7 +157,7 @@ public:
 
     void dfs(TreeNode* p, int d){
         if(!p) return ;
-        if(d>h){
+        if(d>h){  //当前高度更大，说明深度更深可以更新
             res= p->val;
             h=d;
         }

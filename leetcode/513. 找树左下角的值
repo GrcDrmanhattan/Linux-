@@ -144,3 +144,27 @@ public:
 
 
 
+----------------- 0925  /2021  
+
+class Solution {
+public:
+    int res=0;
+    int h=0;
+    int findBottomLeftValue(TreeNode* root) {
+        dfs(root, 1);
+        return res;
+    }
+
+    void dfs(TreeNode* p, int d){
+        if(!p) return ;
+        if(d>h){
+            res= p->val;
+            h=d;
+        }
+
+        dfs(p->left, d+1);
+        dfs(p->right, d+1);
+    }
+};
+
+

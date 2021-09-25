@@ -165,3 +165,48 @@ public:
 
 
 
+------------- 0925  /2021 
+
+class Solution {
+public:
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    int n,m;
+
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        if(mat.empty() || mat[0].size()==0) return {};
+        n=mat.size();
+        m=mat[0].size();
+
+        vector<vector<int>> dis(n, vector<int>(m, -1));
+        queue<pair<int ,int>> q;
+
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j){
+                if(mat[i][j]==0){
+                    dis[i][j]=0;
+                    q.push({i, j});
+                }
+            }
+        
+        while(q.size()){
+            auto t = q.front();
+            q.pop();
+
+            int x=t.first;
+            int y=t.second;
+
+            for(int i=0;i<4;++i){
+                int a=x+dx[i];
+                int b=y+dy[i];
+                if(a>=0 && a<n && b>=0 && b<m && dis[a][b]==-1){
+                    dis[a][b]=dis[x][y]+1;
+                    q.push({a, b});
+                }
+            }
+        }
+
+        return dis;
+    }
+};
+

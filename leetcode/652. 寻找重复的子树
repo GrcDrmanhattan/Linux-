@@ -67,3 +67,38 @@ public:
 
 
 
+------------- 
+
+class Solution {
+public:
+    unordered_map<int, int> mp;
+    unordered_map<string ,int> ids;
+    int cnt;
+    vector<TreeNode*> res;
+
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* p){
+        if(!p) return 0;
+
+        int ll=dfs(p->left);
+        int rr=dfs(p->right);
+
+        string key=to_string(p->val) + ' '+to_string(ll)+' '+to_string(rr);
+        if(ids.count(key)==0){ // 三元组没有出现过,说明第一次出现结构
+            cnt++;
+            ids[key]=cnt;
+        }
+
+        int ans=ids[key]; // 
+        
+        mp[ans]++;
+        if(mp[ans]==2) res.push_back(p);
+
+        return ans;
+    }
+};
+

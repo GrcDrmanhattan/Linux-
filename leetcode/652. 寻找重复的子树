@@ -102,3 +102,39 @@ public:
     }
 };
 
+
+------------------
+
+class Solution {
+public:
+    vector<TreeNode*> res;
+    unordered_map<string, int> ids;
+    unordered_map<int,int> mp;
+    int cnt=0;
+
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+
+    int dfs(TreeNode* p){
+        if(!p) return 0;
+        int ll=dfs(p->left);
+        int rr=dfs(p->right);
+
+        string key=to_string(p->val) + to_string(ll)+to_string(rr);
+
+        if(ids.count(key)==0) { //  结构第一次出现，赋值一个新的id
+            cnt++;
+            ids[key]=cnt;
+        }
+
+        int ans=ids[key]; //结构不是第一次出现，取id，然后出现次数++
+
+        mp[ans]++;
+        if(mp[ans]==2) res.push_back(p);
+
+        return ans;
+    }
+};
+

@@ -1,0 +1,39 @@
+------------------------------  倒序输出一个不含重复数字
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+// 97886339 
+
+// 93687
+unordered_map<int ,int> cnt;
+vector<int> nums;
+
+int help(int num){
+    while(num){
+        int x=num%10;
+        nums.push_back(x);
+        num/=10;
+    }    
+    
+    int res=0;
+    for(auto x:nums){
+        if(cnt[x]==0){
+            res = res *10 +x;
+            cnt[x]++;
+        }
+    }
+    
+    return res;
+}
+
+int main(){
+    
+    auto res=help(97886339);
+    cout<<res<<endl;
+    
+    return 0;
+}

@@ -94,3 +94,38 @@ public:
     }
 };
 
+
+----------------- 0928  / 2021 
+
+
+class Solution {
+public:
+    vector<int> dfs(TreeNode* p){ // 递归求出树的高度和宽度
+        if(!p) return {0, 0};
+        auto l=dfs(p->left);
+        auto r=dfs(p->right);
+        return {max(l[0], r[0])+1, max(l[1] ,r[1]) * 2 +1};
+    }
+
+    vector<vector<string>> res;
+
+    void draw(TreeNode* p, int h, int l, int r){ // draw当前h行的lr区间
+        if(!p) return ;
+
+        int mid=l+r>>1;
+        res[h][mid]=to_string(p->val);
+        draw(p->left, h+1, l, mid-1);
+        draw(p->right, h+1, mid+1, r);
+    }
+
+    vector<vector<string>> printTree(TreeNode* root) {
+        auto t=dfs(root);
+        int h=t[0];
+        int w=t[1];
+        res=vector<vector<string>>(h, vector<string>(w));
+        draw(root, 0, 0, w-1);
+
+        return res;
+    }
+};
+

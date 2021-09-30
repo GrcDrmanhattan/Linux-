@@ -44,3 +44,77 @@ n == forest[i].length
 
 ----------------- 0930  /2021  /  yxc
 
+
+class Solution {
+public:
+    vector<vector<int>> g;
+    int n,m;
+
+    struct tree{
+        int x ;
+        int y;
+        int h;
+        bool operator<(const tree& t) const {
+            return h<t.h;
+        }
+    };
+
+    int cutOffTree(vector<vector<int>>& forest) {
+        g=forest;
+        n=g.size();
+        m=g[0].size();
+        vector<tree> q;
+
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(g[i][j] > 1){
+                    q.push_back({i, j, g[i][j]});
+                }
+            }
+        }
+
+        sort(q.begin(),q.end());
+        int res=0;
+        tree last={0, 0};
+        for(auto &x:q){
+            int t=bfs(last, x);
+            if(t==-1) return -1;
+            res += t;
+            last =x;
+        }
+
+        return res;
+    }
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+
+    int bfs(tree &last, tree &cur){
+        if(last.x == cur.x && last.y==cur.y) return 0;
+        vector<vector<int>> dis=vector<vector<int>>(n ,vector<int>(m, 1e8));
+
+        dis[last.x][last.y]=0;
+        queue<tree> q;
+        q.push(last);
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            for(int i=0;i<4;++i){
+                int a=t.x+dx[i];
+                int b=t.y+dy[i];
+                if(a>=0 && a<n && b>=0 && b<m && g[a][b]){
+                    if(dis[a][b] > dis[t.x][t.y]+1){
+                        dis[a][b]=dis[t.x][t.y] +1;
+                        if(a == cur.x && b == cur.y) return dis[a][b];
+                        q.push({a, b, dis[a][b]});
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+};
+
+
+

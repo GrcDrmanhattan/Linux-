@@ -45,6 +45,9 @@ n == forest[i].length
 ----------------- 0930  /2021  /  yxc
 
 
+排序所有树的时间复杂度为 O(nmlog(nm))，遍历每一棵树并BFS的时间复杂度为 O(n2m2)，故总时间复杂度为 O(n2m2)。
+
+
 class Solution {
 public:
     vector<vector<int>> g;

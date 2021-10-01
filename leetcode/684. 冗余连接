@@ -63,4 +63,31 @@ public:
 
 
 
+----------------- 1001/  2021  
+
+
+int f[2010];
+
+class Solution {
+public:
+    int find(int x){
+        if(f[x] != x) f[x]=find(f[x]);
+        return f[x];
+    }
+
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n=edges.size();
+        for(int i=1; i<=n;++i) f[i]=i;
+
+        for(auto &x:edges){
+            if(find(x[0]) == find(x[1])) return x;
+            else{
+                f[find(x[0])] = f[find(x[1])];
+            }
+        }
+        return {};
+    }
+};
+
+
 

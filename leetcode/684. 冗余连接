@@ -80,7 +80,7 @@ public:
         for(int i=1; i<=n;++i) f[i]=i;
 
         for(auto &x:edges){
-            if(find(x[0]) == find(x[1])) return x;
+            if(find(x[0]) == find(x[1])) return x;    // 如果加边之前在一个集合，说明加边后就会形成环，就是最后添加的边
             else{
                 f[find(x[0])] = f[find(x[1])];
             }

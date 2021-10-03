@@ -82,4 +82,48 @@ public:
 };
 
 
+------------------------- 1003 / 2021  
+
+
+https://www.xigua.cm/vodplay/21452-1-1.html
+
+class Solution {
+public:
+    vector<vector<int>> g;
+    int n,m;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1,0};
+    bool st[55][55];
+
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+
+        int res=0;
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(!st[i][j] && g[i][j]) res=max(res, dfs(i,j));
+            }
+        }
+        return res;
+    }
+
+    int dfs(int x, int y){
+        int res=1;
+        st[x][y]=true;
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && !st[a][b] && g[a][b]){
+                res += dfs(a, b);
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
 

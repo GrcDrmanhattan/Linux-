@@ -12,7 +12,7 @@
 
 示例 1：
 
-输入：accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], 
+输入：accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"]
 ["Mary", "mary@mail.com"]]
 输出：[["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
 解释：
@@ -24,7 +24,7 @@
 
 输入：accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],
 ["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
-输出：[["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],
+输出：[["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"]
 ["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
  
 
@@ -37,4 +37,52 @@ accounts[i][0] 由英文字母组成
 accounts[i][j] (for j > 0) 是有效的邮箱地址
 --------------------------------  1003/  2021  /  yxc 
 
+
+//集合合并，要想到并查集
+
+class Solution {
+public:
+    vector<int> p;
+    int find(int x){
+        if(p[x] != x) p[x]=find(p[x]);
+        return p[x];
+    }
+
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        vector<vector<string>> res;
+        const int n=accounts.size();
+
+        for(int i=0;i<n;++i) p.push_back(i);
+
+        unordered_map<string , vector<int>> mp; // 将每个字符串对应的在account中的下标放入mp
+        for(int i=0;i<n;++i){
+            for(int j=1;j<accounts[i].size();++j){
+                mp[accounts[i][j]].push_back(i);
+            }
+        }
+
+        for(auto [k, v]:mp){
+            for(int i=1;i<v.size();++i)
+                p[find(v[i])] = find(v[0]); // 将字符串对应的id添加到0集合上
+        }
+
+        vector<set<string>> tmp(n);
+        for(int i=0;i<n;++i){
+            for(int j=1;j<accounts[i].size();++j){
+                tmp[find(i)].insert(accounts[i][j]);
+            }
+        }
+
+        for(int i=0;i<n;++i){
+            if(tmp[i].size()){
+                vector<string> t;
+                t.push_back(accounts[i][0]);
+                for(auto x:tmp[i]) t.push_back(x);
+                res.push_back(t);
+            }
+        }
+
+        return res;
+    }
+};
 

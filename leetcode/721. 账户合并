@@ -133,4 +133,55 @@ public:
 };
 
 
+----------- 1003  
+
+class Solution {
+public:
+    vector<int> p;
+    int find(int x){
+        if(p[x] != x) p[x]=find(p[x]);
+        return p[x];
+    }
+
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        const int n=accounts.size();
+        for(int i=0;i<n;++i) p.push_back(i);
+        
+
+        unordered_map<string, vector<int>> mp;
+        for(int i=0;i<n;++i){
+            for(int j=1;j<accounts[i].size();++j)
+                mp[accounts[i][j]].push_back(i);
+        }
+
+        // 先将同一个email所有的账户合并，相当于以email作为根，然后将id的其余的邮件合并到自己的根
+        for(auto [k, v]:mp){
+            for(int i=1;i<v.size();++i){
+                p[find(v[i])] = find(v[0]);
+            }
+        }
+
+        vector<set<string>> tmp(n);
+        for(int i=0;i<n;++i){
+            for(int j=1;j<accounts[i].size();++j){
+                tmp[find(i)].insert(accounts[i][j]); // 对于当前id的每个email加入到根中
+            }
+        }
+
+        vector<vector<string>> res;
+        for(int i=0;i<n;++i){
+            if(tmp[i].size()){
+                vector<string> t;
+                t.push_back(accounts[i][0]);
+                for(auto&x :tmp[i]) t.push_back(x);
+                res.push_back(t);
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
 

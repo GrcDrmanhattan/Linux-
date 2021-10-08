@@ -1,0 +1,48 @@
+214. 最短回文串
+
+给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。
+
+ 
+
+示例 1：
+
+输入：s = "aacecaaa"
+输出："aaacecaaa"
+示例 2：
+
+输入：s = "abcd"
+输出："dcbabcd"
+ 
+
+提示：
+
+0 <= s.length <= 5 * 104
+s 仅由小写英文字母组成
+------------------ 1008 /  2021   yxc 
+
+// 相当于求拼接后的字符串的最长前后缀的长度，ne[拼接后的长度]
+
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+        const int n=s.size();
+        string t(s.rbegin(), s.rend());
+        s=' '+s + '*' + t;
+        int len = n*2+2;
+
+        vector<int> ne(len);
+        for(int i=2, j=0;i<=len-1;++i){
+            while(j && s[i] != s[j+1]) j=ne[j];
+            if(s[i] == s[j+1]) j++;
+            ne[i]=j;
+        }
+
+        int newlen=ne[n*2+1];
+        string left = s.substr(1, newlen);
+        string right = s.substr(1+newlen, n - newlen);
+
+        return string(right.rbegin(), right.rend()) + left+right;
+    }
+};
+
+

@@ -36,3 +36,68 @@ ui != vi
 ------------------------ 1009 / 2021  yxc  
 亚马逊面试题·
 
+const int N=100, M=60010, inf=0x3f3f3f3f;
+bool st[N];
+int dis[M];
+
+int w[M];
+int h[N];
+int id;
+int ne[M];
+int e[M];
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        memset(h, -1, sizeof(h));
+        id=0;
+        for(auto x:times){
+            int a=x[0];
+            int b=x[1];
+            int c=x[2];
+            add(a, b, c);
+        }
+
+        int res=1;
+        spfa(k);
+        for(int i=1;i<=n;++i) res=max(res, dis[i]);
+        if(res == inf) return -1;
+        return res;
+    }
+
+    void add(int a, int b, int c){
+        e[id]=b;
+        w[id]=c;
+        ne[id]=h[a];
+        h[a]=id;
+        id++;
+    }
+
+    void spfa(int start){
+        queue<int> q;
+        memset(dis, 0x3f, sizeof(dis));
+        dis[start]=0;
+        q.push(start);
+
+        st[start]=true;
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+            st[t]=false;
+
+            for(int i=h[t];i!=-1;i=ne[i]){
+                int j=e[i];
+                if(dis[j] > dis[t] + w[i]){
+                    dis[j] = dis[t] + w[i];
+                    if(!st[j]){
+                        st[j]=true;
+                        q.push(j);
+                    }
+                }
+            }
+        }
+    }
+};
+
+

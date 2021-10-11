@@ -102,4 +102,22 @@ public:
     }
 };
 
+--------- yxc
+
+class Solution {
+public:
+    vector<int> res;
+    vector<int> preorder(Node* root) {
+        dfs(root);
+        return res;
+    }
+
+    void dfs(Node* p){
+        if(!p) return ;
+        res.push_back(p->val);
+        for(auto x:p->children) dfs(x);
+    }
+};
+
+
 

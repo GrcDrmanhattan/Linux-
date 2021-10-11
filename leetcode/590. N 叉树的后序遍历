@@ -107,4 +107,21 @@ public:
 };
 
 
+---------- 1011 yxc 
+
+class Solution {
+public:
+    vector<int> res;
+    vector<int> postorder(Node* root) {
+        dfs(root);
+        return res;
+    }
+
+    void dfs(Node* p){
+        if(!p) return ;
+        for(auto x:p->children) dfs(x);
+        res.push_back(p->val);
+    }
+};
+
 

@@ -35,7 +35,7 @@ board 是一个如上所述的 2 x 3 的数组.
 board[i][j] 是一个 [0, 1, 2, 3, 4, 5] 的排列.
 
 ------------------ 1013  /  2021   yxc 
-
+用map时间会多乘log
 
 using vii=vector<vector<int>> ;
 int dx[4]={0, 1, 0, -1};

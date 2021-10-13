@@ -39,3 +39,37 @@ graph[u] 的所有值 互不相同
 ---------------- 1013  / 2021   yxc
 
 
+class Solution {
+public:
+    int n;
+    vector<int> color;
+    vector<vector<int>> g;
+
+    bool isBipartite(vector<vector<int>>& graph) {
+        g=graph;
+        n=g.size();
+        color=vector<int>(n, -1);
+
+        for(int i=0;i<n;++i){
+            if(color[i] == -1){
+                if(!dfs(i, 0)) return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool dfs(int u, int c){
+        color[u]=c;
+
+        for(auto x:g[u]){
+            if(color[x] != -1){
+                if(color[x] == c) return false;
+                
+            }else if(!dfs(x, c^1)) return false;
+        }
+        return true;
+    }
+};
+
+

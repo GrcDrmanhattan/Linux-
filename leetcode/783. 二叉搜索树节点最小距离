@@ -60,3 +60,28 @@ public:
 };
 
 
+------------ 1013  /2021  
+
+中序搜索是有序的
+
+class Solution {
+public:
+    int res=INT_MAX;
+    int last=0;
+    bool is_first=true;
+    int minDiffInBST(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+
+    void dfs(TreeNode* p){
+        if(!p) return ;
+        dfs(p->left);
+        if(is_first) is_first=false;
+        else res=min(res, p->val - last);
+        last=p->val;
+        dfs(p->right);
+    }
+};
+
+

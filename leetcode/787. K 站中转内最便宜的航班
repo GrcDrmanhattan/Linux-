@@ -45,3 +45,30 @@ src != dst
 --------------- 1013   / 2021   yxc 
 
 
+
+// k+2个点， 就有k+1个边
+
+class Solution {
+public:
+    const int inf=1e8;
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<int> dis(n, inf);
+        k++;
+        dis[src]=0;
+
+        while(k--){
+            auto cur =dis;
+            for(auto x:flights){
+                int a=x[0];
+                int b=x[1];
+                int c=x[2];
+                cur[b]=min(cur[b], dis[a]+c);
+            }
+            dis=cur;
+        }
+
+        if(dis[dst] == inf) return -1;
+        else return dis[dst];
+    }
+};
+

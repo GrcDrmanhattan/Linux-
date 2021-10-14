@@ -45,3 +45,28 @@ graph[i] 中的所有元素 互不相同
 ------------------- 1014  / 2021   yxc
 
 
+
+// 普通的图的遍历dfs
+
+class Solution {
+public:
+    vector<vector<int>> g;
+    vector<int> path;
+    vector<vector<int>> res;
+    int n;
+
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        g=graph;
+        n=g.size();
+        dfs(0);
+        return res;
+    }
+
+    void dfs(int u){
+        path.push_back(u);
+        if(u==n-1) res.push_back(path);
+        for(auto x:g[u]) dfs(x);
+        path.pop_back();
+    }
+};
+

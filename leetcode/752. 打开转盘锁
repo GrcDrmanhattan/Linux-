@@ -144,7 +144,7 @@ public:
             for(int i=0;i<4;++i){
                 auto c=t;
                 for(int j=-1; j<=1;j+=2){
-                    c[i]=(t[i]-'0'+j+10) % 10 +'0'; // 用原串t改变
+                    c[i]=(t[i]-'0'+j+10) % 10 +'0'; // 用原串t改变， 因为字符串c声明的位置不一样，所以变化的和上面不一样
                     if(!st.count(c) && dis[c]==0){
                         dis[c]=dis[t]+1;
                         if(c==target) return dis[c];

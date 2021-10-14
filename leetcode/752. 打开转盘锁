@@ -120,3 +120,42 @@ public:
 };
 
 
+------------- 1014  /2021  
+
+
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        string start="0000";
+        if(start == target) return 0;
+        unordered_set<string> st;
+        for(auto x:deadends) st.insert(x);
+        if(st.count(start)) return -1;
+
+        unordered_map<string ,int> dis;
+        dis[start]=0;
+        queue<string> q;
+        q.push(start);
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            for(int i=0;i<4;++i){
+                auto c=t;
+                for(int j=-1; j<=1;j+=2){
+                    c[i]=(t[i]-'0'+j+10) % 10 +'0'; // 用原串t改变
+                    if(!st.count(c) && dis[c]==0){
+                        dis[c]=dis[t]+1;
+                        if(c==target) return dis[c];
+                        q.push(c);
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+

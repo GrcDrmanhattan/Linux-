@@ -89,3 +89,50 @@ public:
 };
 
 
+
+-------------- 1015  /2021   
+
+
+class Solution {
+public:
+    vector<vector<int>> g;
+    int n;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    vector<vector<bool>> st;
+
+    int swimInWater(vector<vector<int>>& grid) {
+        g=grid;
+        n=g.size();
+
+        int l=0;
+        int r=n*n-1;
+        while(l<r){
+            int mid=l+r>>1;
+            if(check(mid)) r=mid;
+            else l=mid+1;
+        }
+        return l;
+    }   
+
+    bool check(int mid){
+        if(g[0][0] > mid) return false;
+        st=vector<vector<bool>>(n, vector<bool>(n));
+        return dfs(0, 0, mid);
+    }
+
+    bool dfs(int x, int y, int mid){
+        st[x][y]=true;
+        if(x==n-1 && y==n-1) return true;
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<n && !st[a][b] && g[a][b] <= mid)
+                if(dfs(a, b, mid)) return true;
+        }
+        return false;
+    }
+};
+
+
+

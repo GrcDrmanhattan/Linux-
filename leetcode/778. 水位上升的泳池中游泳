@@ -121,7 +121,7 @@ public:
         return dfs(0, 0, mid);
     }
 
-    bool dfs(int x, int y, int mid){
+    bool dfs(int x, int y, int mid){ // 检查当前水位mid时，是否可以走到终点
         st[x][y]=true;
         if(x==n-1 && y==n-1) return true;
         for(int i=0;i<4;++i){

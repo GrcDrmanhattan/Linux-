@@ -34,3 +34,45 @@ graph[i] 按严格递增顺序排列。
 --------------- 1015  /2021   yxc 
 
 
+
+// 一个点是安全的相当于他所有到的点都是安全的，没有出边
+// 不断删除出度为0的点，拓扑是入度为0，所以反向存储
+
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n=graph.size();
+        vector<vector<int>> g(n);
+        
+        vector<int> du(n);
+
+        for(int i=0;i<n;++i){
+            for(auto x:graph[i]){
+                int a=i;
+                g[x].push_back(a);
+                du[a]++;
+            }
+        }
+
+        queue<int> q;
+        for(int i=0;i<n;++i)
+            if(du[i]==0) q.push(i);
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+            for(auto x:g[t]){
+                du[x]--;
+                if(du[x]==0) q.push(x);
+            }
+        }
+
+        vector<int> res;
+        for(int i=0;i<n;++i) 
+            if(du[i]==0) res.push_back(i);
+
+        return res;
+    }
+};
+
+

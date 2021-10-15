@@ -131,3 +131,49 @@ public:
 
 
 
+------------------------ 1015  / 2021   
+
+
+using vii=vector<vector<int>> ;
+int dx[4]={0, 1, 0, -1};
+int dy[4]={1, 0, -1, 0};
+
+class Solution {
+public:
+    int slidingPuzzle(vector<vector<int>>& board) {
+        vii end={{1,2,3},{4, 5,0}};
+        if(board == end) return 0;
+        map<vii, int> dis;
+        dis[board]=0;
+        queue<vii> q;
+        q.push(board);
+        
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            int x,y;
+            for(int i=0;i<2;++i){
+                for(int j=0;j<3;++j)
+                    if(t[i][j]==0)
+                        x=i,y=j;
+            }
+
+            for(int i=0;i<4;++i){
+                int a=x+dx[i];
+                int b=y+dy[i];
+                auto c=t;
+                if(a>=0 && a<2 && b>=0 && b<3){
+                    swap(c[a][b], c[x][y]);
+                    if(dis.count(c)==0){
+                        dis[c]=dis[t]+1;
+                        if(c==end) return dis[c];
+                        q.push(c);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
+

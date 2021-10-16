@@ -1,0 +1,79 @@
+815. 公交路线
+
+
+给你一个数组 routes ，表示一系列公交线路，其中每个 routes[i] 表示一条公交线路，第 i 辆公交车将会在上面循环行驶。
+
+例如，路线 routes[0] = [1, 5, 7] 表示第 0 辆公交车会一直按序列 1 -> 5 -> 7 -> 1 -> 5 -> 7 -> 1 -> ... 这样的车站路线行驶。
+现在从 source 车站出发（初始时不在公交车上），要前往 target 车站。 期间仅可乘坐公交车。
+
+求出 最少乘坐的公交车数量 。如果不可能到达终点车站，返回 -1 。
+
+ 
+
+示例 1：
+
+输入：routes = [[1,2,7],[3,6,7]], source = 1, target = 6
+输出：2
+解释：最优策略是先乘坐第一辆公交车到达车站 7 , 然后换乘第二辆公交车到车站 6 。 
+示例 2：
+
+输入：routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]], source = 15, target = 12
+输出：-1
+ 
+
+提示：
+
+1 <= routes.length <= 500.
+1 <= routes[i].length <= 105
+routes[i] 中的所有值 互不相同
+sum(routes[i].length) <= 105
+0 <= routes[i][j] < 106
+0 <= source, target < 106
+
+------------- 1017  / 2021  yxc 
+
+// O(n+m) n是公交车环线的数目，m是边数，公共点的数目
+// 以每个环线作为点，不同环线的公共点作为边，只要有公共点就连接一个边
+
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int source, int target) {
+        const int n=routes.size();
+        if(source == target) return 0;
+        unordered_map<int, vector<int>> g(n);//存储每个点所包含的环线
+        vector<int> dis(n, 1e8);
+        queue<int>q;
+
+        for(int i=0;i<n;++i){
+            for(auto x:routes[i]){ // 遍历环线i的所有点
+                if(x==source) {
+                    dis[i]=1;
+                    q.push(i);// 可以作为起点，就将环线加入队列
+                }
+                g[x].push_back(i);
+            }
+        }
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            for(auto x:routes[t]){//遍历环线t上的所有车站x
+                if(x== target) return dis[t];
+
+                for(auto c:g[x]){ // 看看车站x是否到达其他环线
+                    if(dis[c] > dis[t]+1){
+                        dis[c]=dis[t]+1;
+                        q.push(c);
+                    }
+                }
+                g.erase(x);//每次遍历完点x，将x的其他环线加入队列后，要删除x
+            }
+        }
+
+        return -1;
+    }
+};
+
+
+

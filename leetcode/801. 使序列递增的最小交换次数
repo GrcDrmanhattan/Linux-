@@ -39,7 +39,7 @@ public:
         for(int i=1;i<n;++i){
             if(nums1[i-1] < nums1[i] && nums2[i-1] < nums2[i]){
                 f[i][0]=min(f[i][0], f[i-1][0]);
-                f[i][1]=min(f[i][1], f[i-1][1]+1); // 前面i-1交换，最后一个不换，所以比较同一个数组
+                f[i][1]=min(f[i][1], f[i-1][1]+1); // 前面i-1交换，最后一个交换，两次交换就相当于没换，还是比较同一个数组
             }
 
             if(nums2[i-1] < nums1[i] && nums1[i-1] < nums2[i]){

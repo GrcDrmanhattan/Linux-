@@ -34,3 +34,76 @@ grid[i][j] 为 0 或 1
 -------------- 1017  / 2021  yxc
 
 
+
+class Solution {
+public:
+    int n;
+    vector<int> p, sz;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+    
+    int find(int x){
+        if(p[x] != x) p[x]=find(p[x]);
+        return p[x];
+    }
+    int get(int x, int y){
+        return x * n +y;
+    }
+
+    int largestIsland(vector<vector<int>>& grid) {
+        n=grid.size();
+        for(int i=0;i<n*n;++i) p.push_back(i),sz.push_back(1);
+
+        int res=1;
+        //当没有0的时候，全部是1,res等于合并后的最大值
+        for(int i=0;i<n;++i){
+            for(int j=0;j<n;++j){
+                if(grid[i][j]){
+                    int a=get(i, j);
+                    for(int k=0;k<4;++k){
+                        int x=i+dx[k];
+                        int y=j+dy[k];
+                        if(x>=0 && x<n && y>=0 && y<n && grid[x][y]){
+                            int b=get(x, y);
+                            if(find(a) != find(b)){
+                                sz[find(b)] += sz[find(a)];
+                                p[find(a)] = find(b);
+                            }
+                        }
+                    }
+                    // res=max(res, sz[find(a)]); // 也可以
+                }
+                
+            }
+        }
+
+        for(int i=0;i<n *n ;++i) res=max(res, sz[i]); // 也可以
+        
+
+        // 有0可以改变的
+        for(int i=0;i<n;++i){
+            for(int j=0;j<n;++j){
+                if(grid[i][j] == 0){
+                    unordered_map<int, int> mp;
+                    for(int k=0;k<4;++k){
+                        int a=i+dx[k];
+                        int b=j+dy[k];
+                        if(a>=0 && a<n && b>=0 && b<n && grid[a][b]){
+                            int xx=get(a, b);
+                            mp[find(xx)]=sz[find(xx)];
+                        }
+                    }
+
+                    int s=1;
+                    for(auto [x, v]:mp) s+=v;
+                    res=max(res, s);
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+

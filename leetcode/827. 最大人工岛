@@ -108,3 +108,71 @@ public:
 
 
 ------------
+
+class Solution {
+public:
+    vector<int> p,sz;
+    int n;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1 ,0, -1, 0};
+
+    int find(int x){
+        if(x != p[x]) p[x] = find(p[x]);
+        return p[x];
+    }
+
+    int get(int x, int y){
+        return x*n+y;
+    }
+
+    int largestIsland(vector<vector<int>>& grid) {
+        n=grid.size();
+        for(int i=0;i<n*n;++i) p.push_back(i), sz.push_back(1);
+
+        int res=1;
+        for(int i=0;i<n;++i){ // 统计所有的连通块的面积
+            for(int j=0;j<n;++j){
+                if(grid[i][j]){
+                    int a=get(i, j);
+                    for(int k=0;k<4;++k){
+                        int x=i+dx[k];
+                        int y=j+dy[k];
+                        if(x>=0 && x<n && y>=0 && y<n && grid[x][y]){
+                            int b=get(x, y);
+                            if(find(a) != find(b)){
+                                sz[find(b)] += sz[find(a)];
+                                p[find(a)] = find(b);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for(int i=0;i<n*n;++i) res=max(res, sz[i]);
+
+        for(int i=0;i<n;++i){
+            for(int j=0;j<n;++j){
+                if(grid[i][j]==0){ // 如果有0，酒改变，
+                    map<int ,int> mp;
+
+                    for(int k=0;k<4;++k){
+                        int x=i+dx[k];
+                        int y=j+dy[k];
+                        if(x>=0 && x<n && y>=0 && y<n && grid[x][y]){
+                            int xx=get(x, y);
+                            mp[find(xx)] = sz[find(xx)];
+                        }
+                    }
+                    int s=1;
+                    for(auto [x, v]:mp) s+= v; // 计算改变0后形成的面积
+                    res=max(res, s);
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+

@@ -36,3 +36,51 @@ strs 中的所有单词都具有相同的长度，且是彼此的字母异位词
 
 ------------- 1018 /  2021  yxc
 
+可以直接看代码看懂的
+
+class Solution {
+public:
+    int n;
+    vector<int>p;
+
+    int find(int x){
+        if(p[x] != x) p[x] =find(p[x]);
+        return p[x];
+    }
+
+    int numSimilarGroups(vector<string>& strs) {
+        n=strs.size();
+        for(int i=0;i<n;++i) p.push_back(i);
+
+        int res=n;
+        for(int i=0;i<n;++i){
+            for(int j=i+1;j<n;++j){
+                if(check(strs[i], strs[j])){
+                    if(find(i) != find(j)){
+                        p[find(j)]=find(i);
+                        res--;
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+
+    bool check(string& x, string& y){
+        if(x==y) return true;
+        vector<int> tmp;
+
+        for(int i=0;i<x.size();++i){
+            if(x[i] != y[i]) tmp.push_back(i);
+        }
+
+        if(tmp.size() != 2) return false;
+        int a=tmp[0];
+        int b=tmp[1];
+
+        return x[a]==y[b] || x[b] == y[a];
+    }
+};
+
+

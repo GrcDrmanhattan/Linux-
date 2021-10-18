@@ -31,3 +31,45 @@ A 和 B 只包含集合 {'a', 'b', 'c', 'd', 'e', 'f'} 中的小写字母�
 --------------------- 1018 /  2021   yxc
 
 
+// 两个字符串，相同位置连一个有向边，环状图
+
+class Solution {
+public:
+    int kSimilarity(string s1, string s2) {
+        if(s1 == s2) return 0;
+        int dep=1;
+        while(!dfs(s1 ,s2 , dep)) dep++;
+        return dep;
+    }
+
+    int h(string& s1, string &s2){ // 启发函数
+        int res=0;
+        for(int i=0;i<s1.size();++i){
+            if(s1[i] != s2[i]) res++;
+        }
+        return (res+1)/2; // 下取整代替上取整，应该是res/2向上取整
+    }
+    
+    bool dfs(string&s1, string& s2, int dep){
+        if(dep==0) return s1 == s2;
+
+        if(h(s1, s2) > dep) return false; // 启发函数预估记的大于需要的深度，返回false
+
+        for(int i=0;i<s1.size();++i){
+            if(s1[i] != s2[i]){
+                for(int j=i+1;j<s1.size();++j){
+                    if(s1[j] == s2[i]){
+                        swap(s1[i], s1[j]);
+                        if(dfs(s1, s2, dep-1)) return true;
+                        swap(s1[i], s1[j]);
+                    }
+                }
+                break;
+            }
+        }
+        return false;
+    }
+
+};
+
+

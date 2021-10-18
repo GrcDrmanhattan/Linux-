@@ -26,3 +26,37 @@ difficulty[i], profit[i], worker[i]  的范围是 [1, 10^5]
 -------------1018 / 2021  yxc
 
 
+// O(nlogn)
+class Solution {
+public:
+    struct task{
+        int d, p;
+        bool operator<(const task& t) const {
+            return d<t.d;
+        }
+    };
+
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        const int n=difficulty.size();
+        vector<task> t(n);
+        int res=0;
+        for(int i=0;i<n;++i){
+            t[i]={difficulty[i], profit[i]};
+        }
+
+        sort(t.begin() , t.end());
+        sort(worker.begin(), worker.end());
+
+        int maxp=0;
+        for(int i=0, j=0; i<worker.size() ;++i){
+            while(j<t.size() && t[j].d<=worker[i]){
+                maxp=max(maxp, t[j].p);
+                j++;
+            }
+            res += maxp;
+        }
+        return res;
+    }
+};
+
+

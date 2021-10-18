@@ -35,3 +35,33 @@
 ----------- 1018  / 2021   yxc
 
 
+// 判断是图否连通
+
+class Solution {
+public:
+    int n;
+    vector<vector<int>> g;
+    vector<bool> st;
+
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        g=rooms;
+        n=g.size();
+        st.resize(n);
+        dfs(0);
+
+        for(int i=0;i<n;++i){
+            if(!st[i]) return false;
+        }
+        return true;
+    }
+
+    void dfs(int u){
+        st[u]=true;
+        for(auto x:g[u]){
+            if(!st[x]) dfs(x);
+        }
+        
+    }
+};
+
+

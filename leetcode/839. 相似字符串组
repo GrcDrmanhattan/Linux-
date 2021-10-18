@@ -81,7 +81,7 @@ public:
         int a=tmp[0];
         int b=tmp[1];
 
-        return x[a]==y[b] || x[b] == y[a];
+        return x[a]==y[b] || x[b] == y[a]; // x[a]==y[b] && x[b] == y[a]  都可以
     }
 };
 

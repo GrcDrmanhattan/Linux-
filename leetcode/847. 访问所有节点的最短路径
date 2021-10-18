@@ -104,3 +104,44 @@ public:
         return res;
     }
 };
+
+
+------------ 1018  / 2021   
+
+
+using pii=pair<int, int> ;
+
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        int n=graph.size();
+        vector<vector<int>> f(1<<n, vector<int>(n, 1e8));
+        queue<pii> q;
+
+        for(int i=0;i<n;++i){
+            f[1<<i][i]=0;
+            q.push({1<<i, i});
+        }
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            for(auto x:graph[t.second]){
+                auto state= t.first|1<<x;
+                if(f[state][x] > f[t.first][t.second]+1){
+                    f[state][x] = f[t.first][t.second]+1;
+                    q.push({state, x});
+                }
+            }
+        }
+
+        int res=1e8;
+        for(int i=0;i<n;++i) res=min(res , f[(1<<n)-1][i]);
+        return res;
+    }
+};
+
+
+
+

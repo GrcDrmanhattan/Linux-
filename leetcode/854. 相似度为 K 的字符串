@@ -56,9 +56,9 @@ public:
         if(h(s1, s2) > dep) return false; // 启发函数预估记的大于需要的深度，返回false
 
         for(int i=0;i<s1.size();++i){
-            if(s1[i] != s2[i]){
+            if(s1[i] != s2[i]){ // 找到第一个非自环的位置，也就是第一个不等的位置，
                 for(int j=i+1;j<s1.size();++j){
-                    if(s1[j] == s2[i]){
+                    if(s1[j] == s2[i]){ // 然后在s1找到下一个相等的位置，交换就可以
                         swap(s1[i], s1[j]);
                         if(dfs(s1, s2, dep-1)) return true;
                         swap(s1[i], s1[j]);
@@ -71,5 +71,6 @@ public:
     }
 
 };
+
 
 

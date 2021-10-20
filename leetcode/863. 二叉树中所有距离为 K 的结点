@@ -76,3 +76,39 @@ public:
 };
 
 
+-------------- 1020   // 2021  yxc
+
+class Solution {
+public:
+    vector<int> res;
+    unordered_map<TreeNode*, vector<TreeNode*>> mp;
+
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        dfs1(root);
+        dfs2(target, NULL, k);
+        return res;    
+    }
+
+    void dfs1(TreeNode* u){ // 先将树变成无向图存储
+        if(!u) return ;
+        if(u->left){
+            mp[u].push_back(u->left);
+            mp[u->left].push_back(u);
+            dfs1(u->left);
+        }
+        if(u->right){
+            mp[u].push_back(u->right);
+            mp[u->right].push_back(u);
+            dfs1(u->right);
+        }
+    }
+
+    void dfs2(TreeNode* u, TreeNode* fa, int k){ // 然后从目标结点开始搜，距离从k减少到0就是答案
+        if(k==0) res.push_back(u->val);
+        for(auto x:mp[u]){
+            if(x != fa) dfs2(x , u, k-1);
+        }
+    }
+};
+
+

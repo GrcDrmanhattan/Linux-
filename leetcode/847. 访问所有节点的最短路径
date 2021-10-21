@@ -144,4 +144,51 @@ public:
 
 
 
+------------ 1021  / 2021  
+
+
+// 相当于用bfs和位运算求最短距离，
+// 在bfs和队列的基础上，结合其他的一些应用
+// 访问所有结点，n的范围又比较小，考虑位运算
+
+using pii=pair<int, int>;
+
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        int n=graph.size();
+        int dis[1<<n][n];
+        memset(dis, 0x3f, sizeof(dis));
+        queue<pii> q;
+
+        for(int i=0;i<n;++i){
+            dis[1<<i][i]=0;
+            q.push({1<<i, i});
+        }
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+
+            for(auto x:graph[t.second]){
+                int state= t.first | 1<<x;
+                if(dis[state][x] > dis[t.first][t.second]+1){
+                    dis[state][x] = dis[t.first][t.second]+1;
+                    q.push({state, x});
+                }
+            }
+
+        }
+
+        int res=1e8;
+        for(int i=0;i<n;++i){
+            res= min(res, dis[(1<<n)-1][i]);
+        }
+
+        return res;
+    }
+};
+
+
+
 

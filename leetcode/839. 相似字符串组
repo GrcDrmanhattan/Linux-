@@ -90,3 +90,48 @@ public:
 };
 
 
+
+------------ 1023    //
+
+class Solution {
+public:
+    int n;
+    vector<int> p;
+    int find(int x){
+        if(x != p[x]) p[x]=find(p[x]);
+        return p[x];
+    }
+
+    int numSimilarGroups(vector<string>& strs) {
+        n=strs.size();
+        for(int i=0;i<n;++i) p.push_back(i);
+
+        int res=n;
+        for(int i=0;i<n;++i){
+            for(int j=i+1;j<n;++j){
+                if(check(strs[i], strs[j])){
+                    if(p[find(i)] != find(j)){
+                        p[find(i)] = find(j);
+                        res--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    bool check(string& s1, string& s2){
+        if(s1 == s2) return true;
+        vector<int> t;
+        for(int i=0;i<s1.size();++i){
+            if(s1[i] != s2[i]) t.push_back(i);
+        }
+
+        if(t.size() != 2) return false;
+        int a=t[0];
+        int b=t[1];
+
+        return s1[a] == s2[b] && s1[b] == s2[a];
+    }
+};
+

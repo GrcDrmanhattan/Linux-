@@ -174,3 +174,75 @@ public:
 };
 
 
+-------------------   1023  
+
+class Solution {
+public:
+    int n,m;
+    int dis[31][31][64];
+    int dx[4]={0 , 1, 0, -1};
+    int dy[4]={1 , 0, -1, 0};
+    
+    struct node{
+        int x, y, s;
+    };
+
+    int shortestPathAllKeys(vector<string>& grid) {
+        n=grid.size();
+        m=grid[0].size();
+
+        memset(dis, 0x3f, sizeof(dis));
+        int keys=0;
+        queue<node> q;
+
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(grid[i][j] == '@'){
+                    dis[i][j][0]=0;
+                    q.push({i, j , 0});
+                }
+                else if(grid[i][j] >='A' && grid[i][j] <='Z') keys++;
+            }
+        }
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+            int d=dis[t.x][t.y][t.s];
+
+            for(int i=0;i<4;++i){
+                int a =t.x+dx[i];
+                int b=t.y+dy[i];
+                if(a<0 || a>= n || b<0 || b>=m || grid[a][b] =='#') continue;
+
+                char c=grid[a][b];
+
+                if(c>='A' && c<='Z'){
+                    if(t.s & 1 << c-'A'){
+                        if(dis[a][b][t.s] > d+1){
+                            dis[a][b][t.s]=d+1;
+                            q.push({a, b, t.s});
+                        }
+                    }
+                }else if(c>='a' && c<='z'){
+                    int state = t.s|1<<c-'a';
+                    if(dis[a][b][state] > d+1){
+                        dis[a][b][state]=d+1;
+                        if(state == (1<<keys)-1) return dis[a][b][state];
+                        q.push({a, b ,state});
+                    }
+                }else{
+                    if(dis[a][b][t.s] > d+1){
+                        dis[a][b][t.s]=d+1;
+                        q.push({a, b ,t.s});
+                    }
+                }
+
+            }
+        }
+
+        return -1;
+    }
+};
+
+

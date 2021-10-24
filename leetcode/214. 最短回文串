@@ -70,3 +70,27 @@ public:
 };
 
 
+
+------------- 1024  / 2021   
+
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+        const int n=s.size();
+        string t(s.rbegin(), s.rend());
+        s=' '+s+'*'+t;
+        vector<int> ne(n*2+2);
+
+        for(int i=2, j=0;i<=n*2+1;++i){
+            while(j && s[j+1] != s[i]) j=ne[j];
+            if(s[i] == s[j+1]) j++;
+            ne[i]=j;
+        }
+
+        int len=ne[n*2+1];
+        string ll=s.substr(1, len);
+        string rr =s.substr(len+1, n-len);
+        return string(rr.rbegin() , rr.rend()) + ll+rr;
+    }
+};
+

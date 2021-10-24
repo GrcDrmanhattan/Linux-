@@ -114,3 +114,67 @@ int main()
 
 
 
+------------- 1024  -2021 
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 2e6+10;
+const int base=131;
+
+using ull=unsigned long long ;
+
+ull p[N];
+ull hl[N];
+ull hr[N];
+char s[N];
+
+ull get(ull h[], int l, int r){
+    return h[r]-h[l-1] * p[r-l+1];
+}
+
+int main()
+{
+    int t=1;
+    while(scanf("%s", s+1), strcmp(s+1, "END")){
+        int n=strlen(s+1);
+        int res=0;
+        
+        for(int i=n*2;i>=1 ;i-=2){
+            s[i] = s[i/2];
+            s[i-1]='z'+1;
+        }
+        
+        n*=2;
+        
+        p[0]=1;
+        for(int i=1, j=n;i<=n;++i, --j){
+            hl[i]=hl[i-1] * base + s[i]-'a'+1;
+            hr[i]=hr[i-1] * base + s[j]-'a'+1; // 前i个字符的逆序哈希值
+            p[i]=p[i-1] * base;
+        }
+        
+        for(int i=1;i<=n;++i){
+            int l=0; // 半径最小值
+            int r=min(i-1, n-i);//半径最大值，1...i...n
+            while(l<r){
+                int mid=l+r+1>>1;
+                if(get(hl, i-mid, i-1) != get(hr, n-(i+mid)+1, n-(i+1)+1)) r=mid-1; // 半径过长，要减少半径长度
+                else l=mid;
+            }
+            // 最后求出的最长半径长度l是包含特殊字符
+            // #a#b#c#d
+            // 假设当b为中心，二分出半径是2，a#b#c,s[i-l]=a,则实际回文长度abc是三，就是2+1
+            // 如果二分出半径是1，#b#, 则实际回文长度1，就是二分出的l
+            if(s[i-l] <= 'z') res=max(res, l+1) ;// 如果最后一个是字母，字母比特殊字符多一个,则答案等于长度+1，要加一个字母的长度
+            else res=max(res, l);
+        }
+        
+        printf("Case %d: %d\n", t++ , res);
+    }
+    return 0;
+}
+

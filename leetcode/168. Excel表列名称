@@ -37,3 +37,26 @@ AB -> 28
 1 <= columnNumber <= 231 - 1
 ------------------ 1024 / 2021   yxc
 
+
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        int k=1;
+        for(long long p=26; columnNumber>p; p*=26){
+            columnNumber-=p;
+            k++;  // 求出有几位数字
+        }
+        
+        columnNumber-=1; // col是k位数的第几个是下标从1开始，要改成从0开始
+        string res;
+        while(k--){
+            res += columnNumber % 26 +'A';
+            columnNumber/=26;
+        }
+
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+

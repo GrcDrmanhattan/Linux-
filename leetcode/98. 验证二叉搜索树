@@ -148,3 +148,20 @@ public:
 };
 
 
+-------------- 1025  
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        if(!root) return true;
+        return dfs(root, 1e8, 1e8);
+    }
+
+    bool dfs(TreeNode* u, int mv, int maxv){
+        if(!u) return true;
+        if(mv != 1e8 && mv >= u->val) return false;
+        if(maxv != 1e8 && maxv <= u->val) return false;
+        return dfs(u->left, mv, u->val) && dfs(u->right, u->val, maxv);
+    }
+};
+

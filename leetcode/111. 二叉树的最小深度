@@ -148,3 +148,30 @@ public:
     }
 };
 
+------------ 1024 
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if(!root) return 0;
+        queue<TreeNode*> q;
+        int dep=0;
+
+        q.push(root);
+        while(q.size()){
+            int n=q.size();
+            dep++;
+            while(n--){
+                auto t=q.front();
+                q.pop();
+
+                if(!t->left && !t->right) return dep;
+                if(t->left) q.push(t->left);
+                if(t->right) q.push(t->right);
+            }
+        }
+
+        return -1;
+    }
+};
+

@@ -133,3 +133,18 @@ public:
 
 
 
+--------------- 1024 / 2021  
+递归就是已知了当前左右子树的，然后计算当前返回什么
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if(!root) return 0;
+        if(!root->left && !root->right) return 1; // 当前叶子结点
+        // 当前不是叶子结点
+        if(root->left && root->right) return min(minDepth(root->left), minDepth(root->right)) +1;
+        else if(root->left) return minDepth(root->left) +1;
+        return minDepth(root->right)+1;
+    }
+};
+

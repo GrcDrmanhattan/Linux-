@@ -212,3 +212,31 @@ public:
 };
 
 
+--------------- 1024 / 2021  
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        int k=0;
+        while(k<s.size() && s[k]==' ') k++;
+
+        int f=1;
+        if(s[k]=='-') f=-1 , k++;
+        else if(s[k]=='+') k++;
+
+        int res=0;
+
+        while(k<s.size() && s[k]>='0' && s[k]<='9'){
+            int x=s[k]-'0';
+            if(f==1 && res > (INT_MAX-x)/10) return INT_MAX;
+            if(f==-1 && -res < (INT_MIN+x)  /10 ) return INT_MIN;
+            if( -res* 10 - x == INT_MIN) return INT_MIN;
+            res = res * 10 +x;
+            k++;
+        }
+
+        res *= f;
+        return res;
+    }
+};
+

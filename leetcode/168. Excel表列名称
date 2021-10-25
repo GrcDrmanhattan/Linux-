@@ -59,4 +59,23 @@ public:
     }
 };
 
+--------------  1025  
+
+相当于从1开始的26进制数
+
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string res;
+        while(columnNumber){
+            columnNumber-=1; // 每次先-1
+            res += columnNumber%26+'A';
+            columnNumber/=26;
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+
+
 

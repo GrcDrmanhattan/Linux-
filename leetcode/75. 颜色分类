@@ -103,4 +103,14 @@ public:
         }
     }
 };
-
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        const int n=nums.size();
+        for(int i=0, j=0, k=n-1;i<=k;){ // [0,j-1]是0，[j,i-1]是1，[k,n-1]是2
+            if(nums[i] == 2) swap(nums[i], nums[k--]); // 交换后i不一定是1，所以不能移动位置
+            else if(nums[i] == 0) swap(nums[i++] , nums[j++]); // 因为要使得到i-1之间是1，不包含i所以i可以++
+            else i++;
+        }
+    }
+};

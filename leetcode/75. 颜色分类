@@ -90,3 +90,17 @@ public:
     }
 };
 
+------------ 1026  
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        const int n=nums.size();
+        for(int i=0, j=0, k=n-1;i<=k;){ // ik两个双指针，还需要一个指针j遍历
+            if(nums[i]==2) swap(nums[i], nums[k--]);
+            else if(nums[i]==0) swap(nums[i++], nums[j++]);
+            else i++;
+        }
+    }
+};
+

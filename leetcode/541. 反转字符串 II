@@ -23,3 +23,17 @@ s 仅由小写英文组成
 1 <= k <= 104
 ------------------- 1027 / 2021  
 
+
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        for(int i=0;i<s.size(); i+= k*2){
+            int l=i;
+            int r=min((int)s.size(), i+k);
+            reverse(s.begin()+l, s.begin()+r) ;//   reverse函数是左闭右开
+        }
+        return s;
+    }
+};
+
+

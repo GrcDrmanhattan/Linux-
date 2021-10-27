@@ -1,0 +1,27 @@
+1027 / 2021  二面
+
+汉诺塔
+
+#include <iostream>
+using namespace std;
+ 
+void hannuo(int a, int b, int c, int n) {
+    if (n == 1) {
+        cout << "move disk " << n << " from peg " << a << " to peg " << c << endl;
+    } else {
+        hannuo(a, c, b, n - 1);
+        cout << "move disk " << n << " from peg " << a << " to peg " << c << endl;
+        hannuo(b, a, c, n - 1);
+    }
+}
+ 
+int main(void) {
+    int times;
+    cin >> times;
+    while (times--) {
+        int n;
+        cin >> n; // 几个盘子
+        hannuo(1, 2, 3, n);
+    }
+}
+

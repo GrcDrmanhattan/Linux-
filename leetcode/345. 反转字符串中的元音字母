@@ -45,3 +45,29 @@ public:
 };
 
 
+----------------- 1027 / 2021   
+
+
+class Solution {
+public:
+    string ss="aeiou";
+
+    bool check(char c){
+        return ss.find(tolower(c)) != -1;   
+    }
+
+    string reverseVowels(string s) {
+        int l=0;
+        int r=s.size()-1;
+        while(l<r){
+            while(l<r && !check(s[l])) l++;
+            while(l<r && !check(s[r])) r--;
+
+            swap(s[l++], s[r--]);
+        }
+        
+        return s;
+    }
+};
+
+

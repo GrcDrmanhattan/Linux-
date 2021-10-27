@@ -116,9 +116,9 @@ void hanoi(int n, char x, char y, char z)
 {
     if (n == 0)
         return;
-    hanoi(n - 1, x, z, y);
-    move(n, x, z);
-    hanoi(n - 1, y, x, z);
+    hanoi(n - 1, x, z, y); // x到y
+    move(n, x, z);  //将第n号盘子从x移动z
+    hanoi(n - 1, y, x, z); // n-1个盘子，从y到z
 }
  
 int main()

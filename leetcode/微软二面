@@ -36,9 +36,9 @@ void hannuo(int a, int b, int c, int n) {
         cout << " from " << a << " to" << c << endl;
         return;
     } else {
-        hannuo(a, c, b, n-1);
-        hannuo(a, b, c, 1);
-        hannuo(b, a, c, n-1);
+        hannuo(a, c, b, n-1); // n-1个盘子，从a到b
+        hannuo(a, b, c, 1);  // 1个盘子，从a到c
+        hannuo(b, a, c, n-1); // n-1个，从b到c
     }
 }
  

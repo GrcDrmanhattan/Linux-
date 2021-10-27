@@ -25,3 +25,31 @@ int main(void) {
     }
 }
 
+---------------------  
+不带盘子的
+
+#include <iostream>
+using namespace std;
+ 
+void hannuo(int a, int b, int c, int n) {
+    if (n == 1) {
+        cout << " from " << a << " to" << c << endl;
+        return;
+    } else {
+        hannuo(a, c, b, n-1);
+        hannuo(a, b, c, 1);
+        hannuo(b, a, c, n-1);
+    }
+}
+ 
+int main(void) {
+    int times;
+    cin >> times;
+    while (times--) {
+        int n;
+        cin >> n;
+        hannuo(1, 2, 3, n);
+    }
+}
+
+

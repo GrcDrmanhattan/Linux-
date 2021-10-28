@@ -37,6 +37,7 @@
 0 <= start < arr.length
 ------------------- 1028 / 2021   sf
 
+时间On
 
 const int N=1e5+10;
 int dis[N];

@@ -155,3 +155,24 @@ public:
 };
 
 
+---------------- 
+
+
+就是递归函数，记住作用返回当前为根的树中，pq的最近祖先
+，
+如果pq同在当前左子树或者右子树，说明左右递归肯定有一个不空的返回的就是答案，
+所以如果如果递归左右子树都不为空，说明在左子树找到一个祖先，右子树找到一个祖先，此时pq肯定分别在当前结点的两侧，此时递归左右子树返回的其实是只包含p或者只包含q的祖先，并不是公共祖先，
+此时当前结点才是答案
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root || root->val == p->val || root->val == q->val) return root;
+        auto ll=lowestCommonAncestor(root->left,p, q);
+        auto rr=lowestCommonAncestor(root->right, p, q);
+        if(ll && rr) return root;
+        else if(ll==NULL) return rr;
+        return ll;
+    }
+};
+

@@ -135,3 +135,23 @@ public:
 };
 
 
+------------- 1028  / 2021  
+
+// 函数递归的其实是找pq结点，因为边界情况就是返回p或者q
+
+// 如果第一次当前某个子树找到了p和q，就说明当前结点是答案
+// 如果在当前结点的左子树中找到了pq，右子树没有，答案就是左子树dfs的结果
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root || root->val == p->val || root->val == q->val) return root;
+        auto ll=lowestCommonAncestor(root->left,p, q);
+        auto rr=lowestCommonAncestor(root->right, p, q);
+        if(!ll)  return rr;
+        if(!rr) return ll;
+        return root;
+    }
+};
+
+

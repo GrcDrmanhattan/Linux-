@@ -867,3 +867,135 @@ public:
 };
 
 
+------------ 1028 / 2021  
+
+class LFUCache {
+public:
+    struct node{
+        int key;
+        int value;
+        node* left;
+        node* right;
+        node(int k, int v){
+            key=k;
+            value=v;
+            left=right=nullptr;
+        }
+    };
+
+    struct block{
+        int cnt;
+        block* left;
+        block* right;
+        node* head;
+        node* tail;
+
+        block(int c){
+            cnt=c;
+            left=right=nullptr;
+            head=new node(-1, -1);
+            tail=new node(-1, -1);
+            head->right=tail;
+            tail->left=head;
+        }
+
+        ~block(){
+            delete head;
+            delete tail;
+        }
+
+        bool empty(){
+            return head->right == tail;
+        }
+
+        void remove(node* p){
+            p->left->right=p->right;
+            p->right->left=p->left;
+        }
+
+        void insert(node* p){
+            p->right=head->right;
+            p->left=head;
+
+            head->right->left=p;
+            head->right=p;
+        }
+    }*LB, *RB;
+
+    void remove(block* p){
+        p->left->right=p->right;
+        p->right->left=p->left;
+    }
+
+    void insert(block* p){
+        auto c=new block(p->cnt +1);
+
+        c->right=p->right;
+        c->left=p;
+
+        p->right->left=c;
+        p->right=c;
+    }
+
+    int n;
+    unordered_map<int, node*> hn;
+    unordered_map<int, block*> hb;
+
+    LFUCache(int capacity) {
+        n=capacity;
+        LB=new block(0);
+        RB=new block(INT_MAX);
+        LB->right=RB;
+        RB->left=LB;
+    }
+    
+    int get(int key) {
+        
+        if(hb.count(key)==0) return -1;
+
+        auto p=hn[key];
+        auto b=hb[key];
+
+        b->remove(p);
+        if(b->right->cnt != b->cnt + 1) insert(b);
+        b->right->insert(p);
+        hb[key]=b->right;
+
+        if(b->empty()) remove(b);
+
+        return p->value;
+    }
+    
+    void put(int key, int value) {
+        if(n==0) return;
+        if(hb.count(key)==0){
+            if(n==hb.size()){
+                auto p=LB->right->tail->left;
+                LB->right->remove(p);
+                if(LB->right->empty()) remove(LB->right);
+                hb.erase(p->key);
+                hn.erase(p->key);
+            }
+
+            auto c=new node(key ,value);
+            if(LB->right->cnt > 1) insert(LB);
+            LB->right->insert(c);
+
+            hn[key]=c;
+            hb[key]=LB->right;
+
+        }else{
+            hn[key]->value=value;
+            get(key);
+        }
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+ 
+ 

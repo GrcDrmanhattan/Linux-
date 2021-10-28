@@ -154,3 +154,34 @@ public:
 };
 
 
+---------------------- 1029  
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        string res;
+        int cnt=0;//s的双指针中符合要求的字母种类数
+        unordered_map<char, int> hs, ht;
+        for(auto x:t) ht[x]++;
+
+        for(int i=0, j=0; i<s.size();++i){
+            hs[s[i]]++;
+            if(hs[s[i]] <= ht[s[i]]) cnt++;
+
+            while(hs[s[j]] > ht[s[j]]){
+                hs[s[j]]--;
+                j++;
+            }
+
+            if(cnt == t.size())
+                if(res.empty() || res.size() > i-j+1) 
+                    res=s.substr(j, i-j+1);
+        }
+
+        return res;
+    }
+};
+
+       
+
+

@@ -78,3 +78,42 @@ public:
 };
 
 
+------------ 
+
+using pii=pair<int, int> ;
+const int N=8010;
+int dis[N][2];
+
+class Solution {
+public:
+    int minimumJumps(vector<int>& forbidden, int a, int b, int x) {
+        memset(dis, -1, sizeof(dis));
+        dis[0][0]=0;
+        queue<pii> q;
+        q.push({0, 0});
+        set<int> s;
+        for(auto x:forbidden) s.insert(x);
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+            int d=dis[t.first][t.second];
+
+            if(t.first == x) return d;
+
+            if(t.first + a <N && s.count(t.first+a)==0 && dis[t.first+a][0]==-1){
+                dis[t.first+a][0]=d+1;
+                q.push({t.first+a, 0});
+            }
+
+            if(t.second==0 && t.first-b >=0 && s.count(t.first-b)==0 && dis[t.first-b][1]==-1){
+                dis[t.first-b][1]=d+1;
+                q.push({t.first-b, 1});
+            }
+        }
+
+        return -1;
+    }
+};
+
+

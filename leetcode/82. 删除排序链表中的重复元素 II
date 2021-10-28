@@ -58,3 +58,24 @@ public:
 
 
 
+------------------- yxc
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        auto d=new ListNode(-1);
+        d->next=head;
+        auto c=d;
+
+        while(c->next){// 只要c还有下一个点
+            auto p=c->next;
+            while(p && p->val == c->next->val) p=p->next; // p走完连续相等的一段
+            if(c->next->next==p) c=c->next; // 连续一段只有一个结点
+            else c->next=p;
+        }
+
+        return d->next;
+    }
+};
+
+

@@ -51,4 +51,18 @@ public:
     }
 };
 
+---------------- 1028 / 2021 
+
+// 每次只会递归一侧，最长是数的高度
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(p->val > q->val) swap(p, q); // 保证p的小于q,
+        if(p->val <= root->val && q->val >= root->val) return root;
+        if(q->val < root->val) return lowestCommonAncestor(root->left, p, q);  // pq的最大值q都小于根
+        else return lowestCommonAncestor(root->right, p, q);
+    }
+};
+
+
 

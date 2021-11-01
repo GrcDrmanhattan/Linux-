@@ -112,3 +112,51 @@ public:
 };
 
 
+------------- 1101  / /2021  
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    unordered_map<TreeNode*, vector<TreeNode*>> mp;
+    vector<int> res;
+
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        dfs1(root);
+        dfs2(target, NULL, k);
+        return res;
+    }
+
+    void dfs1(TreeNode* u){
+        if(!u) return ;
+        if(u->left){
+            mp[u].push_back(u->left);
+            mp[u->left].push_back(u);
+            dfs1(u->left);
+        }
+
+        if(u->right){
+            mp[u].push_back(u->right);
+            mp[u->right].push_back(u);
+            dfs1(u->right);
+        }
+    }
+
+    void dfs2(TreeNode* u, TreeNode* fa, int k){
+        if(k==0) res.push_back(u->val);
+
+        for(auto x:mp[u]){
+            if(x != fa){
+                dfs2(x, u, k-1);
+            }
+        }
+    }
+};
+

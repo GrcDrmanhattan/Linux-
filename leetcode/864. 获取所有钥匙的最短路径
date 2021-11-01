@@ -246,3 +246,74 @@ public:
 };
 
 
+--------------- 1101  /2021  
+顺畅的bfs
+
+class Solution {
+public:
+    int n,m;
+    int dis[32][32][64];
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+
+    struct node{
+        int x, y, s;
+    };
+
+    int shortestPathAllKeys(vector<string>& grid) {
+        n=grid.size();
+        m=grid[0].size();
+        int keys=0;
+        queue<node> q;
+
+        memset(dis, 0x3f, sizeof(dis));
+
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(grid[i][j]=='@'){
+                    dis[i][j][0]=0;
+                    q.push({i, j, 0});
+                }else if(grid[i][j]>='A' && grid[i][j]<='Z') keys++;
+            }
+        }
+
+        while(q.size()){
+            auto t=q.front();
+            q.pop();
+            int d=dis[t.x][t.y][t.s];
+
+            for(int i=0;i<4;++i){
+                int x=t.x+dx[i];
+                int y=t.y+dy[i];
+                
+                if(x<0 || x>=n || y<0 || y>=m || grid[x][y]=='#')continue;
+                
+                auto c=grid[x][y];
+                if(c>='A' && c<='Z'){
+                    if(t.s & (1<<(c-'A'))){
+                        if(dis[x][y][t.s] > d+1){
+                            dis[x][y][t.s]=d+1;
+                            q.push({x, y, t.s});
+                        }
+                    }
+                }else if(c>='a' && c<='z'){
+                    int state = t.s | 1<<c-'a';
+                    if(dis[x][y][state] > d+1){
+                        dis[x][y][state]=d+1;
+                        if(state == (1<<keys)-1) return dis[x][y][state];
+                        q.push({x, y, state});
+                    }
+                }
+                else{
+                    if(dis[x][y][t.s] > d+1){
+                        dis[x][y][t.s] =d+1;
+                        q.push({x, y, t.s});
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+

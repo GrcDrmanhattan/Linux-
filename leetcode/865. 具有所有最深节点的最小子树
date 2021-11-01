@@ -78,3 +78,21 @@ public:
     }
 };
 
+------------- 1101  / 2021  
+
+class Solution {
+public:
+    TreeNode* subtreeWithAllDeepest(TreeNode* root) {
+        return dfs(root).first;
+    }
+
+    pair<TreeNode*, int> dfs(TreeNode* u){
+        if(!u) return {nullptr, 0};
+        auto l=dfs(u->left);
+        auto r=dfs(u->right);
+        if(l.second == r.second) return {u, l.second+1};
+        else if(l.second > r.second) return {l.first, l.second+1};
+        else return {r.first, r.second+1};
+    }
+};
+

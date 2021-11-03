@@ -220,3 +220,65 @@ public:
     }
 };
 
+
+----------------- 1103  / 2021   
+
+class Solution {
+public:
+    void trim(string &s){
+        if(s.empty()) return;
+        s.erase(0 , s.find_first_not_of(' '));
+        s.erase(s.find_last_not_of(' ')+1);
+    }
+    string low[10]={ // 一位
+        "","One","Two","Three","Four","Five","Six","Seven","Eight","Nine"
+    };
+
+    string mid[10]={ // 两位
+        "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"
+    };
+
+    string high[10]={//从20开始整十的数
+        "","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"
+    };
+
+    string get(int x){
+        int ll=x%10;
+        x/=10;
+        int mm=x%10;
+        x/=10;
+        int hh=x;
+        string res;
+
+        if(hh != 0) res =res + low[hh] +" Hundred ";
+        if(mm==1) res = res + mid[ll];
+        else if(mm == 0) res = res + low[ll];
+        else res = res + high[mm] + " "+ low[ll];
+
+        trim(res);
+        res = res +" ";
+        return res;
+    }
+
+    string numberToWords(int num) {
+        if(num==0) return "Zero";
+
+        int p4=num%1000;
+        num/=1000;
+        int p3=num%1000;
+        num/=1000;
+        int p2=num%1000;
+        num/=1000;
+        int p1=num;
+        string res="";
+
+        if(p1 != 0) res = res +get(p1)+"Billion ";
+        if(p2 != 0) res= res + get(p2)+"Million ";
+        if(p3 != 0) res = res +get(p3)+"Thousand ";
+        if(p4 != 0) res = res + get(p4);
+        trim(res);
+        return res;
+    }
+};
+
+

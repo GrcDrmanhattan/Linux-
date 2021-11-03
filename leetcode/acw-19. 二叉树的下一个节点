@@ -75,18 +75,21 @@ public:
 ---------------- 1103  /2021
 
 // 每次找后继时间Oh，但是如果找所有结点的后继总时间On，这样均摊到每个结点就是O1
+三种情况
+没有右子树就要分成是父节点的左右儿子进行讨论
+
 
 class Solution {
 public:
     TreeNode* inorderSuccessor(TreeNode* p) {
-        if(p->right){
+        if(p->right){ // 有右子树
             p=p->right;
             while(p->left) p= p->left;
             return p;
         }
         else{
-            while(p->father && p == p->father->right) p=p->father;
-            return p->father;
+            while(p->father && p == p->father->right) p=p->father; // 没有右子树，是父节点的右孩子
+            return p->father; // 是父节点的左儿子
         }
     }
 };

@@ -31,3 +31,25 @@ date[4] == date[7] == '-'，其他的 date[i] 都是数字。
 date 表示的范围从 1900 年 1 月 1 日至 2019 年 12 月 31 日。
 --------------------------- 1105 / 2021   
 
+class Solution {
+public:
+    int dayOfYear(string date) {
+        int y=stoi(date.substr(0, 4));
+        int m=stoi(date.substr(5, 2));
+        int d=stoi(date.substr(8, 2));
+
+        int month[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+
+        if(y%400 == 0 || y%4==0 && y%100 != 0) month[1]=29;
+
+        int res=0;
+        for(int i=1;i<m;++i){
+            res += month[i-1];
+        }
+
+        res += d;
+        return res;
+    }
+};
+
+

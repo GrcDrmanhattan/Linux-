@@ -34,7 +34,7 @@ num 仅由数字（0 - 9）组成
 
 class Solution {
 public:
-    string add(string a, string b){
+    string add(string a, string b){   // 大数加法
         vector<int> A;
         vector<int> B;
         for(int i=a.size()-1;i>=0;--i) A.push_back(a[i]-'0');//先存个位
@@ -55,7 +55,7 @@ public:
 
 
     bool isAdditiveNumber(string num) {
-        for(int i=0;i<num.size();++i){
+        for(int i=0;i<num.size();++i){   // a+1，b是第一个数， b+1，c是第二个数，c+1开始是第三个数
             for(int j=i+1;j+1<num.size();++j){
                 int a=-1;
                 int b=i;
@@ -66,13 +66,13 @@ public:
 
                     string num1=num.substr(a+1, b-a);
                     string num2=num.substr(b+1, c-b);
-                    string z=add(num1, num2);
-                    if(num.substr(c+1, z.size()) != z) break;
+                    string z=add(num1, num2); // 求出第三个数
+                    if(num.substr(c+1, z.size()) != z) break; //如果和后面的不匹配false
 
                     a=b;
                     b=c;
                     c+=z.size();
-                    if(c+1 == num.size()) return true;
+                    if(c+1 == num.size()) return true; //进行到末尾 返回true
                 }
 
             }

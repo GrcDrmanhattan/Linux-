@@ -98,3 +98,46 @@ dave	laura	owen	vick	amr
 
 0----------------- 2022  / 0106  
 
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+const int N = 10;
+
+string names[N];
+unordered_map<string, int> mp;
+
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>names[i];
+    
+    for(int i=0;i<n;++i){
+        string s;
+        int money;
+        int cnt;
+        cin>>s>>money>>cnt;
+        
+        if(cnt){
+            mp[s] -= money /cnt *cnt;
+            for(int j=0;j<cnt;++j){
+                string p;
+                cin>>p;
+                mp[p] += money/cnt;
+            }
+        }
+    }
+    
+    for(int i=0;i<n;++i)
+        cout<<names[i]<<' '<<mp[names[i]]<<endl;
+    
+    
+    return 0;
+}
+
+

@@ -30,3 +30,42 @@
 
 -------------------- 2022/  0106 /  
 
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+// 统计每个月到1900年1月1号的天数
+
+int month[13]={0, 31, 28, 31, 30, 31, 30, 31, 31, 30 ,31, 30, 31};
+int week[7]; // 统计每个星期几多少次
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int year=1900;
+    int days=0;
+    
+    while (n -- ){
+        for(int i=1;i<=12;++i){
+            week[(days + 12) % 7 ] ++;
+            days += month[i];
+            
+            if(i==2)
+                if(year %4 ==0 && year %100 || year % 400 ==0) days++;
+        }
+        
+        year++;
+    }
+    
+    for(int i=5, j=0;j<7;++i, ++j)
+        cout<<week[i%7]<<' ';
+        
+    return 0;
+}
+
+

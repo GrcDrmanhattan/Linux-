@@ -58,5 +58,60 @@ wwwbbrwrbrbrrbrbrwrwwrbwrwrrb
 输出样例：
 11
 
----------------------- 2022 /  0106 
+---------------------- 2022 /  0106  yxc
+
+破环成链
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 710;
+
+int n;
+char s[N];
+
+int get(char c){
+    if(c=='r') return 1;
+    else return 2;
+}
+
+int main()
+{
+    cin>>n>>s;
+    int res=0;
+    
+    for(int i=0;i<n;++i) s[i+n]=s[i]; // 把环变成链
+    
+    for(int i=0;i<n;++i){
+        int cnt=0;
+        int l=i;
+        int r=i+n-1;
+        int left=0; // 左边的状态
+        int right=0; // 右边状态
+        
+        while(l<=r && (s[l] == 'w' || (left | get(s[l]) )!= 3)) // 从左边拿珠子
+        {
+            if(s[l] != 'w') left |= get(s[l]);
+            cnt++;
+            l++;
+        }
+        
+        while(l<=r && (s[r] == 'w' || (right | get(s[r]) )!= 3)) // 从右边拿珠子
+        {
+            if(s[r] != 'w') right |= get(s[r]);
+            cnt++;
+            r--;
+        }
+        
+        
+        res=max(res, cnt);
+    }
+    
+    cout<<res<<endl;
+    return 0;
+}
+
 

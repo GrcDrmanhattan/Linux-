@@ -39,6 +39,8 @@
 
 ------------- 2022 /  0107  
 
+区间合并
+
 #include <iostream>
 #include <cstring>
 #include <algorithm>

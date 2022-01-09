@@ -58,4 +58,49 @@ GREG
 
 -------------------- 2022 /  0109   yxc
 
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int get(char c){
+    if(c<='O') return (c-'A')/3+2;
+    if(c<='S') return 7;
+    if(c<='V') return 8;
+    return 9;
+}
+
+int main()
+{
+    string num, str;
+    cin>>num;
+    
+    int cnt =0;
+    
+    
+    while(cin>>str){
+        string s;
+        for(auto x:str) 
+        {
+            if (x == 'Q' || x == 'Z')
+            {
+                s = "";
+                break;
+            }
+            
+            s+= get(x) +'0';
+        }
+        
+        if(s == num) {
+            cout<<str<<endl;
+            cnt++;
+        }
+    }
+    
+    if(!cnt) puts("NONE");
+    return 0;
+}
+
+
 

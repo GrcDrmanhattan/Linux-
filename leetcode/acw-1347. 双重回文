@@ -31,3 +31,42 @@
 ------------------- 2022 / 0110  
 yxc
 
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+string change(int i, int b){
+    string res;
+    while(i) res += (i%b)+'0', i/=b;
+    return res;
+}
+
+bool check(string s){
+    for(int i=0 ,j=s.size()-1;i<j;i++ , j--){
+        if(s[i] != s[j]) return false;
+    }
+    
+    return true;
+}
+
+int main()
+{
+    int n,s;
+    cin>>n>>s;
+    
+    for(int i=s+1;n;i++){
+        int cnt=0;
+        for(int b=2;b<=10 && cnt<2;++b){
+            if(check(change(i, b))) cnt++;
+            if(cnt ==2) {
+                cout<<i<<endl;
+                n--;
+            }
+        }
+    }
+    
+    return 0;
+}
+

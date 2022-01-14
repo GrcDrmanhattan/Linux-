@@ -36,4 +36,33 @@ nums1 和 nums2 均为升序排列
 
 ------------------------- 2022 / 0114  
 
+// 就相当于求m个递增序列的前k个数，多路归并
+// klogn
+
+class Solution {
+public:
+    vector<vector<int>> kSmallestPairs(vector<int>& a, vector<int>& b, int k) {
+        vector<vector<int>> res;
+        if(a.empty() || b.empty()) return {};
+
+        int n=a.size();
+        int m=b.size();
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>> >hp;
+
+        for(int i=0;i<m;++i) hp.push({a[0]+b[i], 0, i});
+
+        while(k-- && hp.size()){
+            auto t=hp.top();
+            hp.pop();
+            res.push_back({a[t[1]], b[t[2]]});
+
+            if(t[1] + 1 <n){ // a数组还有元素, 继续放入堆
+                hp.push({a[t[1]+1] + b[t[2]], t[1]+1, t[2]});
+            }
+        }
+        return res;
+    }
+};
+
+
 

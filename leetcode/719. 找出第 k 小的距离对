@@ -22,3 +22,34 @@ k = 1
 
 -------------- 2022 / 0115  
 
+// 一般要求满足条件的第k个， 都是二分
+
+nlogn
+// 一般要求满足条件的第k个， 都是二分
+
+class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+
+        int l=0;
+        int r=1e6; // 二分最小的距离是多少，然后用距离去判断个数是否满足
+        while(l<r){
+            int mid=l+r>>1;
+            if(get(nums, mid) >= k) r=mid;
+            else l=mid+1;
+        }
+        return r;
+    }
+
+    int get(vector<int>& nums, int mid){
+        int res=0;
+        for(int i=0, j=0; i<nums.size();++i){ //  双指针， ON
+            while(nums[i]- nums[j] > mid) j++; // 直到距离小于等于二分出的值时，停止
+            res += i-j;
+        }
+
+        return res;
+    }
+};
+

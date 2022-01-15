@@ -35,13 +35,13 @@ public:
         int r=1e6; // 二分最小的距离是多少，然后用距离去判断个数是否满足
         while(l<r){
             int mid=l+r>>1;
-            if(get(nums, mid) >= k) r=mid;
+            if(get(nums, mid) >= k) r=mid; // 看满足小于等于答案的数目 是否大于等于k个，如果是，就在左半部分继续二分，否则在右半部分二分
             else l=mid+1;
         }
         return r;
     }
 
-    int get(vector<int>& nums, int mid){
+    int get(vector<int>& nums, int mid){ // 求出距离小于等于mid的个数
         int res=0;
         for(int i=0, j=0; i<nums.size();++i){ //  双指针， ON
             while(nums[i]- nums[j] > mid) j++; // 直到距离小于等于二分出的值时，停止

@@ -50,4 +50,28 @@ public:
 };
 
 
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int l=INT_MIN;
+        int r=INT_MAX; // 二分查找 答案区间
+        while(l<r){
+            int mid=(long long )l+r>>1;
+            int j=matrix[0].size()-1; // j列
+            int cnt=0;
+
+            for(int i=0;i<matrix.size();++i){ // 在矩阵每一行搜索小于等于mid的元素
+                while(j >= 0 && matrix[i][j] > mid) j--;
+                cnt += j+1;
+            }
+
+            if(cnt >= k) r=mid; // 如果小于等于mid的元素数目大于等于k， 说明答案在左半部分，更新右边界
+            else l=mid+1;
+        }
+
+        return r;
+    }
+};
+
+
 

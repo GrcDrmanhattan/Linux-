@@ -31,3 +31,29 @@ m 和 n 的范围在 [1, 30000] 之间。
 k 的范围在 [1, m * n] 之间。
 --------------------- 2022 / 0115  
 
+
+// 每次判断on，总体时间nlogn
+
+class Solution {
+public:
+    int get(int m, int n ,int mid){
+        int res=0;
+        for(int i=1;i<=n;++i)
+            res += min(m, mid/i);
+
+        return res;
+    }
+
+    int findKthNumber(int m, int n, int k) {
+        int l=1;
+        int r=n*m;
+
+        while(l<r){
+            int mid=l+r>>1;
+            if(get(m, n, mid) >= k) r=mid;
+            else l=mid+1;
+        }
+        return r;
+    }
+};
+

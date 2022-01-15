@@ -25,7 +25,6 @@ k = 1
 // 一般要求满足条件的第k个， 都是二分
 
 nlogn
-// 一般要求满足条件的第k个， 都是二分
 
 class Solution {
 public:

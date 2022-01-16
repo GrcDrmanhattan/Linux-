@@ -1,0 +1,75 @@
+786. 第 K 个最小的素数分数
+
+给你一个按递增顺序排序的数组 arr 和一个整数 k 。数组 arr 由 1 和若干 素数  组成，且其中所有整数互不相同。
+
+对于每对满足 0 <= i < j < arr.length 的 i 和 j ，可以得到分数 arr[i] / arr[j] 。
+
+那么第 k 个最小的分数是多少呢?  以长度为 2 的整数数组返回你的答案, 这里 answer[0] == arr[i] 且 answer[1] == arr[j] 。
+
+ 
+示例 1：
+
+输入：arr = [1,2,3,5], k = 3
+输出：[2,5]
+解释：已构造好的分数,排序后如下所示: 
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3
+很明显第三个最小的分数是 2/5
+示例 2：
+
+输入：arr = [1,7], k = 1
+输出：[1,7]
+ 
+
+提示：
+
+2 <= arr.length <= 1000
+1 <= arr[i] <= 3 * 104
+arr[0] == 1
+arr[i] 是一个 素数 ，i > 0
+arr 中的所有数字 互不相同 ，且按 严格递增 排序
+1 <= k <= arr.length * (arr.length - 1) / 2
+
+--------------- 2022 / 0116 
+
+// 二分时间logn， 每次判断On，总时间复杂度nlogn
+// 又是二分求出最小的满足某个条件的第k个数
+
+
+class Solution {
+public:
+    const double  eps=1e-8;
+    int A;
+    int B;
+
+    int get(vector<int>& arr, double mid){
+        int res=0;
+        for(int i=0, j=0;i<arr.size();++i){
+            while((double)arr[j+1] / arr[i] <= mid) j++;
+
+            if((double)arr[j] / arr[i] <= mid) res += j+1;
+            if(fabs((double)arr[j] / arr[i] - mid ) < eps) {
+                A = arr[j];
+                B=arr[i];
+            }
+        }
+
+        return res;
+    }
+
+    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+        double l=0;
+        double r=1;
+
+        while(r-l > eps){
+            double mid=(l+r)/2;
+            if(get(arr, mid) >= k) r=mid;
+            else l=mid;
+        }
+
+        get(arr ,r);
+        return {A, B};
+    }
+};
+
+
+

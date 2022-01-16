@@ -40,4 +40,41 @@ solution.getRandom(); // 返回 3
 你能否在不使用额外空间的情况下解决此问题？
 -------------------------------- 2022 / /0116 
 
+蓄水池采样算法
 
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* p;
+    Solution(ListNode* head) {
+        p=head;
+    }
+    
+    int getRandom() {
+        int n=0;
+        int res;
+        for(auto t=p;t;t=t->next){
+            n++;
+            if(rand() % n == 0) res = t->val; // rand函数 % n，返回0到n-1随机一个数，因此1/n概率返回0
+        }
+        return res;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(head);
+ * int param_1 = obj->getRandom();
+ */
+ 
+ 

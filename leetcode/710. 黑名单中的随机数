@@ -78,3 +78,38 @@ public:
  
  
  
+------------ 0117  / 2022  需要再思考
+
+class Solution {
+public:
+    int n,len;
+    unordered_map<int, int>mp;
+
+    Solution(int N, vector<int>& blacklist) {
+        n=N;
+        len=blacklist.size();
+        unordered_set<int> s;
+        for(int i=n-len;i<n;++i) s.insert(i);
+        for(auto x:blacklist) s.erase(x); // 删除黑名单的，s就是白名单原素
+
+        auto t=s.begin();
+        for(auto x:blacklist){
+            if(x < n-len)
+                mp[x] =*t++; 
+        }
+    }
+    
+    int pick() {
+        int k=rand() % (n-len);
+        if(mp.count(k)) return mp[k];
+        return k;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(n, blacklist);
+ * int param_1 = obj->pick();
+ */
+ 
+ 

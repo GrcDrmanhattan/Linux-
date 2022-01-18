@@ -34,3 +34,48 @@ pick 最多被调用10000次。
 ============================  2022 / / 0118  
 
 
+// s随机的点要和矩形面积成正比，在数轴上长度表示面积，先随机在哪个矩形，然后随机在矩形中抽取点
+
+
+class Solution {
+public:
+    int n;
+    vector<vector<int>> rects;
+    vector<int> s;
+
+    Solution(vector<vector<int>>& _rects) {
+        rects=_rects;
+        n=rects.size();
+        s.push_back(0);
+        for(auto &x:rects){
+            int dx=x[2]-x[0]+1;
+            int dy=x[3]-x[1]+1;
+            s.push_back(s.back() + dx * dy); // 存储面积的前缀和
+        }
+
+    }
+    
+    vector<int> pick() {
+        int k = rand() % s.back() + 1;
+        int l=0;
+        int r=n;
+        while(l<r){
+            int mid=l+r>>1;
+            if(s[mid] >= k) r=mid;
+            else l=mid+1;
+        }
+
+        auto &x=rects[r-1]; // 矩形从0开始所以-1、
+        int dx=x[2]-x[0]+1;
+        int dy=x[3]-x[1]+1;
+        return {rand() % dx + x[0], rand() % dy + x[1]};
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(rects);
+ * vector<int> param_1 = obj->pick();
+ */
+ 
+ 

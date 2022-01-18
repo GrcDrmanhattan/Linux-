@@ -20,3 +20,24 @@
 timePoints[i] 格式为 "HH:MM"
 -------------------------- 2022 / 0118 
 
+注意sscanf用法2
+
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        vector<int> q;
+        for(auto& x:timePoints){
+            int h,m;
+            sscanf(x.c_str(), "%d:%d",&h, &m);
+            q.push_back(h*60+m);
+        }
+
+        sort(q.begin(),q.end());
+        int res=INT_MAX;
+        for(int i=1;i<q.size();++i) res=min(res, q[i]-q[i-1]);
+        res=min(res, 24*60-q.back()+ q[0]);
+        return res;
+    }
+};
+
+

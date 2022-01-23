@@ -43,3 +43,77 @@
 
 ======================= 2022 / 0123v  
 
+双端队列bfs
+
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include<deque>
+
+#define x first
+#define y second
+
+using namespace std;
+
+const int N = 1010; // 障碍物的数目
+
+bool g[N][N];
+int dis[N][N];
+bool st[N][N];
+
+int dx[4]={0, 1, 0, -1};
+int dy[4]={1, 0, -1, 0};
+
+int bfs(int sx, int sy){
+    deque<pair<int,int>> q;
+    q.push_back({sx, sy});
+    memset(dis, 0x3f, sizeof dis);
+    dis[sx][sy]=0;
+    
+    while(q.size()){
+        auto t=q.front();
+        q.pop_front();
+        
+        if(st[t.x][t.y]) continue;
+        st[t.x][t.y]=true;
+        
+        if(t.x ==0 && t.y==0) break;
+        
+        for(int i=0;i<4;++i){
+            int a=t.x+dx[i];
+            int b=t.y+dy[i];
+            
+            if(a >=0 && a<N && b >=0 && b < N ){
+                int w=0;
+                if(g[a][b]) w=1;
+                
+                if(dis[a][b] > dis[t.x][t.y] + w){
+                    dis[a][b] = dis[t.x][t.y] + w;
+                    if(w==0) q.push_front({a, b});
+                    else q.push_back({a, b});
+                }
+            }
+        }
+    }
+    
+    return dis[0][0];
+}
+
+
+int main()
+{
+    int n,sx,sy;
+    cin>>n>>sx>>sy;
+    while (n -- ){
+        int x,y;
+        cin>>x>>y;
+        g[x][y]=true; // 当前位置是障碍物
+    }
+    
+    printf("%d\n", bfs(sx, sy));
+    
+    return 0;
+}
+
+

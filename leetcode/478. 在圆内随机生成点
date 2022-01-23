@@ -28,3 +28,28 @@ randPoint 没有参数。输入参数是一个列表，即使参数为空，也
 
 ================================ 2022 / 0118 /  
 
+class Solution {
+public:
+    double x,y,r;
+
+    Solution(double radius, double x_center, double y_center) {
+        x=x_center;
+        y=y_center;
+        r=radius;
+    }
+    
+    vector<double> randPoint() {
+        double a=(double)rand() / RAND_MAX * 2-1; // 生成-1到1的随机数
+        double b=(double)rand() / RAND_MAX * 2 -1 ; 
+        if( a* a + b *b >1) return randPoint();
+        return {x + r*a, y+r*b};
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(radius, x_center, y_center);
+ * vector<double> param_1 = obj->randPoint();
+ */
+ 
+ 

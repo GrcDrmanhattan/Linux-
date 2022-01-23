@@ -67,7 +67,7 @@ int dy[4]={1, 0, -1, 0};
 
 int bfs(int sx, int sy){
     deque<pair<int,int>> q;
-    q.push_back({sx, sy});
+    q.push_back({sx, sy});  // 刚开始不能把st数组标记起点sxst为true，否则答案不正确
     memset(dis, 0x3f, sizeof dis);
     dis[sx][sy]=0;
     

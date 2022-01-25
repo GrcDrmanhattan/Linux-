@@ -59,7 +59,7 @@ public:
                 int a=t.first + dx[i];
                 int b=t.second + dy[i];
 
-                if(a>=0 && a<n && b>=0 && b<n && grid[a][b] == 0 && dis[a][b] == -1){
+                if(a>=0 && a<n && b>=0 && b<n && grid[a][b] == 0 && dis[a][b] == -1){ // 当前没有遍历过就继续
                     dis[a][b] = dis[t.first][t.second] + 1;
                     q.push({a, b});
 

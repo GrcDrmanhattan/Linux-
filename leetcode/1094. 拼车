@@ -41,3 +41,23 @@ trips[i].length == 3
 1 <= capacity <= 100000
 ========================= 2022   // 0127
 
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        vector<int> b(1001);
+
+        for(auto x:trips){
+            b[x[1]] += x[0];
+            b[x[2]] -= x[0];
+        }
+
+        int sum=0;
+        for(int i=0;i<=1000;++i){
+            sum += b[i];
+            if(sum > capacity) return false;
+        }
+        return true;
+    }
+};
+
+

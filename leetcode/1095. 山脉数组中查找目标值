@@ -52,3 +52,56 @@ MountainArray.length() - 会返回该数组的长度
 ========================== 2022 /  0127 
 
 
+
+/**
+ * // This is the MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class MountainArray {
+ *   public:
+ *     int get(int index);
+ *     int length();
+ * };
+ */
+
+class Solution {
+public:
+    int findInMountainArray(int target, MountainArray &mountainArr) {
+        int n=mountainArr.length();
+        int l=0;
+        int r=n-1;
+
+        // 先二分出数组的最高值
+        while(l<r){
+            int mid=l+r>>1;
+            if(mountainArr.get(mid) > mountainArr.get(mid+1)) r=mid;
+            else l=mid+1;// 二分找到第一个大于的位置
+        }
+
+        int mm=r;
+        if(mountainArr.get(mm) == target) return mm;
+
+        l=0;
+        r=mm-1; // r为mm或者mm-1都可以
+        while(l<r){ // 在左边升序二分target
+            int mid=l+r>>1;
+            if(mountainArr.get(mid) >= target) r=mid;
+            else l=mid+1;
+        }
+
+        if(mountainArr.get(r) == target) return r;
+
+        l=mm+1;
+        r=n-1;
+        while(l<r){ // 在右侧降序二分位置
+            int mid=l+r+1>>1;
+            if(mountainArr.get(mid) >= target) l=mid;
+            else r=mid-1;
+        }
+
+        if(mountainArr.get(r) == target) return r;
+        return -1;
+    }
+
+};
+
+

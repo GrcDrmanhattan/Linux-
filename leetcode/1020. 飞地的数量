@@ -31,3 +31,41 @@ grid[i][j] 的值为 0 或 1
 
 ------------------------------ 2022  ./ 0212 
 
+class Solution {
+public:
+    vector<vector<int>> g;
+    int n,m;
+    int dx[4]={0, 1, 0, -1};
+    int dy[4]={1, 0, -1, 0};
+
+    int numEnclaves(vector<vector<int>>& grid) {
+        g=grid;
+        n=g.size();
+        m=g[0].size();
+        // 从边界搜索，把搜索到的陆地标记一下，然后剩下的就是res
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(!i || !j || i==n-1 || j==m-1)
+                    if(g[i][j])
+                        dfs(i,j);
+
+        int res=0;
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                res += g[i][j];
+
+        return res;
+    }
+
+    void dfs(int x, int y){
+        g[x][y]=0;
+        for(int i=0;i<4;++i){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m && g[a][b] == 1)
+                dfs(a,b);
+        }
+        
+    }
+};
+

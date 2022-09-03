@@ -85,3 +85,43 @@ int main()
    如果当前区间包括这个点，pass这个区间，否则从当前区间选择点
    
    
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+const int N=1e5+10;
+
+int n;
+struct Range{
+    int l, r;
+    bool operator<(const Range &w ) const{
+        return r<w.r;
+    } 
+}range[N];
+
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;++i){
+        int l, r;
+        cin>>l>>r;
+        range[i]={l,r};
+    }
+    
+    sort(range, range+n);
+    
+    int  res=0;
+    int ed=-2e9;
+    
+    for(int i=0;i<n;++i){
+        if(range[i].l > ed){
+            res++;
+            ed=range[i].r;
+        }
+    }
+    
+    cout<<res<<endl;
+    return 0;
+}
+
